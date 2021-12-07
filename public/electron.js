@@ -2,7 +2,13 @@
 const path = require('path');
 
 const { app, BrowserWindow } = require('electron');
+const { ipcMain } = require('electron');
+const Store = require('electron-store');
 const isDev = require('electron-is-dev');
+const DEBUG = true;
+
+// require('./db_connect/main');
+
 
 function createWindow() {
   // Create the browser window.
@@ -50,6 +56,43 @@ app.on('activate', () => {
 });
 
 
+// user data management
+const schema = {
+	current_user: {
+		type: 'string',
+		default: 'guest'
+	},
+  library_setup: {
+    type: 'boolean',
+    default: false
+  },
+  library_name: {
+    type: 'string',
+    default: ""
+  }
+};
+
+var userDataPath = app.getPath('userData');
+
+const library_state = new Store({ schema });
+
+// Retrieves data of current profile
+ipcMain.handle('getStoreValue', (event, key) => {
+    if (DEBUG === true){
+      console.log("Library state for " + key + " requested: " + library_state.get(key));
+      console.log("PATH: " + app.getPath('userData'));
+    }
+    return library_state.get(key);
+});
+
+// Sets data for current profile
+ipcMain.handle('setStoreValue', (event, key, value) => {
+  if (DEBUG === true) {
+    console.log("Library state for " + key + " is now " + value);
+    console.log("PATH: " + app.getPath('userData'));
+  }
+    return library_state.set(key, value);
+});
 
 
 
