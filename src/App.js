@@ -1,20 +1,24 @@
 import logo from './logo.svg';
 import './App.css';
-import Navbar from './components/NavbarFiles/Navbar';
-import { BrowserRouter as Router, Switch, Route } from 'react-router-dom';
-import Home from './Pages/Home';
-import Login from './Pages/Profiles';
-import Setup from './Pages/Setup';
-import Search from './Pages/Search';
-import AddProfile from './Pages/AddProfile';
-import AddBookManually from './Pages/AddBookManually';
-import AddBookAPI from './Pages/AddBookAPI';
-import MetadataEdit from './Pages/MetadataEdit';
+import Navbar from './navbar/navbar_src/navbar';
+import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
+import Home from './pages/home';
+import Login from './pages/profiles';
+import Setup from './pages/setup';
+import Search from './pages/search';
+import AddProfile from './pages/add_profile';
+import AddBookManually from './pages/add_book_manually';
+import AddBookAPI from './pages/add_book_api';
+import MetadataEdit from './pages/metadata_edit';
 
 import { useState } from 'react';
 // Used for conditional setup
-const electron = window.require('electron');
-const { ipcRenderer } = electron;
+const { ipcRenderer } = window.require('electron');
+
+// const { ipcRenderer } = require('electron')
+
+// const electron = window.require('electron');
+// const { ipcRenderer } = electron;
 var firstPage;
 
 function App() {
@@ -36,27 +40,28 @@ function App() {
   return (
     // <>
       <Router>
-        <Switch>
-        <Route path='/' exact component={((isSetup) ? Login : Setup)} />
-          <Route path='/Login' exact component={Login} />
-          <Route path='/Setup' exact component={Setup} />
-          <Route path='/AddProfile' exact component={AddProfile} />
+        <Routes>
+        <Route path='/' element={((isSetup) ? Login : Setup)} />
+          <Route path='/Login' element={Login} />
+          <Route path='/Setup' element={Setup} />
+          <Route path='/AddProfile' element={AddProfile} />
           <div>
           <Navbar />
-          <Route path='/Home' exact component={Home} />
-          <Route path='/Search' exact component={Search} />
-          <Route path='/AddBookAPI' exact component={AddBookAPI} />
-          <Route path='/AddBookManually' exact component={AddBookManually} />
-          <Route path='/MetadataEdit' exact component={MetadataEdit} />
+          <Route path='/Home' element={Home} />
+          <Route path='/Search' element={Search} />
+          <Route path='/AddBookAPI' element={AddBookAPI} />
+          <Route path='/AddBookManually' element={AddBookManually} />
+          <Route path='/MetadataEdit' element={MetadataEdit} />
           </div>
-        </Switch>
+        </Routes>
       </Router>
     // </>
   );
 }
 
 export default App;
-// template code:
+// original template code below:
+
 // import logo from './logo.svg';
 // import './App.css';
 //
