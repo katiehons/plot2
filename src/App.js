@@ -1,6 +1,6 @@
 import logo from './logo.svg';
 import './App.css';
-import Navbar from './navbar/navbar_src/navbar';
+// import Navbar from './navbar/navbar_src/navbar';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Home from './pages/home';
 import Login from './pages/profiles';

@@ -7,7 +7,7 @@ const Store = require('electron-store');
 const isDev = require('electron-is-dev');
 const DEBUG = true;
 
-// require('./db_connect/main');
+require('../src/db_connect/main');
 
 
 function createWindow() {

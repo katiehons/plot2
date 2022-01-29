@@ -1,4 +1,5 @@
 import React from 'react';
+import { Link } from 'react-router-dom';
 // import sendAsync from '../db_connect/renderer';
 // import imageNotFound from '../Pages/imageNotFound.svg';
 
@@ -104,7 +105,12 @@ function Search() {
   // )
   // // populate with books from database
   return(
-    <h1>search</h1>
+    <div className='searchpage'>
+      <h1>search</h1>
+      <Link to={'/Home'} id='homelink-searchpage'>
+        <button id="homelinkbtn" className="otherpage-nav-button">Back to home</button>
+      </Link>
+    </div>
   )
 }
 
