@@ -1,5 +1,5 @@
 import React, { location, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 import sendAsync from '../db_connect/renderer';
 const queryString = require('query-string');
 
@@ -7,12 +7,15 @@ const queryString = require('query-string');
 function MetadataEdit(props) {
   const [book, setBook] = useState([]);
   let history = useNavigate();
+  const useQuery = () => new URLSearchParams(useLocation().search);
+  let query = useQuery();
 
 //todo start here: https://betterprogramming.pub/using-url-parameters-and-query-strings-with-react-router-fffdcea7a8e9
 
   console.log("rendering metadata page");
   // console.log( {props.location} );
-  var original_isbn = queryString.parse(this.props.location.search).isbn
+  // var original_isbn = queryString.parse(this.props.location.search).isbn
+  var original_isbn = query.get("isbn")
 
   if( book.length == 0 ){
     var sqlGetBook = "SELECT * FROM books WHERE isbn = ?;";
