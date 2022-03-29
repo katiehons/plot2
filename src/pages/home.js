@@ -1,7 +1,7 @@
 import {React, useState} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import sendAsync from '../db_connect/renderer';
-import imageNotFound from '../pages/imageNotFound.svg';
+import imageNotFound from '../images/imageNotFound.svg';
 const electron = window.require('electron');
 const { ipcRenderer } = electron;
 const electron_store = window.require('electron-store');
