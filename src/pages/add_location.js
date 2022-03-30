@@ -6,6 +6,8 @@ import { Link } from 'react-router-dom'
 function AddLocation() {
   const[rooms, setRooms] = useState([]);
   const[selectedRoom, setSelectedRoom] = useState([]);
+  const[bookshelves, setBookshelves] = useState([]);
+  const[selectedBookshelf, setSelectedBookshelf] = useState([]);
 ////// todo next: set bookshelf dropdown based on room
 
   if( rooms.length == 0 )
@@ -23,6 +25,12 @@ function AddLocation() {
   let roomList = rooms.length > 0 && rooms.map((item, i) => {
   return (
     <option key={i} value={item.room}>{item.room}</option>
+  )
+  }, this);
+
+  let bookshelvesList = bookshelves.length > 0 && bookshelves.map((item, i) => {
+  return (
+    <option key={i} value={item.bookshelf}>{item.bookshelf}</option>
   )
   }, this);
 
@@ -62,14 +70,36 @@ function AddLocation() {
       ...selectedRoom,
       [e.target.name]: e.target.value
     });
+    // get the bookshelves in that room
+    var sql_get_rooms = "SELECT DISTINCT bookshelf FROM locations WHERE room=?;"
+    var params = [e.target.value]
+    sendAsync(sql_get_rooms, params).then((result) => {
+      console.log("got shelves from db");
+      console.log(result);
+      if( result.length > 0) {
+        setBookshelves(result);
+      }
+    });
+  };
+
+  const handleBookshelfChange = e =>{
+    setSelectedRoom({
+      ...selectedBookshelf,
+      [e.target.name]: e.target.value
+    });
+    console.log(e.target.value)
   };
 
   return (
     <div className="centered">
       <h1>Add Location</h1>
       <form onSubmit={handleSubmit}>
-      <label for="room">Which room? </label>
+      <label for="roomsel">Which room? </label>
       <select id="roomsel" onChange={handleRoomChange}> {roomList} </select>
+      <br/>
+      <label for="bookshelfsel">Which bookshelf? </label>
+      <select id="bookshelfsel" onChange={handleBookshelfChange}> {bookshelvesList} </select>
+
       <br/>
 
       <input className="edit-button" id="submit-btn" type="submit" value="Add Location" />
