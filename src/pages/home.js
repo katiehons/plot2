@@ -114,6 +114,9 @@ function Home() {
       <Link to={'/AddBookAPI'} id='addbooklink'>
         <button id="addbooklinkbtn" className="homepage-nav-button">Add new book</button>
       </Link>
+      <Link to={'/LocationMgr'} id='location_mgrlink'>
+        <button id="location_mgrlinkbtn" className="homepage-nav-button">Location Manager</button>
+      </Link>
       <CurrentUser user={user}/>
       <BookList books={books}/>
     </div>

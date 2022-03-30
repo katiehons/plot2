@@ -10,6 +10,10 @@ import AddProfile from './pages/add_profile';
 import AddBookManually from './pages/add_book_manually';
 import AddBookAPI from './pages/add_book_api';
 import MetadataEdit from './pages/metadata_edit';
+import LocationMgr from './pages/location_mgr';
+import AddLocation from './pages/add_location';
+
+
 
 import { useState, Fragment } from 'react';
 // Used for conditional setup
@@ -46,6 +50,8 @@ function App() {
         <Route exact path='/AddBookAPI' element={<AddBookAPI />} />
         <Route exact path='/AddBookManually' element={<AddBookManually />} />
         <Route exact path='/MetadataEdit' element={<MetadataEdit />} />
+        <Route exact path='/LocationMgr' element={<LocationMgr />} />
+        <Route exact path='/AddLocation' element={<AddLocation />} />
       </Routes>
     </Router>
     </>
