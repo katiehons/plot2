@@ -8,12 +8,20 @@ function Setup() {
     console.log("setup")
     // Database initialization
     const bookTableCreate = "CREATE TABLE IF NOT EXISTS books( isbn TEXT NOT NULL PRIMARY KEY, title TEXT, author TEXT, author_sort TEXT, series TEXT, series_sequence REAL, cover BLOB, cover_color TEXT, spine_color TEXT, media_type TEXT, location_id TEXT)";
-    const locationTableCreate = "CREATE TABLE IF NOT EXISTS locations( location_id TEXT NOT NULL PRIMARY KEY, room TEXT, bookshelf TEXT, shelf INTEGER )";
+    // const locationTableCreate = "CREATE TABLE IF NOT EXISTS locations( location_id TEXT NOT NULL PRIMARY KEY, room TEXT, bookshelf TEXT, shelf INTEGER )";
     const userTableCreate = "CREATE TABLE IF NOT EXISTS \"users\" (\"username\" TEXT NOT NULL UNIQUE, \"reading history\" TEXT, PRIMARY KEY(\"username\"))";
+    const roomsTableCreate = "CREATE TABLE IF NOT EXISTS rooms( room_id INTEGER NOT NULL PRIMARY KEY, room_name TEXT UNIQUE )";
+    const bookshelvesTableCreate = "CREATE TABLE IF NOT EXISTS bookshelves( bookshelf_id INTEGER NOT NULL PRIMARY KEY, bookshelf_name TEXT UNIQUE, number_shelves INTEGER )";
+    const roomsBooksTableCreate = "CREATE TABLE IF NOT EXISTS rooms_books( room_id INTEGER, shelf_id INTEGER, PRIMARY KEY ( room_id, shelf_id ) )";
+
 
     sendAsync(bookTableCreate).then((result) => console.log(result));
-    sendAsync(locationTableCreate).then((result) => console.log(result));
+    // sendAsync(locationTableCreate).then((result) => console.log(result));
     sendAsync(userTableCreate).then((result) => console.log(result));
+    sendAsync(roomsTableCreate).then((result) => console.log(result));
+    sendAsync(bookshelvesTableCreate).then((result) => console.log(result));
+    sendAsync(roomsBooksTableCreate).then((result) => console.log(result));
+
 
     let history = useNavigate();
     const [state, setState] = React.useState({ libName: "" });

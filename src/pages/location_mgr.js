@@ -9,8 +9,8 @@ return (
   <Link to={'/Home'} id='return-to-home'>
       <button className="edit-button" id="abortButton"> Return to Home</button>
   </Link>
-  <Link to={'/AddLocation'}>
-      <button className="edit-button" id="addLocationLinkbtn">Add new location</button>
+  <Link to={'/EditLocation'}>
+      <button className="edit-button" id="editLocationLinkbtn">Edit an existing location</button>
   </Link>
   </div>
 )
