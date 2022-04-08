@@ -12,6 +12,8 @@ import AddBookAPI from './pages/add_book_api';
 import MetadataEdit from './pages/metadata_edit';
 import LocationMgr from './pages/location_mgr';
 import EditLocation from './pages/edit_location';
+import AddLocation from './pages/add_location';
+
 
 
 
@@ -52,6 +54,7 @@ function App() {
         <Route exact path='/MetadataEdit' element={<MetadataEdit />} />
         <Route exact path='/LocationMgr' element={<LocationMgr />} />
         <Route exact path='/EditLocation' element={<EditLocation />} />
+        <Route exact path='/AddLocation' element={<AddLocation />} />
       </Routes>
     </Router>
     </>

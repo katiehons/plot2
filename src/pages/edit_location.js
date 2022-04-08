@@ -62,26 +62,73 @@ function EditLocation() {
   };
 
 ///^^^^^^^^^^^^^^^^^^
-  const deleteBookshelf = e =>{
+  function deleteBookshelf( bookshelf )
+  {
+    var sql_delete_shelf_from_room = "DELETE FROM rooms_books WHERE shelf_id IN (SELECT shelf_id FROM rooms_books JOIN bookshelves ON bookshelves.bookshelf_id = rooms_books.shelf_id WHERE bookshelves.bookshelf_name = ?);"// DELETE FROM bookshelves WHERE bookshelf_name = ?;"
+    var sql_delete_shelf = "DELETE FROM bookshelves WHERE bookshelf_name = ?;"
+
+    var params = [bookshelf]
+    console.log("Trying to delete: " + params)
+
+    sendAsync(sql_delete_shelf_from_room, params).then((result) => {
+      console.log(result)
+      sendAsync(sql_delete_shelf, params).then((result) => {
+        console.log(result)
+        console.log( "Current room: " + selectedRoom[""] )
+        fetchBookshelves( selectedRoom[""] )
+      });
+    });
+  }
+
+  const handleDeleteBookshelf = e =>{
     var bookshelf_sel = document.getElementById("bookshelfsel")
     var bookshelf_name = bookshelf_sel.options[bookshelf_sel.selectedIndex].text
 
-    if( window.confirm( "Are you sure you want to delete bookshelf \"" + bookshelf_name + "\"?"))
+    if( window.confirm( "Are you sure you want to delete bookshelf \"" + bookshelf_name + "\"?\nThis will unset location for all books on this shelf."))
     {
-      var sql_delete_shelf_from_room = "DELETE FROM rooms_books WHERE shelf_id IN (SELECT shelf_id FROM rooms_books JOIN bookshelves ON bookshelves.bookshelf_id = rooms_books.shelf_id WHERE bookshelves.bookshelf_name = ?);"// DELETE FROM bookshelves WHERE bookshelf_name = ?;"
-      var sql_delete_shelf = "DELETE FROM bookshelves WHERE bookshelf_name = ?;"
+      deleteBookshelf( bookshelf_name );
+      // var sql_delete_shelf_from_room = "DELETE FROM rooms_books WHERE shelf_id IN (SELECT shelf_id FROM rooms_books JOIN bookshelves ON bookshelves.bookshelf_id = rooms_books.shelf_id WHERE bookshelves.bookshelf_name = ?);"// DELETE FROM bookshelves WHERE bookshelf_name = ?;"
+      // var sql_delete_shelf = "DELETE FROM bookshelves WHERE bookshelf_name = ?;"
+      //
+      // var params = [bookshelf_name]
+      // console.log("Trying to delete: " + params)
+      //
+      // sendAsync(sql_delete_shelf_from_room, params).then((result) => {
+      //   console.log(result)
+      //   sendAsync(sql_delete_shelf, params).then((result) => {
+      //     console.log(result)
+      //     console.log( "Current room: " + selectedRoom[""] )
+      //     fetchBookshelves( selectedRoom[""] )
+      //   });
+      // });
+    }
+  }
 
-      var params = [bookshelf_name]
+  const handleDeleteRoom = e =>{
+    var room_sel = document.getElementById("roomsel")
+    var room_name = room_sel.options[room_sel.selectedIndex].text
+
+    if( window.confirm( "Are you sure you want to delete room \"" + room_name + "\"?\nThis will also delete all bookshelves in this room."))
+    {
+      // this takes care of deleting bookshelfs and room-bookshelf associations
+      for (var i = 0; i < bookshelves.length; i++) {
+          console.log(bookshelves[i].bookshelf_name);
+          deleteBookshelf( bookshelves[i].bookshelf_name );
+      }
+      console.log("we would delete " + room_name);
+
+
+      // var sql_delete_shelf_from_room = "DELETE FROM rooms_books WHERE shelf_id IN (SELECT shelf_id FROM rooms_books JOIN bookshelves ON bookshelves.bookshelf_id = rooms_books.shelf_id WHERE bookshelves.bookshelf_name = ?);"// DELETE FROM bookshelves WHERE bookshelf_name = ?;"
+      var sql_delete_room = "DELETE FROM rooms WHERE room_name = ?;"
+
+      var params = [room_name]
       console.log("Trying to delete: " + params)
 
-      sendAsync(sql_delete_shelf_from_room, params).then((result) => {
+      sendAsync(sql_delete_room, params).then((result) => {
         console.log(result)
-        sendAsync(sql_delete_shelf, params).then((result) => {
-          console.log(result)
-          console.log( "Current room: " + selectedRoom[""] )
-          fetchBookshelves( selectedRoom[""] )
+        // todo re-fetch rooms
         });
-      });
+      // });
     }
   }
 
@@ -137,7 +184,8 @@ function EditLocation() {
       <br/>
       <input className="edit-button" id="submit-btn" type="submit" value="Make these changes" />
       </form>
-      <button id="delete-bookshelf-btn" onClick={deleteBookshelf}>Delete this bookshelf</button>
+      <button id="delete-bookshelf-btn" onClick={handleDeleteBookshelf}>Delete this bookshelf</button>
+      <button id="delete-room-btn" onClick={handleDeleteRoom}>Delete this room</button>
 
       <Link to={'/LocationMgr'}>
                   <button className="edit-button" id="locationabortButton">Back to all locations</button>

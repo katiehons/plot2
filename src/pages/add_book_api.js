@@ -72,16 +72,6 @@ function AddBookAPI() {
       </Link>
     </div>
   )
-
-  // return(
-  //   <div>
-  //   <h1> Add Book </h1>
-  //
-  //   <Link to={'/AddBookManually'}>
-  //     <button className="edit-button" id="submit-btn">Add manually</button>
-  //   </Link>
-  //   </div>
-  // )
 }
 
 export default AddBookAPI

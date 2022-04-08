@@ -52,13 +52,6 @@ function AddBookManually() {
                   </Link>
     </div>
   );
-  // return(
-  // <div>
-  // <h1> Add Book Manually </h1>
-  // <Link to={'/Home'} id='homelink-man-addpage'>
-  //   <button id="homelinkbtn-man-addpage" className="homepage-nav-button">Home</button>
-  // </Link>
-  // </div>)
 }
 
 export default AddBookManually;
