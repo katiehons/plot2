@@ -15,6 +15,7 @@ function EditLocation() {
 
   function fetchBookshelves( room )
   {
+    console.log("Fetching bookshelves..." + room )
     // get the bookshelves in that room
     var sql_get_bookshelves = "SELECT bookshelf_name FROM bookshelves JOIN rooms_books ON bookshelves.bookshelf_id = rooms_books.shelf_id JOIN rooms ON rooms.room_id = rooms_books.room_id WHERE rooms.room_name = ?;";
 
@@ -28,6 +29,7 @@ function EditLocation() {
 
   if( firstLoad )
   {
+    console.log("Working on first load…")
     setFirstLoad( false )
     var sql_get_rooms = "SELECT room_name FROM rooms";
     sendAsync(sql_get_rooms).then((result) => {
@@ -35,6 +37,7 @@ function EditLocation() {
       console.log(result);
       if( result.length > 0) {
         setRooms(result);
+
         fetchBookshelves( result[0].room_name );
       }
     });
@@ -115,8 +118,6 @@ function EditLocation() {
           console.log(bookshelves[i].bookshelf_name);
           deleteBookshelf( bookshelves[i].bookshelf_name );
       }
-      console.log("we would delete " + room_name);
-
 
       // var sql_delete_shelf_from_room = "DELETE FROM rooms_books WHERE shelf_id IN (SELECT shelf_id FROM rooms_books JOIN bookshelves ON bookshelves.bookshelf_id = rooms_books.shelf_id WHERE bookshelves.bookshelf_name = ?);"// DELETE FROM bookshelves WHERE bookshelf_name = ?;"
       var sql_delete_room = "DELETE FROM rooms WHERE room_name = ?;"
@@ -128,7 +129,6 @@ function EditLocation() {
         console.log(result)
         // todo re-fetch rooms
         });
-      // });
     }
   }
 
@@ -143,6 +143,8 @@ function EditLocation() {
     });
     console.log(e.target.value )
     fetchBookshelves( e.target.value )
+
+
     // // get the bookshelves in that room
     // var sql_get_rooms = "SELECT bookshelf_name, rooms.room_name FROM bookshelves JOIN rooms_books ON bookshelves.bookshelf_id = rooms_books.shelf_id JOIN rooms ON rooms.room_id = rooms_books.room_id WHERE rooms.room_name = ?;"
     //

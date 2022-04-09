@@ -10,8 +10,10 @@ const database = new sqlite3.Database('././data/library.db', (err) => {
 var times_triggered = 0;
 ipcMain.on('asynchronous-message', (event, arg, params) => {
   const sql = arg;
+  console.log("got message: event: " + event + "\n\t arg(sql): " + sql + "\n\t params: " + params)
 
   database.all(sql, params, (err, rows) => {
+    // console.log("sending reply for [[[" + sql + "]]], main.js\nReturns: " + ( (err && err.message) || rows) );
     event.reply('asynchronous-reply', (err && err.message) || rows);
   });
 });
