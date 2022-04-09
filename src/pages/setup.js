@@ -12,7 +12,7 @@ function Setup() {
     const userTableCreate = "CREATE TABLE IF NOT EXISTS \"users\" (\"username\" TEXT NOT NULL UNIQUE, \"reading history\" TEXT, PRIMARY KEY(\"username\"))";
     const roomsTableCreate = "CREATE TABLE IF NOT EXISTS rooms( room_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, room_name TEXT UNIQUE )";
     const bookshelvesTableCreate = "CREATE TABLE IF NOT EXISTS bookshelves( bookshelf_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, bookshelf_name TEXT UNIQUE, number_shelves INTEGER )";
-    const roomsBooksTableCreate = "CREATE TABLE IF NOT EXISTS rooms_books( room_id INTEGER, shelf_id INTEGER, PRIMARY KEY ( room_id, shelf_id ) )";
+    const roomsBooksTableCreate = "CREATE TABLE IF NOT EXISTS rooms_bookshelves( room_id INTEGER, bookshelf_id INTEGER UNIQUE, PRIMARY KEY ( room_id, bookshelf_id ) )";
 
 
     sendAsync(bookTableCreate).then((result) => console.log(result));

@@ -8,7 +8,7 @@ function AddLocation()
   const[newRoom, setNewRoom] = useState();
   const[newBookshelf, setNewBookshelf] = useState();
   const[rooms, setRooms] = useState([]);
-  const[bookshelfRoom, setBookshelfRoom] = useState( 0 );
+  const[bookshelfRoom, setBookshelfRoom] = useState();
 
 
   if( firstLoad )
@@ -21,6 +21,7 @@ function AddLocation()
       console.log(result);
       if( result.length > 0) {
         setRooms(result);
+        setBookshelfRoom(result[0].room_name)
       }
     });
   }
@@ -33,17 +34,32 @@ function AddLocation()
 
   const handleRoomSubmit = e => {
     e.preventDefault();
-    var sql_new_room = "INSERT INTO rooms(room_name) VALUES( ? )";
+    var sql_new_room = "INSERT INTO rooms(room_name) VALUES( ? );";
     var params = [newRoom];
     console.log(params);
     sendAsync(sql_new_room, params).then((result) => console.log(result));
 
-    //todo, enforce unique room names
+    //todo, handle/process/ display sql errors
+    // todo, add the room to the bookshelves dropdown after it exists, maybe just set firstload true?
   }
 
   const handleBookshelfSubmit = e => {
     e.preventDefault();
+    console.log("new bookshelf: " + newBookshelf + " into: " + bookshelfRoom );
 
+    // make new bookshelf
+    var sql_new_bookshelf = "INSERT INTO bookshelves(bookshelf_name) VALUES( ? );";
+    var bookshelf_params = [newBookshelf];
+
+    // associate bookshelf with room
+    var sql_assoc_bookshelf_room = "INSERT INTO rooms_bookshelves SELECT rooms.room_id, bookshelves.bookshelf_id FROM rooms, bookshelves WHERE room_name = ? AND bookshelf_name = ?";
+    var room_bookshelf_params = [ bookshelfRoom, newBookshelf ];
+
+    sendAsync(sql_new_bookshelf, bookshelf_params).then((result) =>
+    {
+      console.log(result);
+      sendAsync( sql_assoc_bookshelf_room, room_bookshelf_params ).then((result) => console.log(result));
+    });
   }
 
   const handleNewRoomChange = e => {
@@ -52,11 +68,8 @@ function AddLocation()
   };
 
   const handleBookshelfRoomChange = e =>{
-    setBookshelfRoom({
-      ...bookshelfRoom,
-      [e.target.name]: e.target.value
-    });
-    console.log(bookshelfRoom )
+    setBookshelfRoom( e.target.value );
+    console.log( bookshelfRoom )
   };
 
   const handleNewBookshelfChange = e => {
