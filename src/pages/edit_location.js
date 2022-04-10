@@ -11,13 +11,12 @@ function EditLocation() {
   const[selectedBookshelf, setSelectedBookshelf] = useState( 0 );
   const[shelves, setshelves] = useState([]);
   const[selectedShelves, setSelectedShelves] = useState([]);
-////// todo next: set bookshelf dropdown based on room
 
   function fetchBookshelves( room )
   {
     console.log("Fetching bookshelves..." + room )
     // get the bookshelves in that room
-    var sql_get_bookshelves = "SELECT bookshelf_name FROM bookshelves JOIN rooms_books ON bookshelves.bookshelf_id = rooms_bookshelves.bookshelf_id JOIN rooms ON rooms.room_id = rooms_bookshelves.room_id WHERE rooms.room_name = ?;";
+    var sql_get_bookshelves = "SELECT bookshelf_name FROM bookshelves JOIN rooms_bookshelves ON bookshelves.bookshelf_id = rooms_bookshelves.bookshelf_id JOIN rooms ON rooms.room_id = rooms_bookshelves.room_id WHERE rooms.room_name = ?;";
 
     var params = [room];
     sendAsync(sql_get_bookshelves, params).then((result) => {
@@ -67,7 +66,7 @@ function EditLocation() {
 ///^^^^^^^^^^^^^^^^^^
   function deleteBookshelf( bookshelf )
   {
-    var sql_delete_shelf_from_room = "DELETE FROM rooms_bookshelves WHERE bookshelf_id IN (SELECT bookshelf_id FROM rooms_bookshelves JOIN bookshelves ON bookshelves.bookshelf_id = rooms_books.bookshelf_id WHERE bookshelves.bookshelf_name = ?);"// DELETE FROM bookshelves WHERE bookshelf_name = ?;"
+    var sql_delete_shelf_from_room = "DELETE FROM rooms_bookshelves WHERE bookshelf_id IN (SELECT bookshelf_id FROM rooms_bookshelves JOIN bookshelves ON bookshelves.bookshelf_id = rooms_bookshelves.bookshelf_id WHERE bookshelves.bookshelf_name = ?);"// DELETE FROM bookshelves WHERE bookshelf_name = ?;"
     var sql_delete_shelf = "DELETE FROM bookshelves WHERE bookshelf_name = ?;"
 
     var params = [bookshelf]

@@ -5,22 +5,49 @@ import { Link } from 'react-router-dom'
 //TODO test, handle multiple authors
 
 function AddBookAPI() {
+  const [firstLoad, setFirstLoad] = useState( true );
   const [message, setMessage] = useState('SELECT * FROM books');
   const [response, setResponse] = useState();
+  const [rooms, setRooms] = useState([]);
+  const [bookshelfRoom, setBookshelfRoom] = useState();
+  const [isbn, setISBN] = useState();
+
+//todo: Add location sel's 
+  // if( firstLoad )
+  // {
+  //   console.log("Working on first load…")
+  //   setFirstLoad( false )
+  //   var sql_get_rooms = "SELECT room_name FROM rooms";
+  //   sendAsync(sql_get_rooms).then((result) => {
+  //     console.log("got rooms from db");
+  //     console.log(result);
+  //     if( result.length > 0) {
+  //       setRooms(result);
+  //       setBookshelfRoom(result[0].room_name)
+  //
+  //       let roomList = rooms.length > 0 && rooms.map((item, i) => {
+  //         return (
+  //           <option key={i} value={item.room_name}>{item.room_name}</option>
+  //         )
+  //         }, this);
+  //       // roomList.unshift( <option key={0} value={""}></option> );
+  //       console.log("roomlist: " + roomList)
+  //
+  //     }
+  //   });
+  // }
 
   function send(sql) {
     sendAsync(sql).then((result) => setResponse(result));
   }
 
-  const [state, setState] = React.useState({ isbn: "" });
-
     // Fetch the book info and submit it to the db
     const handleSubmit = e => {
         e.preventDefault();
-        //log state.isbn to the database instead of console
+        //log isbn to the database instead of console
         //display success or failure message
-        console.log("sending: " + state.isbn)
-        fetch('https://www.googleapis.com/books/v1/volumes?q=isbn:'+state.isbn+'&key=AIzaSyCD09mSVM0FXfqGBT3tS0M-jRlu72FP-WI')
+        console.log("sending: " + isbn)
+        fetch('https://www.googleapis.com/books/v1/volumes?q=isbn:'+isbn+'&key=AIzaSyCD09mSVM0FXfqGBT3tS0M-jRlu72FP-WI')
         .then(response => response.json())
         .then(function(data)
         {
@@ -45,15 +72,12 @@ function AddBookAPI() {
         .catch(function(error)
         {
             console.log(error);
-            window.alert("Failed to find a book with ISBN " + state.isbn + "; \n You can try again or add the information manually.")
+            window.alert("Failed to find a book with ISBN " + isbn + "; \n You can try again or add the information manually.")
         } );
     };
 
   const handleChange = e => {
-    setState({
-      ...state,
-      [e.target.name]: e.target.value
-    });
+    setISBN(e.target.value);
   };
 
   return (

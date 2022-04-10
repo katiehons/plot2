@@ -24,7 +24,6 @@ function Home() {
   console.log(user);
   if (user.length === 0) {
     ipcRenderer.invoke('getStoreValue', 'current_user').then((result) => {
-      // current_user = result;
       console.log("current user: " + result);
       if( result.length > 0)
       {
@@ -102,6 +101,7 @@ function Home() {
     });
   }
 
+// for-each html tags to generate header/headers/list
   return (
     <div className='home'>
       <h1>Home</h1>

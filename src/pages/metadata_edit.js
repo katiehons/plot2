@@ -10,11 +10,8 @@ function MetadataEdit(props) {
   const useQuery = () => new URLSearchParams(useLocation().search);
   let query = useQuery();
 
-//todo start here: https://betterprogramming.pub/using-url-parameters-and-query-strings-with-react-router-fffdcea7a8e9
-
   console.log("rendering metadata page");
-  // console.log( {props.location} );
-  // var original_isbn = queryString.parse(this.props.location.search).isbn
+
   var original_isbn = query.get("isbn")
 
   if( book.length == 0 ){
@@ -82,9 +79,6 @@ function MetadataEdit(props) {
     </Link>
     </div>
   )
-  // return(
-  //   <h1>metadata edit</h1>
-  // )
 }
 
 export default MetadataEdit;
