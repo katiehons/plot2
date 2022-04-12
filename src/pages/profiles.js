@@ -1,13 +1,32 @@
 import {React, useState} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import sendAsync from '../db_connect/renderer';
+
+// import { Sequelize } from 'sequelize';
+import User from '../db_connect/open_sequelize';
+// const { User } = require( '../db_connect/sequelize');
 const electron = window.require('electron');
 const { ipcRenderer } = electron;
 const electron_store = window.require('electron-store');
 const { store } = electron_store;
 
 
+
+async function get_users()
+{
+  // const users = await User.findAll();
+  // console.log(users.every(user => user instanceof User)); // true
+  // console.log("All users:", JSON.stringify(users, null, 2));
+}
+
 function Login() {
+  // sequelize explorations
+  // const users = await User.findAll();
+  // console.log(users.every(user => user instanceof User)); // true
+  // console.log("All users:", JSON.stringify(users, null, 2));
+  get_users();
+  /// fin sequelize explaorations
+
   let history = useNavigate();
 
   const setUser = (username) => {
@@ -31,7 +50,6 @@ function Login() {
     console.log("making *all* the buttons");
     console.log(profiles);
     return (
-      // <div>profiles placeholder </div>
       <span id='generated-profilesButtons'>{profiles.map((user) => makeButton(user))}</span>
     )
   }

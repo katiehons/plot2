@@ -17,18 +17,3 @@ ipcMain.on('asynchronous-message', (event, arg, params) => {
     event.reply('asynchronous-reply', (err && err.message) || rows);
   });
 });
-
-const { Sequelize } = require('sequelize');
-const library = new Sequelize({
-  dialect: 'sqlite',
-  storage: '././data/library.db'
-});async function catch_err(){
-  try {
-    await library.authenticate();
-    console.log('sequelize Connection has been established successfully.');
-  } catch (error) {
-    console.error('Unable to connect to the sequelize database:', error);
-  }
-}
-
-catch_err();
