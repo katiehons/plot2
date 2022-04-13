@@ -26,23 +26,6 @@ function Login() {
     history("/Home");
   }
 
-  // username button
-  function makeButton(user) {
-    // console.log('button for ' + user);
-    return (
-      <button className="profiles-button" onClick={() => setUser(user)}>{user}</button>
-    )
-  }
-
-  // all username buttons
-  function ProfileButtons({ profiles }) {
-    // console.log("making *all* the buttons");
-    // console.log(profiles);
-    return (
-      <span id='generated-profilesButtons'>{profiles.map((user) => makeButton(user))}</span>
-    )
-  }
-
   // get library from electron store (settings and config info)
   if (libName.length === 0){
     ipcRenderer.invoke('getStoreValue', 'library_name').then((result) => {
@@ -81,18 +64,28 @@ function Login() {
   const User = require('../db_connect/models/user')(sequelize)
 
   if (profiles.length === 0) {
-    User.findAll().then((users) => {
+    User.findAll({raw: true}).then((users) => {
       // console.log(users.every(user => user instanceof User)); // true
-      // console.log("(home)All users:", JSON.stringify(users, null, 2));
-      console.log(users)
-      var usernames = [];
-      for (var i = 0; i < users.length; i++) {
-        usernames.push(users[i].username);
-      }
-      console.log("sequelize got simplified users")
-      console.log(usernames);
-      setProfiles( usernames );
+      console.log("(home)All users:", users);
+      setProfiles( users );
     });
+  }
+
+  // username button
+  function makeButton(user) {
+    // console.log('button for ' + user);
+    return (
+      <button className="profiles-button" onClick={() => setUser(user.username)}>{user.username}</button>
+    )
+  }
+
+  // all username buttons
+  function ProfileButtons({ profiles }) {
+    // console.log("making *all* the buttons");
+    // console.log(profiles);
+    return (
+      <span id='generated-profilesButtons'>{profiles.map((user) => makeButton(user))}</span>
+    )
   }
 
   return (
