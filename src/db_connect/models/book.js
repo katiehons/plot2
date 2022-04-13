@@ -1,28 +1,29 @@
-const { Sequelize } = require("sequelize");
+const { Sequelize, DataTypes } = require("sequelize");
 
 module.exports = (sequelize) => {
-  const Book = sequelize.define("Books", {
+  const Book = sequelize.define("books", {
     isbn: {
-      type: Sequelize.DataTypes.INTEGER,
+      type: DataTypes.INTEGER,
       primaryKey: true
     },
     title: {
-      type: Sequelize.DataTypes.TEXT,
+      type: DataTypes.TEXT,
       allowNull: false
     },
     author: {
-      type: Sequelize.DataTypes.TEXT,
+      type: DataTypes.TEXT,
       allowNull: false
     },
     cover: {
-      type: Sequelize.DataTypes.BLOB
+      type: DataTypes.BLOB
     }
   },
   {
     timestamps: false,
   });
 
-  // todo, finish after making bookshelves model
-  // Book.hasOne( )
+  // todo, why isn't this happening?
+  const Bookshelf = require('./bookshelf')(sequelize)
+  Book.hasOne( Bookshelf );
   return Book;
 };
