@@ -60,6 +60,7 @@ function Login() {
   }
 
   // Get usernames from database
+  // should this execute every time?
   const sequelize = new Sequelize({
     dialect: 'sqlite',
     storage: './data/library.db',
@@ -81,8 +82,8 @@ function Login() {
 
   if (profiles.length === 0) {
     User.findAll().then((users) => {
-      console.log(users.every(user => user instanceof User)); // true
-      console.log("(profiles)All users:", JSON.stringify(users, null, 2));
+      // console.log(users.every(user => user instanceof User)); // true
+      // console.log("(home)All users:", JSON.stringify(users, null, 2));
       console.log(users)
       var usernames = [];
       for (var i = 0; i < users.length; i++) {

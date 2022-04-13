@@ -8,7 +8,7 @@ const { ipcRenderer } = electron;
 function Setup() {
     console.log("setup")
     // Database initialization
-    const bookTableCreate = "CREATE TABLE IF NOT EXISTS books( isbn TEXT NOT NULL PRIMARY KEY, title TEXT NOT NULL, author TEXT NOT NULL, bookshelf_id, cover BLOB, FOREIGN KEY(bookshelf_id) REFERENCES bookshelves(bookshelf_id))";
+    const bookTableCreate = "CREATE TABLE IF NOT EXISTS books( isbn INTEGER PRIMARY KEY, title TEXT NOT NULL, author TEXT NOT NULL, bookshelf_id, cover BLOB, FOREIGN KEY(bookshelf_id) REFERENCES bookshelves(bookshelf_id))";
     // const bookTableCreate = "CREATE TABLE IF NOT EXISTS books( isbn TEXT NOT NULL PRIMARY KEY, title TEXT, author TEXT, author_sort TEXT, series TEXT, series_sequence REAL, cover BLOB, cover_color TEXT, spine_color TEXT, media_type TEXT, FOREIGN KEY(bookshelf_id) REFERENCES bookshelves(bookshelf_id))";
     // const locationTableCreate = "CREATE TABLE IF NOT EXISTS locations( location_id TEXT NOT NULL PRIMARY KEY, room TEXT, bookshelf TEXT, shelf INTEGER )";
     const userTableCreate = "CREATE TABLE IF NOT EXISTS \"users\" (\"username\" TEXT PRIMARY KEY, \"reading history\" TEXT)";

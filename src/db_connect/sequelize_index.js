@@ -21,12 +21,12 @@ catch_err();
 
 const User = require('./models/user')(sequelize)
 
-User.findAll().then((users) => {
-  console.log(users.every(user => user instanceof User)); // true
-  console.log("All users:", JSON.stringify(users, null, 2));
-  // console.log(users)
-  // sequelize.close()
-})
+// User.findAll().then((users) => {
+//   console.log(users.every(user => user instanceof User)); // true
+//   console.log("All users:", JSON.stringify(users, null, 2));
+//   // console.log(users)
+//   // sequelize.close()
+// })
 
 
 

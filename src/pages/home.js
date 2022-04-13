@@ -1,7 +1,9 @@
 import {React, useState} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import sendAsync from '../db_connect/renderer';
+import { Sequelize } from 'sequelize';
+// import sendAsync from '../db_connect/renderer';
 import imageNotFound from '../images/imageNotFound.svg';
+
 const electron = window.require('electron');
 const { ipcRenderer } = electron;
 const electron_store = window.require('electron-store');
@@ -55,8 +57,6 @@ function Home() {
     var isbn = book.isbn;
     var author = book.author;
 
-    //TODO flexibly generate metadata-block display items
-
     // was formerly immediately above id="title" div
     // <img id="cover-block" src={cover}/>
 
@@ -87,18 +87,46 @@ function Home() {
     )
   }
 
+  const sequelize = new Sequelize({
+    dialect: 'sqlite',
+    storage: './data/library.db',
+    define: {
+      timestamps: false
+    }
+  });
+
+  (async function(){
+    try {
+      await sequelize.authenticate();
+      console.log('sequelize Connection has been established successfully.');
+    } catch (error) {
+      console.error('Unable to connect to the sequelize database:', error);
+    }
+  })();
+
   const[books, setBooks] = useState([]);
 
+  const Book = require('../db_connect/models/book')(sequelize)
   if( books.length == 0 )
   {
-    var sql_get_books = "SELECT * FROM books";
-    sendAsync(sql_get_books).then((result) => {
-      console.log("got books from db");
-      console.log(result);
-      if( result.length > 0) {
-        setBooks(result);
-      }
+    Book.findAll({raw: true}).then((books) => {
+      // console.log(books.every(books => books instanceof Book)); // true
+      console.log("(home)All books, before stringify:", books);
+      // books = JSON.stringify(books, null, 2);
+      // console.log("(home)All books, stringify:", books);
+      // console.log(books)
+      // console.log("sequelize got simplified users")
+      // console.log(books);
+      setBooks( books );
     });
+    // var sql_get_books = "SELECT * FROM books";
+    // sendAsync(sql_get_books).then((result) => {
+    //   console.log("got books from db, ipcRenderer");
+    //   console.log(result);
+    //   if( result.length > 0) {
+    //     setBooks(result);
+    //   }
+    // });
   }
 
 // for-each html tags to generate header/headers/list
