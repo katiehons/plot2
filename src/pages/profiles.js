@@ -2,29 +2,60 @@ import {React, useState} from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import sendAsync from '../db_connect/renderer';
 
-// import { Sequelize } from 'sequelize';
-import User from '../db_connect/open_sequelize';
+import { Sequelize } from 'sequelize';
+// import User from '../db_connect/sequelize_index';
 // const { User } = require( '../db_connect/sequelize');
 const electron = window.require('electron');
 const { ipcRenderer } = electron;
 const electron_store = window.require('electron-store');
 const { store } = electron_store;
 
+const sequelize = new Sequelize({
+  dialect: 'sqlite',
+  storage: './data/library.db',
+  define: {
+    timestamps: false
+  }
+});
 
-
-async function get_users()
-{
-  // const users = await User.findAll();
-  // console.log(users.every(user => user instanceof User)); // true
-  // console.log("All users:", JSON.stringify(users, null, 2));
+async function catch_err(){
+  try {
+    await sequelize.authenticate();
+    console.log('sequelize Connection has been established successfully.');
+  } catch (error) {
+    console.error('Unable to connect to the sequelize database:', error);
+  }
 }
+
+catch_err();
+
+const User = require('../db_connect/models/user')(sequelize)
+
+User.findAll().then((users) => {
+  console.log(users.every(user => user instanceof User)); // true
+  console.log("(profiles)All users:", JSON.stringify(users, null, 2));
+  // console.log(users)
+  sequelize.close()
+})
+
+// async function get_users()
+// {
+//     try{
+//     const users = await User.findAll();
+//     console.log(users.every(user => user instanceof User)); // true
+//     console.log("All users:", JSON.stringify(users, null, 2));
+//     } catch (error) {
+//     console.error('Users table err:', error);
+//     }
+//     // const users = await User.findAll();
+//   // console.log(users.every(user => user instanceof User)); // true
+//   // console.log("All users:", JSON.stringify(users, null, 2));
+// }
 
 function Login() {
   // sequelize explorations
-  // const users = await User.findAll();
-  // console.log(users.every(user => user instanceof User)); // true
-  // console.log("All users:", JSON.stringify(users, null, 2));
-  get_users();
+
+
   /// fin sequelize explaorations
 
   let history = useNavigate();

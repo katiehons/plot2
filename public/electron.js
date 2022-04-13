@@ -8,7 +8,7 @@ const isDev = require('electron-is-dev');
 const DEBUG = true;
 
 require('../src/db_connect/main');
-require('../src/db_connect/open_sequelize');
+require('../src/db_connect/sequelize_index');
 
 function createWindow() {
   // Create the browser window.
