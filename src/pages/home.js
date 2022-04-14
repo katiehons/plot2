@@ -1,50 +1,42 @@
-import {React, useState} from 'react';
+import { React, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
 import { Sequelize } from 'sequelize';
-// import sendAsync from '../db_connect/renderer';
 import imageNotFound from '../images/imageNotFound.svg';
 
-const electron = window.require('electron');
+const electron = window.require( 'electron' );
 const { ipcRenderer } = electron;
-const electron_store = window.require('electron-store');
+const electron_store = window.require( 'electron-store' );
 const { store } = electron_store;
 
 
 function Home() {
   let history = useNavigate();
+  const [user, setUser] = useState([]);
+
 
   // get and set the current user
   function CurrentUser({ user }) {
-    console.log("getting user");
-    console.log(user);
     return (
       <h3 id='current_user'>Current user: {user}</h3>
     )
   }
 
-  const [user, setUser] = useState([]);
-  console.log(user);
-  if (user.length === 0) {
+  if ( user.length === 0 ) {
     ipcRenderer.invoke('getStoreValue', 'current_user').then((result) => {
-      console.log("current user: " + result);
       if( result.length > 0)
       {
         setUser(result);
       }
-    }
-    );
+    });
   }
 
   // generate the book list
   const editBook = ( isbn ) => {
-    console.log("sending " + "/MetadataEdit?isbn=" + isbn )
     history("/MetadataEdit?isbn=" + isbn);
   }
 
   function makeBook(book)
   {
-    console.log("creating " + book.title);
-
     //get the image for each cover and set custom image if none found
     // var cover;
     // if(book.cover != null){
@@ -80,7 +72,7 @@ function Home() {
     )
   }
 
-  function BookList({books}) {
+  function BookList({ books }) {
     console.log("displaying books" + books);
     return (
       <div id='book-list'>{books.map((book) => makeBook(book))}</div>
@@ -110,23 +102,9 @@ function Home() {
   if( books.length == 0 )
   {
     Book.findAll({raw: true}).then((books) => {
-      // console.log(books.every(books => books instanceof Book)); // true
       console.log("(home)All books, before stringify:", books);
-      // books = JSON.stringify(books, null, 2);
-      // console.log("(home)All books, stringify:", books);
-      // console.log(books)
-      // console.log("sequelize got simplified users")
-      // console.log(books);
       setBooks( books );
     });
-    // var sql_get_books = "SELECT * FROM books";
-    // sendAsync(sql_get_books).then((result) => {
-    //   console.log("got books from db, ipcRenderer");
-    //   console.log(result);
-    //   if( result.length > 0) {
-    //     setBooks(result);
-    //   }
-    // });
   }
 
 // for-each html tags to generate header/headers/list
