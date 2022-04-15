@@ -19,4 +19,4 @@ async function catch_err(){
 
 catch_err();
 
-const User = require('./models/user')(sequelize)
+// const User = require('./models/user')(sequelize)

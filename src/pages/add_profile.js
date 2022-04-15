@@ -8,9 +8,9 @@ function AddProfile() {
   let history = useNavigate();
 
   const [newUsername, setNewUsername] = useState( "" );
+
   const handleSubmit = e => {
     e.preventDefault();
-    // //log state.author, state.book, state.isbn to the database instead of console
     if( newUsername )
     {
       const sequelize = new Sequelize({

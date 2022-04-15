@@ -1,6 +1,5 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-// import sendAsync from '../db_connect/renderer';
 const electron = window.require('electron');
 const { ipcRenderer } = electron;
 const { Sequelize } = require('sequelize');
