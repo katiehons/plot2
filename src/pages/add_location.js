@@ -10,7 +10,6 @@ function AddLocation()
   const[rooms, setRooms] = useState([]);
   const[bookshelfRoom, setBookshelfRoom] = useState();
 
-
   if( firstLoad )
   {
     console.log("Working on first load…")
