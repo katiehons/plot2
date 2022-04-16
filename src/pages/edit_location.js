@@ -50,14 +50,6 @@ function EditLocation() {
         setSelectedBookshelf("");
       }
     });
-    // var sql_get_bookshelves = "SELECT bookshelf_name FROM bookshelves JOIN rooms_bookshelves ON bookshelves.bookshelf_id = rooms_bookshelves.bookshelf_id JOIN rooms ON rooms.room_id = rooms_bookshelves.room_id WHERE rooms.room_name = ?;";
-    //
-    // var params = [room];
-    // sendAsync(sql_get_bookshelves, params).then((result) => {
-    //   console.log("got shelves from db");
-    //   console.log(result);
-    //   setBookshelves(result);
-    // });
   }
 
   if( firstLoad )
@@ -112,20 +104,6 @@ function EditLocation() {
       console.log( "Current room: " + selectedRoom[""] );
       fetchBookshelves( selectedRoom[""] );
     });
-    // var sql_delete_shelf_from_room = "DELETE FROM rooms_bookshelves WHERE bookshelf_id IN (SELECT bookshelf_id FROM rooms_bookshelves JOIN bookshelves ON bookshelves.bookshelf_id = rooms_bookshelves.bookshelf_id WHERE bookshelves.bookshelf_name = ?);"// DELETE FROM bookshelves WHERE bookshelf_name = ?;"
-    // var sql_delete_shelf = "DELETE FROM bookshelves WHERE bookshelf_name = ?;"
-    //
-    // var params = [bookshelf]
-    // console.log("Trying to delete: " + params)
-    //
-    // sendAsync(sql_delete_shelf_from_room, params).then((result) => {
-    //   console.log(result)
-    //   sendAsync(sql_delete_shelf, params).then((result) => {
-    //     console.log(result)
-    //     console.log( "Current room: " + selectedRoom[""] )
-    //     fetchBookshelves( selectedRoom[""] )
-    //   });
-    // });
   }
 
   const handleDeleteBookshelf = e =>{
@@ -135,20 +113,6 @@ function EditLocation() {
     if( window.confirm( "Are you sure you want to delete bookshelf \"" + bookshelf_name + "\"?\nThis will unset location for all books on this shelf."))
     {
       deleteBookshelf( bookshelf_name );
-      // var sql_delete_shelf_from_room = "DELETE FROM rooms_books WHERE shelf_id IN (SELECT shelf_id FROM rooms_books JOIN bookshelves ON bookshelves.bookshelf_id = rooms_books.shelf_id WHERE bookshelves.bookshelf_name = ?);"// DELETE FROM bookshelves WHERE bookshelf_name = ?;"
-      // var sql_delete_shelf = "DELETE FROM bookshelves WHERE bookshelf_name = ?;"
-      //
-      // var params = [bookshelf_name]
-      // console.log("Trying to delete: " + params)
-      //
-      // sendAsync(sql_delete_shelf_from_room, params).then((result) => {
-      //   console.log(result)
-      //   sendAsync(sql_delete_shelf, params).then((result) => {
-      //     console.log(result)
-      //     console.log( "Current room: " + selectedRoom[""] )
-      //     fetchBookshelves( selectedRoom[""] )
-      //   });
-      // });
     }
   }
 
@@ -172,22 +136,9 @@ function EditLocation() {
       Room.sync()
         // todo re-fetch rooms
     });
-      // var sql_delete_shelf_from_room = "DELETE FROM rooms_books WHERE shelf_id IN (SELECT shelf_id FROM rooms_books JOIN bookshelves ON bookshelves.bookshelf_id = rooms_books.shelf_id WHERE bookshelves.bookshelf_name = ?);"// DELETE FROM bookshelves WHERE bookshelf_name = ?;"
-      // var sql_delete_room = "DELETE FROM rooms WHERE room_name = ?;"
-      //
-      // var params = [room_name]
-      // console.log("Trying to delete: " + params)
-      //
-      // sendAsync(sql_delete_room, params).then((result) => {
-      //   console.log(result)
-      //   // todo re-fetch rooms
-      //   });
     }
   }
 
-  // const deleteRoom = e =>{
-  //   var sql_delete_loc =
-  // }
 
   const handleRoomChange = e =>{
     setSelectedRoom({
@@ -196,17 +147,6 @@ function EditLocation() {
     });
     console.log(e.target.value )
     fetchBookshelves( e.target.value )
-
-
-    // // get the bookshelves in that room
-    // var sql_get_rooms = "SELECT bookshelf_name, rooms.room_name FROM bookshelves JOIN rooms_books ON bookshelves.bookshelf_id = rooms_books.shelf_id JOIN rooms ON rooms.room_id = rooms_books.room_id WHERE rooms.room_name = ?;"
-    //
-    // var params = [e.target.value]
-    // sendAsync(sql_get_rooms, params).then((result) => {
-    //   console.log("got shelves from db");
-    //   console.log(result);
-    //   setBookshelves(result);
-    // });
   };
 
   const handleBookshelfChange = e =>{
@@ -215,18 +155,8 @@ function EditLocation() {
       [e.target.name]: e.target.value
     });
     console.log(e.target.value)
-    //todo: set the current number of shelves based on which bookshelf
   };
 
-  // const handleShelfChange = e =>{
-  //   setSelectedRoom({
-  //     ...selectedBookshelf,
-  //     [e.target.name]: e.target.value
-  //   });
-  //   console.log(e.target.value)
-  // };
-  // <label for="shelfsel">How many shelves? </label>
-  // <select id="shelfsel" onChange={handleShelfChange}> {shelvesList} </select>
   return (
     <div className="centered">
       <h1>Update or Delete Location</h1>
@@ -248,6 +178,5 @@ function EditLocation() {
     </div>
   );
 }
-// <button id="delete-room-btn" onClick={deleteRoom}>Delete this room</button>
 
 export default EditLocation;
