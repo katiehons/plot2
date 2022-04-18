@@ -1,5 +1,4 @@
 import {React, useState} from 'react';
-// import sendAsync from '../db_connect/renderer';
 import Sequelize from 'sequelize'
 import { Link } from 'react-router-dom'
 

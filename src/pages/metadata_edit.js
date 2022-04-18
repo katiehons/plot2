@@ -1,6 +1,7 @@
 import React, { location, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import sendAsync from '../db_connect/renderer';
+import { Sequelize } from 'sequelize';
 const queryString = require('query-string');
 
 
@@ -10,27 +11,71 @@ function MetadataEdit(props) {
   const useQuery = () => new URLSearchParams(useLocation().search);
   let query = useQuery();
 
+  const sequelize = new Sequelize({
+    dialect: 'sqlite',
+    storage: './data/library.db',
+    define: {
+      timestamps: false
+    }
+  });
+
+  (async function(){
+    try {
+      await sequelize.authenticate();
+      console.log('Metadata: sequelize Connection has been established successfully.');
+    } catch (error) {
+      console.error('Unable to connect to the sequelize database:', error);
+    }
+  })();
+
+  const Book = require('../db_connect/models/book')(sequelize);
+
   console.log("rendering metadata page");
 
   var original_isbn = query.get("isbn")
 
   if( book.length == 0 ){
-    var sqlGetBook = "SELECT * FROM books WHERE isbn = ?;";
-    var params = [original_isbn]
-    sendAsync(sqlGetBook, params).then((result) => {
-      console.log("result from the db: " + result);
-      setBook(result[0]);
+    Book.findAll({
+      where: {
+        isbn: original_isbn },
+      raw: true}).then((book) => {
+      console.log("book: " + book)
+      setBook(book[0])
     })
     .catch(function(error)
-    {
-        console.log(error);
-        window.alert("Something went wrong updating the book");
-    })};
+        {
+            console.log(error);
+            window.alert("Something went wrong finding the book");
+        });
+
+    // var sqlGetBook = "SELECT * FROM books WHERE isbn = ?;";
+    // var params = [original_isbn]
+    // sendAsync(sqlGetBook, params).then((result) => {
+    //   console.log("result from the db: " + result);
+    //   setBook(result[0]);
+    // })
+    // .catch(function(error)
+    // {
+    //     console.log(error);
+    //     window.alert("Something went wrong updating the book");
+    // })
+  };
 
   const saveEdits = function( event, original_isbn ) {
     if ( window.confirm("Update book information to:\nTitle: " + book.title
       + "\nISBN: " + book.isbn + "\nAuthor: " + book.author) ) {
-    console.log("save book, original isbn:" + original_isbn);
+      console.log("save book, original isbn:" + original_isbn);
+      // await Book.update(
+      //   { isbn: book.isbn,
+      //     title: book.title,
+      //     author: book.uthor}, {
+      //   where: {
+      //     isbn: original_isbn
+      //     }
+      //   });
+
+
+      // .then( () => { Book.sync() } );
     var sqlUpdateBook = "UPDATE books SET isbn = ?, title = ?, author = ? WHERE isbn = ?;";
     var params = [book.isbn, book.title, book.author, original_isbn];
     console.log("update sql string: \n" + sqlUpdateBook)
