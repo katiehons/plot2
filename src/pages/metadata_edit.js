@@ -1,6 +1,5 @@
 import React, { location, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import sendAsync from '../db_connect/renderer';
 import { Sequelize } from 'sequelize';
 const queryString = require('query-string');
 

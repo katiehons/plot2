@@ -1,28 +1,64 @@
 import {React, useState} from 'react';
+import Sequelize from 'sequelize'
 import sendAsync from '../db_connect/renderer';
 import { Link } from 'react-router-dom'
 
 function AddLocation()
 {
-  const[firstLoad, setFirstLoad] = useState( true );
+  const[firstLoad, setFirstLoad] = useState( true ); //rename to something like reload/load
   const[newRoom, setNewRoom] = useState();
   const[newBookshelf, setNewBookshelf] = useState();
   const[rooms, setRooms] = useState([]);
   const[bookshelfRoom, setBookshelfRoom] = useState();
 
+  const sequelize = new Sequelize({
+    dialect: 'sqlite',
+    storage: './data/library.db',
+    define: {
+      timestamps: false
+    }
+  });
+
+  (async function() {
+    try {
+      await sequelize.authenticate();
+      console.log('Metadata: sequelize Connection has been established successfully.');
+    } catch (error) {
+      console.error('Unable to connect to the sequelize database:', error);
+    }
+  })();
+
+  const Bookshelf = require('../db_connect/models/bookshelf')(sequelize);
+  const Room = require('../db_connect/models/room')(sequelize);
+
+
+
   if( firstLoad )
   {
     console.log("Working on first load…")
     setFirstLoad( false )
-    var sql_get_rooms = "SELECT room_name FROM rooms";
-    sendAsync(sql_get_rooms).then((result) => {
-      console.log("got rooms from db");
-      console.log(result);
-      if( result.length > 0) {
-        setRooms(result);
-        setBookshelfRoom(result[0].room_name)
-      }
-    });
+    Room.findAll({raw: true}).then((rooms) => {
+      console.log("rooms: " + rooms)
+          setRooms(rooms);
+          if( rooms.length > 0 )
+          {
+            setBookshelfRoom( rooms[0].room_name );
+            // fetchBookshelves( rooms[0].room_name );
+          }
+          else
+          {
+            setBookshelfRoom("")
+          }
+        });
+    // var sql_get_rooms = "SELECT room_name FROM rooms";
+    // sendAsync(sql_get_rooms).then((result) => {
+    //   console.log("got rooms from db");
+    //   console.log(result);
+    //   if( result.length > 0) {
+    //     setRooms(result);
+    //     setBookshelfRoom(result[0].room_name)
+    //   }
+    // });
   }
 
   let roomList = rooms.length > 0 && rooms.map((item, i) => {
@@ -37,6 +73,9 @@ function AddLocation()
     var params = [newRoom];
     console.log(params);
     sendAsync(sql_new_room, params).then((result) => console.log(result));
+    setFirstLoad(true);
+    document.getElementById('new-room-form').reset();
+
 
     //todo, handle/process/ display sql errors
     // todo, add the room to the bookshelves dropdown after it exists, maybe just set firstload true?
@@ -79,7 +118,7 @@ function AddLocation()
   return(
     <div className='centered'>
     <h1>Add New Location</h1>
-    <form onSubmit={handleRoomSubmit}>
+    <form onSubmit={handleRoomSubmit} id="new-room-form">
     <input id="new-room" type="text" placeholder="New Room…" onChange={handleNewRoomChange}/>
     <input id="submit-new-room" type="submit" value="Add This Room" />
     <br/>

@@ -23,41 +23,21 @@ function Setup() {
 
   sequelize.sync();
 
+  let history = useNavigate();
+  const [state, setState] = React.useState({ libName: "" });
 
+  const handleSubmit = e => {
+      e.preventDefault();
 
-    //
-    // const bookTableCreate = "CREATE TABLE IF NOT EXISTS books( isbn INTEGER PRIMARY KEY, title TEXT NOT NULL, author TEXT NOT NULL, bookshelf_id, cover BLOB, FOREIGN KEY(bookshelf_id) REFERENCES bookshelves(bookshelf_id))";
-    // // const bookTableCreate = "CREATE TABLE IF NOT EXISTS books( isbn TEXT NOT NULL PRIMARY KEY, title TEXT, author TEXT, author_sort TEXT, series TEXT, series_sequence REAL, cover BLOB, cover_color TEXT, spine_color TEXT, media_type TEXT, FOREIGN KEY(bookshelf_id) REFERENCES bookshelves(bookshelf_id))";
-    // // const locationTableCreate = "CREATE TABLE IF NOT EXISTS locations( location_id TEXT NOT NULL PRIMARY KEY, room TEXT, bookshelf TEXT, shelf INTEGER )";
-    // const userTableCreate = "CREATE TABLE IF NOT EXISTS \"users\" (\"username\" TEXT PRIMARY KEY, \"reading history\" TEXT)";
-    // const roomsTableCreate = "CREATE TABLE IF NOT EXISTS rooms( room_id INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT, room_name TEXT UNIQUE )";
-    // const bookshelvesTableCreate = "CREATE TABLE IF NOT EXISTS bookshelves( bookshelf_id INTEGER PRIMARY KEY AUTOINCREMENT, bookshelf_name TEXT UNIQUE, number_shelves INTEGER )";
-    // const roomsBooksTableCreate = "CREATE TABLE IF NOT EXISTS rooms_bookshelves( room_id INTEGER, bookshelf_id INTEGER UNIQUE, PRIMARY KEY ( room_id, bookshelf_id ) )";
-    //
-    //
-    // sendAsync(bookTableCreate).then((result) => console.log(result));
-    // // sendAsync(locationTableCreate).then((result) => console.log(result));
-    // sendAsync(userTableCreate).then((result) => console.log(result));
-    // sendAsync(roomsTableCreate).then((result) => console.log(result));
-    // sendAsync(bookshelvesTableCreate).then((result) => console.log(result));
-    // sendAsync(roomsBooksTableCreate).then((result) => console.log(result));
-
-
-    let history = useNavigate();
-    const [state, setState] = React.useState({ libName: "" });
-
-    const handleSubmit = e => {
-        e.preventDefault();
-
-        if (state.libName){
-            ipcRenderer.invoke('setStoreValue', 'library_name', state.libName)
-            .then(ipcRenderer.invoke('setStoreValue', 'library_setup', true))
-            .then(history('/Login'));
-        }else{
-            console.log("empty library name");
-            window.alert("Please choose a name with more than 0 characters.");
-        }
-    };
+      if (state.libName){
+          ipcRenderer.invoke('setStoreValue', 'library_name', state.libName)
+          .then(ipcRenderer.invoke('setStoreValue', 'library_setup', true))
+          .then(history('/Login'));
+      }else{
+          console.log("empty library name");
+          window.alert("Please choose a name with more than 0 characters.");
+      }
+  };
 
     const handleChange = e => {
         setState({
