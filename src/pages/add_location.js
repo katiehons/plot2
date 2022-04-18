@@ -1,6 +1,5 @@
 import {React, useState} from 'react';
 import Sequelize from 'sequelize'
-import sendAsync from '../db_connect/renderer';
 import { Link } from 'react-router-dom'
 
 function AddLocation()
@@ -43,22 +42,13 @@ function AddLocation()
           if( rooms.length > 0 )
           {
             setBookshelfRoom( rooms[0].room_name );
-            // fetchBookshelves( rooms[0].room_name );
+            //todo: handle when this was already selected to some different dropdown val
           }
           else
           {
             setBookshelfRoom("")
           }
         });
-    // var sql_get_rooms = "SELECT room_name FROM rooms";
-    // sendAsync(sql_get_rooms).then((result) => {
-    //   console.log("got rooms from db");
-    //   console.log(result);
-    //   if( result.length > 0) {
-    //     setRooms(result);
-    //     setBookshelfRoom(result[0].room_name)
-    //   }
-    // });
   }
 
   let roomList = rooms.length > 0 && rooms.map((item, i) => {
@@ -69,35 +59,35 @@ function AddLocation()
 
   const handleRoomSubmit = e => {
     e.preventDefault();
-    var sql_new_room = "INSERT INTO rooms(room_name) VALUES( ? );";
-    var params = [newRoom];
-    console.log(params);
-    sendAsync(sql_new_room, params).then((result) => console.log(result));
-    setFirstLoad(true);
-    document.getElementById('new-room-form').reset();
-
+    Room.create({
+      room_name: newRoom
+    }).then( () => {
+      Room.sync();
+      setFirstLoad(true);
+      document.getElementById('new-room-form').reset();
+    });
 
     //todo, handle/process/ display sql errors
-    // todo, add the room to the bookshelves dropdown after it exists, maybe just set firstload true?
   }
 
   const handleBookshelfSubmit = e => {
     e.preventDefault();
     console.log("new bookshelf: " + newBookshelf + " into: " + bookshelfRoom );
 
-    // make new bookshelf
-    var sql_new_bookshelf = "INSERT INTO bookshelves(bookshelf_name) VALUES( ? );";
-    var bookshelf_params = [newBookshelf];
-
-    // associate bookshelf with room
-    var sql_assoc_bookshelf_room = "INSERT INTO rooms_bookshelves SELECT rooms.room_id, bookshelves.bookshelf_id FROM rooms, bookshelves WHERE room_name = ? AND bookshelf_name = ?";
-    var room_bookshelf_params = [ bookshelfRoom, newBookshelf ];
-
-    sendAsync(sql_new_bookshelf, bookshelf_params).then((result) =>
-    {
+    Bookshelf.create({
+      bookshelf_name: newBookshelf
+    }).then( (result) => {
       console.log(result);
-      sendAsync( sql_assoc_bookshelf_room, room_bookshelf_params ).then((result) => console.log(result));
-    });
+      sequelize.query(
+        "INSERT INTO rooms_bookshelves SELECT rooms.room_id, bookshelves.bookshelf_id FROM rooms, bookshelves WHERE room_name = ? AND bookshelf_name = ?",
+        { replacements: [ bookshelfRoom, newBookshelf ],
+          raw: true })
+        .then((result) => {
+          document.getElementById('new-bookshelf-name').value = "";
+          setNewBookshelf("");
+          console.log(result);
+        });
+    })
   }
 
   const handleNewRoomChange = e => {
@@ -124,9 +114,9 @@ function AddLocation()
     <br/>
     </form>
 
-    <form onSubmit={handleBookshelfSubmit}>
+    <form onSubmit={handleBookshelfSubmit} id="new-bookshelf-form">
     <select id="roomsel" onChange={handleBookshelfRoomChange}> {roomList} </select>
-    <input id="new-bookshelf" type="text" placeholder="New Bookshelf…" onChange={handleNewBookshelfChange}/>
+    <input id="new-bookshelf-name" type="text" placeholder="New Bookshelf…" onChange={handleNewBookshelfChange}/>
     <input id="submit-new-room" type="submit" value="Add This Bookshelf" />
     <br/>
     </form>
