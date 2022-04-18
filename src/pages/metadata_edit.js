@@ -6,10 +6,14 @@ const queryString = require('query-string');
 
 
 function MetadataEdit(props) {
-  const [book, setBook] = useState([]);
+  const [book, setBook] = useState("");
   let history = useNavigate();
   const useQuery = () => new URLSearchParams(useLocation().search);
   let query = useQuery();
+
+  // console.log("rendering metadata page");
+
+  var original_isbn = query.get("isbn")
 
   const sequelize = new Sequelize({
     dialect: 'sqlite',
@@ -19,7 +23,9 @@ function MetadataEdit(props) {
     }
   });
 
-  (async function(){
+  // console.log( "done init'ing sequelize");
+
+  (async function() {
     try {
       await sequelize.authenticate();
       console.log('Metadata: sequelize Connection has been established successfully.');
@@ -29,12 +35,11 @@ function MetadataEdit(props) {
   })();
 
   const Book = require('../db_connect/models/book')(sequelize);
+  // console.log("book: " + book);
 
-  console.log("rendering metadata page");
+  if( book == "" ){
+    // console.log("had no book, getting new book");
 
-  var original_isbn = query.get("isbn")
-
-  if( book.length == 0 ){
     Book.findAll({
       where: {
         isbn: original_isbn },
@@ -47,41 +52,24 @@ function MetadataEdit(props) {
             console.log(error);
             window.alert("Something went wrong finding the book");
         });
-
-    // var sqlGetBook = "SELECT * FROM books WHERE isbn = ?;";
-    // var params = [original_isbn]
-    // sendAsync(sqlGetBook, params).then((result) => {
-    //   console.log("result from the db: " + result);
-    //   setBook(result[0]);
-    // })
-    // .catch(function(error)
-    // {
-    //     console.log(error);
-    //     window.alert("Something went wrong updating the book");
-    // })
   };
 
+
   const saveEdits = function( event, original_isbn ) {
+    event.preventDefault();
+
     if ( window.confirm("Update book information to:\nTitle: " + book.title
       + "\nISBN: " + book.isbn + "\nAuthor: " + book.author) ) {
-      console.log("save book, original isbn:" + original_isbn);
-      // await Book.update(
-      //   { isbn: book.isbn,
-      //     title: book.title,
-      //     author: book.uthor}, {
-      //   where: {
-      //     isbn: original_isbn
-      //     }
-      //   });
+      // console.log("save book, original isbn:" + original_isbn);
 
-
-      // .then( () => { Book.sync() } );
-    var sqlUpdateBook = "UPDATE books SET isbn = ?, title = ?, author = ? WHERE isbn = ?;";
-    var params = [book.isbn, book.title, book.author, original_isbn];
-    console.log("update sql string: \n" + sqlUpdateBook)
-    sendAsync(sqlUpdateBook, params).then((result) => {
-      console.log("update sql result:\n" + result);
-    });
+      Book.update(
+        { isbn: book.isbn,
+          title: book.title,
+          author: book.uthor}, {
+        where: {
+          isbn: original_isbn
+          }
+        }).then( () => { Book.sync() } );
   }
     else {
       console.log("cancelled book update");
