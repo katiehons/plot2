@@ -8,7 +8,7 @@ function AddLocation()
   const[newRoom, setNewRoom] = useState();
   const[newBookshelf, setNewBookshelf] = useState();
   const[rooms, setRooms] = useState([]);
-  const[bookshelfRoom, setBookshelfRoom] = useState();
+  const[bookshelfRoom, setBookshelfRoom] = useState(null);
 
   const sequelize = new Sequelize({
     dialect: 'sqlite',
@@ -38,22 +38,24 @@ function AddLocation()
     setFirstLoad( false )
     Room.findAll({raw: true}).then((rooms) => {
       console.log("rooms: " + rooms)
+      console.log("room 0: " + rooms[0])
           setRooms(rooms);
           if( rooms.length > 0 )
           {
-            setBookshelfRoom( rooms[0].room_name );
+            setBookshelfRoom( rooms[0].room_id );
             //todo: handle when this was already selected to some different dropdown val
           }
           else
           {
-            setBookshelfRoom("")
+            setBookshelfRoom(null)
           }
         });
   }
 
   let roomList = rooms.length > 0 && rooms.map((item, i) => {
+    console.log("listing room: " + item.room_name + " " + item.room_id)
   return (
-    <option key={i} value={item.room_name}>{item.room_name}</option>
+    <option key={i} value={item.room_id}>{item.room_name}</option>
   )
   }, this);
 
@@ -75,18 +77,21 @@ function AddLocation()
     console.log("new bookshelf: " + newBookshelf + " into: " + bookshelfRoom );
 
     Bookshelf.create({
-      bookshelf_name: newBookshelf
+      bookshelf_name: newBookshelf,
+      room_id: bookshelfRoom
     }).then( (result) => {
       console.log(result);
-      sequelize.query(
-        "INSERT INTO rooms_bookshelves SELECT rooms.room_id, bookshelves.bookshelf_id FROM rooms, bookshelves WHERE room_name = ? AND bookshelf_name = ?",
-        { replacements: [ bookshelfRoom, newBookshelf ],
-          raw: true })
-        .then((result) => {
-          document.getElementById('new-bookshelf-name').value = "";
-          setNewBookshelf("");
-          console.log(result);
-        });
+      // result.addRoom( bookshelfRoom.id );
+      Bookshelf.sync();
+      // sequelize.query(
+      //   "INSERT INTO rooms_bookshelves SELECT rooms.room_id, bookshelves.bookshelf_id FROM rooms, bookshelves WHERE room_name = ? AND bookshelf_name = ?",
+      //   { replacements: [ bookshelfRoom, newBookshelf ],
+      //     raw: true })
+      //   .then((result) => {
+      //     document.getElementById('new-bookshelf-name').value = "";
+      //     setNewBookshelf("");
+      //     console.log(result);
+      //   });
     })
   }
 

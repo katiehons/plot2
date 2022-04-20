@@ -37,7 +37,14 @@ function EditLocation() {
   {
     console.log("Fetching bookshelves..." + room )
     // get the bookshelves in that room
-    Bookshelf.findAll({raw: true}).then((bookshelves) => {
+        // var sql_get_bookshelves = "SELECT bookshelf_name FROM bookshelves JOIN rooms_bookshelves ON bookshelves.bookshelf_id = rooms_bookshelves.bookshelf_id JOIN rooms ON rooms.room_id = rooms_bookshelves.room_id WHERE rooms.room_name = ?;";
+
+    // todo next: get the bookshelves only from the right room
+    Bookshelf.findAll({
+      where: {
+      room_id: 1
+      },
+        raw: true}).then((bookshelves) => {
       console.log("bookshelves: " + bookshelves)
       setBookshelves( bookshelves );
       if( bookshelves.length > 0 )
