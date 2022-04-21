@@ -6,9 +6,9 @@ function EditLocation() {
   // todo make these not-array as appropriate
   const[firstLoad, setFirstLoad] = useState( true );
   const[rooms, setRooms] = useState([]);
-  const[selectedRoom, setSelectedRoom] = useState( 0 );
+  const[selectedRoom, setSelectedRoom] = useState( null );
   const[bookshelves, setBookshelves] = useState([]);
-  const[selectedBookshelf, setSelectedBookshelf] = useState( 0 );
+  const[selectedBookshelf, setSelectedBookshelf] = useState( null );
   const[shelves, setshelves] = useState([]);
   const[selectedShelves, setSelectedShelves] = useState([]);
 
@@ -33,28 +33,30 @@ function EditLocation() {
   const Room = require('../db_connect/models/room')(sequelize);
 
 
-  function fetchBookshelves( room )
+  function fetchBookshelves( room_id )
   {
-    console.log("Fetching bookshelves..." + room )
+    console.log("Fetching bookshelves..." + room_id )
     // get the bookshelves in that room
         // var sql_get_bookshelves = "SELECT bookshelf_name FROM bookshelves JOIN rooms_bookshelves ON bookshelves.bookshelf_id = rooms_bookshelves.bookshelf_id JOIN rooms ON rooms.room_id = rooms_bookshelves.room_id WHERE rooms.room_name = ?;";
-
+    var resultno = 0
     // todo next: get the bookshelves only from the right room
     Bookshelf.findAll({
       where: {
-      room_id: 1
+      room_id: room_id
       },
-        raw: true}).then((bookshelves) => {
-      console.log("bookshelves: " + bookshelves)
-      setBookshelves( bookshelves );
-      if( bookshelves.length > 0 )
-      {
-        setSelectedBookshelf( bookshelves.[0].bookshelf_name );
-      }
-      else
-      {
-        setSelectedBookshelf("");
-      }
+      raw: true}).then((bookshelves_result) => {
+        console.log("result number: " + resultno +" calling room: " + room_id)
+        resultno ++
+        console.log("bookshelves: " + bookshelves_result)
+        setBookshelves( bookshelves_result );
+        if( bookshelves_result.length > 0 )
+        {
+          setSelectedBookshelf( bookshelves_result.[0].bookshelf_id );
+        }
+        else
+        {
+          setSelectedBookshelf(null);
+        }
     });
   }
 
@@ -63,29 +65,31 @@ function EditLocation() {
     console.log("Working on first load…")
     setFirstLoad( false )
     Room.findAll({raw: true}).then((rooms) => {
-      console.log("rooms: " + rooms)
+      console.log("number of rooms: " + rooms.length)
           setRooms(rooms);
           if( rooms.length > 0 )
           {
-            setSelectedRoom( rooms[0].room_name );
-            fetchBookshelves( rooms[0].room_name );
+            setSelectedRoom( rooms[0].room_id );
+            fetchBookshelves( rooms[0].room_id );
           }
           else
           {
-            setSelectedRoom("")
+            setSelectedRoom(null)
+            setBookshelves([])
+            setSelectedBookshelf(null)
           }
         });
   }
 
   let roomList = rooms.length > 0 && rooms.map((item, i) => {
   return (
-    <option key={i} value={item.room_name}>{item.room_name}</option>
+    <option key={i} value={item.room_id}>{item.room_name}</option>
   )
   }, this);
 
   let bookshelvesList = bookshelves.length > 0 && bookshelves.map((item, i) => {
   return (
-    <option key={i} value={item.bookshelf_name}>{item.bookshelf_name}</option>
+    <option key={i} value={item.bookshelf_id}>{item.bookshelf_name}</option>
   )
   }, this);
 
@@ -99,39 +103,45 @@ function EditLocation() {
   };
 
 ///^^^^^^^^^^^^^^^^^^
-  function deleteBookshelf( bookshelf )
+  function deleteBookshelf( bookshelf_id, from_room_delete=false )
   {
     Bookshelf.destroy({
       where: {
-        bookshelf_name: bookshelf
+        bookshelf_id: bookshelf_id
       }
     }).then( () => {
       Bookshelf.sync()
-      console.log( "Current room: " + selectedRoom[""] );
-      fetchBookshelves( selectedRoom[""] );
+      console.log( "Current room: " + selectedRoom );
+      if( !from_room_delete )
+      {
+        fetchBookshelves( selectedRoom );
+      }
     });
   }
 
   const handleDeleteBookshelf = e =>{
     var bookshelf_sel = document.getElementById("bookshelfsel")
     var bookshelf_name = bookshelf_sel.options[bookshelf_sel.selectedIndex].text
+    var bookshelf_id = bookshelf_sel.options[bookshelf_sel.selectedIndex].value
 
     if( window.confirm( "Are you sure you want to delete bookshelf \"" + bookshelf_name + "\"?\nThis will unset location for all books on this shelf."))
     {
-      deleteBookshelf( bookshelf_name );
+      console.log("deleting bookshelf: " + bookshelf_name + " id: " + bookshelf_id )
+      deleteBookshelf( bookshelf_id );
     }
   }
 
   const handleDeleteRoom = e =>{
     var room_sel = document.getElementById("roomsel")
     var room_name = room_sel.options[room_sel.selectedIndex].text
+    var room_id = room_sel.options[room_sel.selectedIndex].value
 
     if( window.confirm( "Are you sure you want to delete room \"" + room_name + "\"?\nThis will also delete all bookshelves in this room."))
     {
       // this takes care of deleting bookshelfs and room-bookshelf associations
       for (var i = 0; i < bookshelves.length; i++) {
-          console.log(bookshelves[i].bookshelf_name);
-          deleteBookshelf( bookshelves[i].bookshelf_name );
+          // console.log("From room delete, deleting bookshelf: " + bookshelves[i].bookshelf_name);
+          deleteBookshelf( bookshelves[i].bookshelf_id, true );
       }
 
     Room.destroy({
@@ -140,6 +150,10 @@ function EditLocation() {
       }
     }).then( () => {
       Room.sync()
+      setFirstLoad(true)
+      // if
+      // setSelectedRoom(rooms[0])
+      // fetchBookshelves( selectedRoom );
         // todo re-fetch rooms
     });
     }
@@ -147,10 +161,7 @@ function EditLocation() {
 
 
   const handleRoomChange = e =>{
-    setSelectedRoom({
-      ...selectedRoom,
-      [e.target.name]: e.target.value
-    });
+    setSelectedRoom( e.target.value );
     console.log(e.target.value )
     fetchBookshelves( e.target.value )
   };

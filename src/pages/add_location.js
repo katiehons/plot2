@@ -88,8 +88,8 @@ function AddLocation()
       //   { replacements: [ bookshelfRoom, newBookshelf ],
       //     raw: true })
       //   .then((result) => {
-      //     document.getElementById('new-bookshelf-name').value = "";
-      //     setNewBookshelf("");
+      document.getElementById('new-bookshelf-name').value = "";
+      setNewBookshelf("");
       //     console.log(result);
       //   });
     })
@@ -126,7 +126,7 @@ function AddLocation()
     <br/>
     </form>
     <Link to={'/LocationMgr'}>
-                <button id="locationabortButton">Back to all locations</button>
+                <button id="locationabortButton">Back to location manager</button>
                 </Link>
     </div>
   )
