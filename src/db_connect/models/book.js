@@ -16,6 +16,10 @@ module.exports = (sequelize) => {
     },
     cover: {
       type: DataTypes.BLOB
+    },
+    bookshelf_id:
+    {
+      type: DataTypes.INTEGER
     }
   },
   {
@@ -23,7 +27,8 @@ module.exports = (sequelize) => {
   });
 
   // todo, why isn't this happening?
-  const Bookshelf = require('./bookshelf')(sequelize)
-  Book.hasOne( Bookshelf );
+  // const Bookshelf = require('./bookshelf')(sequelize)
+  // Book.hasOne( Bookshelf, { foreignKey: "bookshelf_id" });
+  // Bookshelf.belongsToMany( Book, { foreignKey: "bookshelf_id" })
   return Book;
 };
