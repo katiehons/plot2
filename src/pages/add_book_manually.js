@@ -1,7 +1,11 @@
 import { React, useState } from 'react';
-import { Sequelize } from 'sequelize';
 import { Link } from 'react-router-dom'
 
+import library_db from "../db_connect/sequelize_index"
+
+const Book = library_db.book;
+const Bookshelf = library_db.bookshelf;
+const Room = library_db.room;
 
 function AddBookManually() {
   const [bookInfo, setBookInfo] = useState({ author: "", book: "", isbn: "" });
@@ -20,32 +24,13 @@ function AddBookManually() {
       window.alert("ISBN must be a number");
     }
     else if (window.confirm("Add " + bookInfo.title + ", " + bookInfo.isbn + " by " + bookInfo.author + "?") ){
-      const sequelize = new Sequelize({
-        dialect: 'sqlite',
-        storage: './data/library.db',
-        define: {
-          timestamps: false
-        }
-      });
-
-      (async function(){
-        try {
-          await sequelize.authenticate();
-          console.log('sequelize Connection has been established successfully.');
-        } catch (error) {
-          console.error('Unable to connect to the sequelize database:', error);
-        }
-      })();
-
-      const Book = require( '../db_connect/models/book')(sequelize);
-
       Book.create( {
         isbn: bookInfo.isbn,
         title: bookInfo.title,
         author: bookInfo.author,
       }).then(() => {
         Book.sync().then((response) => {
-          sequelize.close();
+          // sequelize.close();
           document.getElementById('manual-add-form').reset();
         });
       });
