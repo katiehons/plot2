@@ -1,8 +1,12 @@
 import React, { location, useState } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import { Sequelize } from 'sequelize';
-const queryString = require('query-string');
+import library_db from "../db_connect/sequelize_index"
 
+const Book = library_db.book;
+const Bookshelf = library_db.bookshelf;
+const Room = library_db.room;
+
+const queryString = require('query-string');
 
 function MetadataEdit(props) {
   const [book, setBook] = useState("");
@@ -13,28 +17,6 @@ function MetadataEdit(props) {
   // console.log("rendering metadata page");
 
   var original_isbn = query.get("isbn")
-
-  const sequelize = new Sequelize({
-    dialect: 'sqlite',
-    storage: './data/library.db',
-    define: {
-      timestamps: false
-    }
-  });
-
-  // console.log( "done init'ing sequelize");
-
-  (async function() {
-    try {
-      await sequelize.authenticate();
-      console.log('Metadata: sequelize Connection has been established successfully.');
-    } catch (error) {
-      console.error('Unable to connect to the sequelize database:', error);
-    }
-  })();
-
-  const Book = require('../db_connect/models/book')(sequelize);
-  // console.log("book: " + book);
 
   if( book == "" ){
     // console.log("had no book, getting new book");
