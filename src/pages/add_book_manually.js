@@ -4,8 +4,8 @@ import { Link } from 'react-router-dom'
 import library_db from "../db_connect/sequelize_index"
 
 const Book = library_db.book;
-const Bookshelf = library_db.bookshelf;
-const Room = library_db.room;
+// const Bookshelf = library_db.bookshelf;
+// const Room = library_db.room;
 
 function AddBookManually() {
   const [bookInfo, setBookInfo] = useState({ author: "", book: "", isbn: "" });
@@ -30,7 +30,6 @@ function AddBookManually() {
         author: bookInfo.author,
       }).then(() => {
         Book.sync().then((response) => {
-          // sequelize.close();
           document.getElementById('manual-add-form').reset();
         });
       });

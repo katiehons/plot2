@@ -1,6 +1,5 @@
 import { React, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-// import { Sequelize } from 'sequelize';
 import library_db from "../db_connect/sequelize_index"
 import imageNotFound from '../images/imageNotFound.svg';
 
@@ -55,17 +54,8 @@ function Home() {
     var title = book.title;
     var isbn = book.isbn;
     var author = book.author;
-    // var bookshelf_id = book.bookshelf_id;
     var bookshelf = book["bookshelf.bookshelf_name"];
     var room = book["bookshelf.room.room_name"];
-    // if( book.bookshelf.bookshelf_name != null)
-    // {
-    //   bookshelf = book.bookshelf.bookshelf_name;
-    // }
-    // var bookshelf = book.bookshelf.bookshelf_name;
-
-    // was formerly immediately above id="title" div
-    // <img id="cover-block" src={cover}/>
 
     return(
       <p class="list-block">
@@ -101,17 +91,13 @@ function Home() {
   if( books.length == 0 )
   {
     Book.findAll({raw: true,
-                  // include: { Bookshelf }
                   include: {
                     model: Bookshelf,
                     attributes: ["bookshelf_name"],
-                    // as: "bookshelf",
                     include: {
                       model:Room,
                       attributes: ["room_name"]
                     }}}
-                    // as: "bookshelf",
-                    // attributes: ["bookshelf_id", "bookshelf_name", "room_id"]}}
                   ).then((books_result) => {
       console.log("(home)All books:", books_result);
       setBooks( books_result );
