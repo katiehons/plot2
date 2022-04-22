@@ -1,6 +1,8 @@
 const { Sequelize, DataTypes } = require("sequelize");
 
 module.exports = (sequelize) => {
+  const Bookshelf = require('./bookshelf')(sequelize)
+
   const Room = sequelize.define("rooms", {
     room_id: {
       type: DataTypes.INTEGER,
@@ -15,13 +17,11 @@ module.exports = (sequelize) => {
   {
     timestamps: false,
   });
-
-  const Bookshelf = require('./bookshelf')(sequelize)
   // Room.belongsToMany( Bookshelf, { through: "rooms_bookshelves", foreignKey: "room_id", otherKey: "bookshelf_id" });
-  associate() = function()
-  {
-    Room.hasMany(Bookshelf, { foreignKey: "room_id" })
-    Bookshelf.belongsTo(Room, { foreignKey: "room_id" })
-  }
+  // Room.associate = function()
+  // {
+  //   Room.hasMany(Bookshelf, { foreignKey: "room_id" })
+  //   Bookshelf.belongsTo(Room, { foreignKey: "room_id" })
+  // }
   return Room;
 };
