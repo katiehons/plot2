@@ -1,6 +1,7 @@
 import { React, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Sequelize, associate } from 'sequelize';
+// import { Sequelize } from 'sequelize';
+import library_db from "../db_connect/sequelize_index"
 import imageNotFound from '../images/imageNotFound.svg';
 
 const electron = window.require( 'electron' );
@@ -8,10 +9,14 @@ const { ipcRenderer } = electron;
 const electron_store = window.require( 'electron-store' );
 const { store } = electron_store;
 
+const Book = library_db.book;
+const Bookshelf = library_db.bookshelf;
+const Room = library_db.room;
 
 function Home() {
   let history = useNavigate();
-  const [user, setUser] = useState([]);
+  const [user, setUser] = useState(null);
+  const[books, setBooks] = useState([]);
 
 
   // get and set the current user
@@ -21,7 +26,7 @@ function Home() {
     )
   }
 
-  if ( user.length === 0 ) {
+  if ( user == null ) {
     ipcRenderer.invoke('getStoreValue', 'current_user').then((result) => {
       if( result.length > 0)
       {
@@ -37,6 +42,8 @@ function Home() {
 
   function makeBook(book)
   {
+    console.log("lookin at book:")
+    console.log( book)
     //get the image for each cover and set custom image if none found
     // var cover;
     // if(book.cover != null){
@@ -48,6 +55,13 @@ function Home() {
     var title = book.title;
     var isbn = book.isbn;
     var author = book.author;
+    // var bookshelf_id = book.bookshelf_id;
+    var bookshelf = book["bookshelf.bookshelf_name"];
+    var room = book["bookshelf.room.room_name"];
+    // if( book.bookshelf.bookshelf_name != null)
+    // {
+    //   bookshelf = book.bookshelf.bookshelf_name;
+    // }
     // var bookshelf = book.bookshelf.bookshelf_name;
 
     // was formerly immediately above id="title" div
@@ -65,6 +79,9 @@ function Home() {
             <div class="metadata-item" id="author">
             Author: {author}
             </div>
+            <div class="metadata-item" id="author">
+            Location: {room}, {bookshelf}
+            </div>
         </div>
         <button type="button" className="edit-button" onClick={() => editBook(isbn)}>
           Edit
@@ -80,40 +97,24 @@ function Home() {
     )
   }
 
-  const sequelize = new Sequelize({
-    dialect: 'sqlite',
-    storage: './data/library.db',
-    define: {
-      timestamps: false
-    }
-  });
-
-  (async function(){
-    try {
-      await sequelize.authenticate();
-      Book.associate()
-      Bookshelf.associate()
-      Room.associate()
-      console.log('sequelize Connection has been established successfully.');
-    } catch (error) {
-      console.error('Unable to connect to the sequelize database:', error);
-    }
-  })();
-
-  const[books, setBooks] = useState([]);
-
-  const Book = require('../db_connect/models/book')(sequelize)
-  const Bookshelf = require('../db_connect/models/bookshelf')(sequelize)
-  const Room = require('../db_connect/models/room')(sequelize)
-  // Book.associate()
-  // Bookshelf.associate()
-  // Room.associate()
 
   if( books.length == 0 )
   {
-    Book.findAll({raw: true, include: Bookshelf}).then((books) => {
-      console.log("(home)All books, before stringify:", books);
-      setBooks( books );
+    Book.findAll({raw: true,
+                  // include: { Bookshelf }
+                  include: {
+                    model: Bookshelf,
+                    attributes: ["bookshelf_name"],
+                    // as: "bookshelf",
+                    include: {
+                      model:Room,
+                      attributes: ["room_name"]
+                    }}}
+                    // as: "bookshelf",
+                    // attributes: ["bookshelf_id", "bookshelf_name", "room_id"]}}
+                  ).then((books_result) => {
+      console.log("(home)All books:", books_result);
+      setBooks( books_result );
     });
   }
 // for-each html tags to generate header/headers/list

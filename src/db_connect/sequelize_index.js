@@ -40,6 +40,8 @@ library_db.user = require("./models/user")(sequelize);
 
 library_db.book.belongsTo( library_db.bookshelf, { foreignKey: "bookshelf_id" })
 library_db.bookshelf.hasMany( library_db.book, { foreignKey: "bookshelf_id" })
+// library_db.book.hasOne( library_db.bookshelf, { foreignKey: "bookshelf_id" })
+// library_db.bookshelf.belongsToMany( library_db.book, { foreignKey: "bookshelf_id" })
 
 library_db.bookshelf.belongsTo( library_db.room, { foreignKey: "room_id" })
 library_db.room.hasMany( library_db.bookshelf, { foreignKey: "room_id" })
@@ -49,7 +51,7 @@ module.exports = library_db;
 //   Book.belongsTo( Bookshelf, { foreignKey: "bookshelf_id" })
 // Room.hasMany(Bookshelf, { foreignKey: "room_id" })
 // Bookshelf.belongsTo(Room, { foreignKey: "room_id" })
-// 
+//
 // const db = {};
 // db.Sequelize = Sequelize;
 // db.sequelize = sequelize;
