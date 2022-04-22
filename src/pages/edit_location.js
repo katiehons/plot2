@@ -1,6 +1,9 @@
 import {React, useState} from 'react';
-import Sequelize from 'sequelize'
 import { Link } from 'react-router-dom'
+import library_db from "../db_connect/sequelize_index"
+
+const Bookshelf = library_db.bookshelf;
+const Room = library_db.room;
 
 function EditLocation() {
   // todo make these not-array as appropriate
@@ -9,35 +12,10 @@ function EditLocation() {
   const[selectedRoom, setSelectedRoom] = useState( null );
   const[bookshelves, setBookshelves] = useState([]);
   const[selectedBookshelf, setSelectedBookshelf] = useState( null );
-  // const[shelves, setshelves] = useState([]);
-  // const[selectedShelves, setSelectedShelves] = useState([]);
-
-  const sequelize = new Sequelize({
-    dialect: 'sqlite',
-    storage: './data/library.db',
-    define: {
-      timestamps: false
-    }
-  });
-
-  (async function(){
-    try {
-      await sequelize.authenticate();
-      console.log('PROFILES: sequelize Connection has been established successfully.');
-    } catch (error) {
-      console.error('Unable to connect to the sequelize database:', error);
-    }
-  })();
-
-  const Bookshelf = require('../db_connect/models/bookshelf')(sequelize);
-  const Room = require('../db_connect/models/room')(sequelize);
-
 
   function fetchBookshelves( room_id )
   {
     console.log("Fetching bookshelves..." + room_id )
-    // get the bookshelves in that room
-        // var sql_get_bookshelves = "SELECT bookshelf_name FROM bookshelves JOIN rooms_bookshelves ON bookshelves.bookshelf_id = rooms_bookshelves.bookshelf_id JOIN rooms ON rooms.room_id = rooms_bookshelves.room_id WHERE rooms.room_name = ?;";
     Bookshelf.findAll({
       where: {
       room_id: room_id
@@ -91,11 +69,11 @@ function EditLocation() {
 
 
 /// from add book pg, needs rework!!! todotodotodo vvvvvvvvvvvvv
-  const [state, setState] = useState({ author: "", book: "", isbn: "" });
+  // const [state, setState] = useState({ author: "", book: "", isbn: "" });
   const handleSubmit = e => {
-    e.preventDefault();
-    //display success or failure message
-    console.log(state);
+  //   e.preventDefault();
+  //   //display success or failure message
+  //   console.log(state);
   };
 
 ///^^^^^^^^^^^^^^^^^^
@@ -147,10 +125,6 @@ function EditLocation() {
     }).then( () => {
       Room.sync()
       setFirstLoad(true)
-      // if
-      // setSelectedRoom(rooms[0])
-      // fetchBookshelves( selectedRoom );
-        // todo re-fetch rooms
     });
     }
   }
