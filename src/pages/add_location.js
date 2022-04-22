@@ -1,6 +1,10 @@
 import {React, useState} from 'react';
-import Sequelize from 'sequelize'
 import { Link } from 'react-router-dom'
+import library_db from "../db_connect/sequelize_index"
+
+const Book = library_db.book;
+const Bookshelf = library_db.bookshelf;
+const Room = library_db.room;
 
 function AddLocation()
 {
@@ -9,28 +13,6 @@ function AddLocation()
   const[newBookshelf, setNewBookshelf] = useState();
   const[rooms, setRooms] = useState([]);
   const[bookshelfRoom, setBookshelfRoom] = useState(null);
-
-  const sequelize = new Sequelize({
-    dialect: 'sqlite',
-    storage: './data/library.db',
-    define: {
-      timestamps: false
-    }
-  });
-
-  (async function() {
-    try {
-      await sequelize.authenticate();
-      console.log('Metadata: sequelize Connection has been established successfully.');
-    } catch (error) {
-      console.error('Unable to connect to the sequelize database:', error);
-    }
-  })();
-
-  const Bookshelf = require('../db_connect/models/bookshelf')(sequelize);
-  const Room = require('../db_connect/models/room')(sequelize);
-
-
 
   if( firstLoad )
   {
