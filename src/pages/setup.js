@@ -1,25 +1,20 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
+import library_db from "../db_connect/sequelize_index"
+
 const electron = window.require('electron');
 const { ipcRenderer } = electron;
-const { Sequelize } = require('sequelize');
-
 
 function Setup() {
   console.log("setup")
   // Database initialization
-  const sequelize = new Sequelize({
-    dialect: 'sqlite',
-    storage: './data/library.db',
-    define: {
-      timestamps: false
-    }
-  });
 
-  const User = require('../db_connect/models/user')(sequelize)
-  const Book = require('../db_connect/models/book')(sequelize)
-  const Bookshelf = require('../db_connect/models/bookshelf')(sequelize)
-  const Room = require('../db_connect/models/room')(sequelize)
+  const Book = library_db.book;
+  const Bookshelf = library_db.bookshelf;
+  const Room = library_db.room;
+  const User = library_db.user;
+
+  const sequelize = library_db.sequelize;
 
   sequelize.sync();
 
@@ -59,9 +54,6 @@ function Setup() {
             </form>
         </div>
     );
-    // return(
-    //   <h1>setup</h1>
-    // )
 }
 
 export default Setup;
