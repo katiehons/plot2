@@ -22,8 +22,11 @@ module.exports = (sequelize) => {
   });
 
   const Book = require('./book')(sequelize)
-  Bookshelf.hasMany( Book, { foreignKey: "bookshelf_id" });
-  Book.belongsTo( Bookshelf, { foreignKey: "bookshelf_id" })
+  associate() = function()
+  {
+    Bookshelf.hasMany( Book, { foreignKey: "bookshelf_id" });
+    Book.belongsTo( Bookshelf, { foreignKey: "bookshelf_id" })
+  }
 
   // const Room = require('./room')(sequelize)
   // // Room.belongsToMany( Bookshelf, { through: "rooms_bookshelves", foreignKey: "room_id", otherKey: "bookshelf_id" });

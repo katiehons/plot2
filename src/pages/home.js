@@ -1,6 +1,6 @@
 import { React, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Sequelize } from 'sequelize';
+import { Sequelize, associate } from 'sequelize';
 import imageNotFound from '../images/imageNotFound.svg';
 
 const electron = window.require( 'electron' );
@@ -48,6 +48,7 @@ function Home() {
     var title = book.title;
     var isbn = book.isbn;
     var author = book.author;
+    // var bookshelf = book.bookshelf.bookshelf_name;
 
     // was formerly immediately above id="title" div
     // <img id="cover-block" src={cover}/>
@@ -90,6 +91,9 @@ function Home() {
   (async function(){
     try {
       await sequelize.authenticate();
+      Book.associate()
+      Bookshelf.associate()
+      Room.associate()
       console.log('sequelize Connection has been established successfully.');
     } catch (error) {
       console.error('Unable to connect to the sequelize database:', error);
@@ -99,14 +103,19 @@ function Home() {
   const[books, setBooks] = useState([]);
 
   const Book = require('../db_connect/models/book')(sequelize)
+  const Bookshelf = require('../db_connect/models/bookshelf')(sequelize)
+  const Room = require('../db_connect/models/room')(sequelize)
+  // Book.associate()
+  // Bookshelf.associate()
+  // Room.associate()
+
   if( books.length == 0 )
   {
-    Book.findAll({raw: true}).then((books) => {
+    Book.findAll({raw: true, include: Bookshelf}).then((books) => {
       console.log("(home)All books, before stringify:", books);
       setBooks( books );
     });
   }
-
 // for-each html tags to generate header/headers/list
   return (
     <div className='home'>

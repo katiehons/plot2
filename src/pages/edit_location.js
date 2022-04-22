@@ -9,8 +9,8 @@ function EditLocation() {
   const[selectedRoom, setSelectedRoom] = useState( null );
   const[bookshelves, setBookshelves] = useState([]);
   const[selectedBookshelf, setSelectedBookshelf] = useState( null );
-  const[shelves, setshelves] = useState([]);
-  const[selectedShelves, setSelectedShelves] = useState([]);
+  // const[shelves, setshelves] = useState([]);
+  // const[selectedShelves, setSelectedShelves] = useState([]);
 
   const sequelize = new Sequelize({
     dialect: 'sqlite',
@@ -38,15 +38,11 @@ function EditLocation() {
     console.log("Fetching bookshelves..." + room_id )
     // get the bookshelves in that room
         // var sql_get_bookshelves = "SELECT bookshelf_name FROM bookshelves JOIN rooms_bookshelves ON bookshelves.bookshelf_id = rooms_bookshelves.bookshelf_id JOIN rooms ON rooms.room_id = rooms_bookshelves.room_id WHERE rooms.room_name = ?;";
-    var resultno = 0
-    // todo next: get the bookshelves only from the right room
     Bookshelf.findAll({
       where: {
       room_id: room_id
       },
       raw: true}).then((bookshelves_result) => {
-        console.log("result number: " + resultno +" calling room: " + room_id)
-        resultno ++
         console.log("bookshelves: " + bookshelves_result)
         setBookshelves( bookshelves_result );
         if( bookshelves_result.length > 0 )
