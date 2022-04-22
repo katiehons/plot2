@@ -1,7 +1,10 @@
 import {  React, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Sequelize, Op } from 'sequelize';
+import { Op } from 'sequelize';
 import imageNotFound from '../images/imageNotFound.svg';
+import library_db from "../db_connect/sequelize_index"
+
+const Book = library_db.book;
 
 function Search() {
   const [searchTerm, setSearchTerm] = useState();
@@ -73,25 +76,6 @@ function Search() {
     while (block.hasChildNodes()) {
       block.removeChild(block.lastChild);
     }
-
-    const sequelize = new Sequelize({
-      dialect: 'sqlite',
-      storage: './data/library.db',
-      define: {
-        timestamps: false
-      }
-    });
-
-    (async function(){
-      try {
-        await sequelize.authenticate();
-        console.log('sequelize Connection has been established successfully.');
-      } catch (error) {
-        console.error('Unable to connect to the sequelize database:', error);
-      }
-    })();
-
-    const Book = require('../db_connect/models/book')(sequelize)
 
     Book.findAll({where: {
                     [filter]: { [Op.like]: `%${searchTerm}%` } },
