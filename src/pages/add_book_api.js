@@ -1,7 +1,10 @@
 import { React, useState } from 'react';
 import { Link } from 'react-router-dom'
-import { Sequelize } from 'sequelize';
+import library_db from "../db_connect/sequelize_index"
 
+const Book = library_db.book;
+const Bookshelf = library_db.bookshelf;
+const Room = library_db.room;
 //TODO test, handle multiple authors
 
 function AddBookAPI() {
@@ -14,26 +17,6 @@ function AddBookAPI() {
   const [isbn, setISBN] = useState();
 
   /// same as edit_location, should probably refactor
-  const sequelize = new Sequelize({
-    dialect: 'sqlite',
-    storage: './data/library.db',
-    define: {
-      timestamps: false
-    }
-  });
-
-  (async function(){
-    try {
-      await sequelize.authenticate();
-      console.log('PROFILES: sequelize Connection has been established successfully.');
-    } catch (error) {
-      console.error('Unable to connect to the sequelize database:', error);
-    }
-  })();
-
-  const Bookshelf = require('../db_connect/models/bookshelf')(sequelize);
-  const Room = require('../db_connect/models/room')(sequelize);
-  const Book = require('../db_connect/models/book')(sequelize);
 
   function fetchBookshelves( room_id )
   {
@@ -115,25 +98,6 @@ function AddBookAPI() {
             if (window.confirm("Add " + title + " by " + authors + "\nLocation: " + books_room +", " + books_shelf + " Shelf.")) {
                 console.log('Adding' + title + ", " + authors + ", isbn-13: " + isbn_13 );
 
-                // const sequelize = new Sequelize({
-                //   dialect: 'sqlite',
-                //   storage: './data/library.db',
-                //   define: {
-                //     timestamps: false
-                //   }
-                // });
-                //
-                // (async function(){
-                //   try {
-                //     await sequelize.authenticate();
-                //     console.log('sequelize Connection has been established successfully.');
-                //   } catch (error) {
-                //     console.error('Unable to connect to the sequelize database:', error);
-                //   }
-                // })();
-
-                // const Book = require( '../db_connect/models/book')(sequelize);
-
                 console.log("author: " + authors);
                 Book.create( {
                   isbn: isbn_13,
@@ -143,7 +107,7 @@ function AddBookAPI() {
                   bookshelf_id: selectedBookshelf
                 }).then(() => {
                   Book.sync().then((response) => {
-                    sequelize.close();
+                    // sequelize.close();
                     setISBN("");
                     document.getElementById.value = isbn;
                   });
