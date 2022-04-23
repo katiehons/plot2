@@ -1,5 +1,6 @@
 import {React, useState} from 'react';
 import { Link } from 'react-router-dom'
+import { RoomSelector } from "../library_components";
 import library_db from "../db_connect/sequelize_index"
 
 const Bookshelf = library_db.bookshelf;
@@ -32,13 +33,6 @@ function AddLocation()
           }
         });
   }
-
-  let roomList = rooms.length > 0 && rooms.map((item, i) => {
-    console.log("listing room: " + item.room_name + " " + item.room_id)
-  return (
-    <option key={i} value={item.room_id}>{item.room_name}</option>
-  )
-  }, this);
 
   const handleRoomSubmit = e => {
     e.preventDefault();
@@ -97,11 +91,10 @@ function AddLocation()
     <form onSubmit={handleRoomSubmit} id="new-room-form">
     <input id="new-room" type="text" placeholder="New Room…" onChange={handleNewRoomChange}/>
     <input id="submit-new-room" type="submit" value="Add This Room" />
-    <br/>
     </form>
-
+    <br/> <br/>
     <form onSubmit={handleBookshelfSubmit} id="new-bookshelf-form">
-    <select id="roomsel" onChange={handleBookshelfRoomChange}> {roomList} </select>
+    <RoomSelector rooms={rooms} roomChange={handleBookshelfRoomChange}/>
     <input id="new-bookshelf-name" type="text" placeholder="New Bookshelf…" onChange={handleNewBookshelfChange}/>
     <input id="submit-new-room" type="submit" value="Add This Bookshelf" />
     <br/>
