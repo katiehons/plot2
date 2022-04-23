@@ -1,6 +1,11 @@
 import { Link, useNavigate } from 'react-router-dom';
 
 
+function CurrentUser({ user }) {
+  return (
+    <h3 id='current_user'>Current user: {user}</h3>
+  )
+}
 
 // generate the book list
 function EditBookButton(isbn) {
@@ -62,4 +67,4 @@ function BookList({ books }) {
   )
 }
 
-export { BookList }
+export { BookList, CurrentUser }

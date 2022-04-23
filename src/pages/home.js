@@ -1,6 +1,6 @@
 import { React, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { BookList } from "../library_components"
+import { BookList, CurrentUser } from "../library_components"
 import library_db from "../db_connect/sequelize_index"
 import imageNotFound from '../images/imageNotFound.svg';
 
@@ -18,12 +18,6 @@ function Home() {
   const[books, setBooks] = useState([]);
 
   // get and set the current user
-  function CurrentUser({ user }) {
-    return (
-      <h3 id='current_user'>Current user: {user}</h3>
-    )
-  }
-
   if ( user == null ) {
     ipcRenderer.invoke('getStoreValue', 'current_user').then((result) => {
       if( result.length > 0)
