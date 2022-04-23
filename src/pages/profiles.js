@@ -3,7 +3,8 @@ import { Link, useNavigate } from 'react-router-dom';
 
 import library_db from "../db_connect/sequelize_index"
 
-const User = library_db.user;const electron = window.require('electron');
+const User = library_db.user;
+const electron = window.require('electron');
 
 const { ipcRenderer } = electron;
 const electron_store = window.require('electron-store');

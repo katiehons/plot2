@@ -1,5 +1,6 @@
 import { React, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
+import { BookList } from "../library_components"
 import library_db from "../db_connect/sequelize_index"
 import imageNotFound from '../images/imageNotFound.svg';
 
@@ -13,10 +14,8 @@ const Bookshelf = library_db.bookshelf;
 const Room = library_db.room;
 
 function Home() {
-  let history = useNavigate();
   const [user, setUser] = useState(null);
   const[books, setBooks] = useState([]);
-
 
   // get and set the current user
   function CurrentUser({ user }) {
@@ -33,60 +32,6 @@ function Home() {
       }
     });
   }
-
-  // generate the book list
-  const editBook = ( isbn ) => {
-    history("/MetadataEdit?isbn=" + isbn);
-  }
-
-  function makeBook(book)
-  {
-    console.log("lookin at book:")
-    console.log( book)
-    //get the image for each cover and set custom image if none found
-    // var cover;
-    // if(book.cover != null){
-    //   cover = book.cover;
-    // }else{
-    //   cover = imageNotFound;
-    // }
-
-    var title = book.title;
-    var isbn = book.isbn;
-    var author = book.author;
-    var bookshelf = book["bookshelf.bookshelf_name"];
-    var room = book["bookshelf.room.room_name"];
-
-    return(
-      <p class="list-block">
-        <div id="metadata-block">
-            <div class="metadata-item" id="title">
-            Title: {title}
-            </div>
-            <div class="metadata-item" id="isbn">
-            ISBN: {isbn}
-            </div>
-            <div class="metadata-item" id="author">
-            Author: {author}
-            </div>
-            <div class="metadata-item" id="author">
-            Location: {room}, {bookshelf}
-            </div>
-        </div>
-        <button type="button" className="edit-button" onClick={() => editBook(isbn)}>
-          Edit
-        </button>
-      </p>
-    )
-  }
-
-  function BookList({ books }) {
-    console.log("displaying books" + books);
-    return (
-      <div id='book-list'>{books.map((book) => makeBook(book))}</div>
-    )
-  }
-
 
   if( books.length == 0 )
   {

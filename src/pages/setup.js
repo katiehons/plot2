@@ -9,14 +9,14 @@ function Setup() {
   console.log("setup")
   // Database initialization
 
-  const Book = library_db.book;
-  const Bookshelf = library_db.bookshelf;
-  const Room = library_db.room;
-  const User = library_db.user;
-
-  const sequelize = library_db.sequelize;
-
-  sequelize.sync();
+  // const Book = library_db.book;
+  // const Bookshelf = library_db.bookshelf;
+  // const Room = library_db.room;
+  // const User = library_db.user;
+  //
+  // const sequelize = library_db.sequelize;
+  //
+  // sequelize.sync();
 
   let history = useNavigate();
   const [state, setState] = React.useState({ libName: "" });
