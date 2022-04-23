@@ -2,7 +2,6 @@ import {React, useState} from 'react';
 import { Link } from 'react-router-dom'
 import library_db from "../db_connect/sequelize_index"
 
-// const Book = library_db.book;
 const Bookshelf = library_db.bookshelf;
 const Room = library_db.room;
 

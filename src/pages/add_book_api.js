@@ -21,8 +21,6 @@ function AddBookAPI() {
   function fetchBookshelves( room_id )
   {
     console.log("Fetching bookshelves..." + room_id )
-    // get the bookshelves in that room
-        // var sql_get_bookshelves = "SELECT bookshelf_name FROM bookshelves JOIN rooms_bookshelves ON bookshelves.bookshelf_id = rooms_bookshelves.bookshelf_id JOIN rooms ON rooms.room_id = rooms_bookshelves.room_id WHERE rooms.room_name = ?;";
     Bookshelf.findAll({
       where: {
       room_id: room_id
@@ -81,7 +79,6 @@ function AddBookAPI() {
     // Fetch the book info and submit it to the db
     const handleSubmit = e => {
         e.preventDefault();
-        //log isbn to the database instead of console
         //display success or failure message
         console.log("sending: " + isbn)
         fetch('https://www.googleapis.com/books/v1/volumes?q=isbn:'+isbn+'&key=AIzaSyCD09mSVM0FXfqGBT3tS0M-jRlu72FP-WI')
@@ -107,7 +104,6 @@ function AddBookAPI() {
                   bookshelf_id: selectedBookshelf
                 }).then(() => {
                   Book.sync().then((response) => {
-                    // sequelize.close();
                     setISBN("");
                     document.getElementById.value = isbn;
                   });
