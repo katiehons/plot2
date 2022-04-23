@@ -1,5 +1,6 @@
 import { React, useState } from 'react';
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
+import { RoomSelector, BookshelfSelector } from "../library_components";
 import library_db from "../db_connect/sequelize_index"
 
 const Book = library_db.book;
@@ -17,7 +18,6 @@ function AddBookAPI() {
   const [isbn, setISBN] = useState();
 
   /// same as edit_location, should probably refactor
-
   function fetchBookshelves( room_id )
   {
     console.log("Fetching bookshelves..." + room_id )
@@ -60,18 +60,6 @@ function AddBookAPI() {
         });
   }
 
-  let roomList = rooms.length > 0 && rooms.map((item, i) => {
-  return (
-    <option key={i} value={item.room_id}>{item.room_name}</option>
-  )
-  }, this);
-
-  let bookshelvesList = bookshelves.length > 0 && bookshelves.map((item, i) => {
-  return (
-    <option key={i} value={item.bookshelf_id}>{item.bookshelf_name}</option>
-  )
-  }, this);
-
 ///// ^^^ end of same as edit_location
 
 
@@ -92,9 +80,9 @@ function AddBookAPI() {
             var books_room = selectedRoom;
             var books_shelf = selectedBookshelf;
 
-            if (window.confirm("Add " + title + " by " + authors + "\nLocation: " + books_room +", " + books_shelf + " Shelf.")) {
+            if (window.confirm("Add " + title + " by " + authors + "\nLocation: " + books_room +", " + books_shelf + " Shelf."))
+            {
                 console.log('Adding' + title + ", " + authors + ", isbn-13: " + isbn_13 );
-
                 console.log("author: " + authors);
                 Book.create( {
                   isbn: isbn_13,
@@ -105,8 +93,12 @@ function AddBookAPI() {
                 }).then(() => {
                   Book.sync().then((response) => {
                     setISBN("");
-                    document.getElementById.value = isbn;
+                    document.getElementById("isbn-input").value = "";
                   });
+                })
+                .catch((err) =>
+                {
+                  console.log(err);
                 });
             }
             else {
@@ -132,10 +124,7 @@ function AddBookAPI() {
   };
 
   const handleBookshelfChange = e =>{
-    setSelectedBookshelf({
-      ...selectedBookshelf,
-      [e.target.name]: e.target.value
-    });
+    setSelectedBookshelf(e.target.value);
     console.log(e.target.value)
   };
 
@@ -147,11 +136,8 @@ function AddBookAPI() {
               placeholder="Enter ISBN" onChange={handleChange}/>
         <br/>
         <div>Location:</div>
-        <label for="roomsel">Room: </label>
-        <select id="roomsel" onChange={handleRoomChange}> {roomList} </select>
-        <br/>
-        <label for="bookshelfsel">Bookshelf: </label>
-        <select id="bookshelfsel" onChange={handleBookshelfChange}>{bookshelvesList}</select>
+        <RoomSelector rooms={rooms} roomChange={handleRoomChange}/>
+        <BookshelfSelector bookshelves={bookshelves} bookshelfChange={handleBookshelfChange}/>
         <br/>
         <input className="edit-button" id="search-btn" type="submit" value="Search" />
       </form>
