@@ -1,5 +1,30 @@
 import { Link, useNavigate } from 'react-router-dom';
 
+function BookshelfSelector( {bookshelves, bookshelfChange} )
+{
+  let bookshelvesList = bookshelves.length > 0 && bookshelves.map((item, i) => {
+    return (<option key={i} value={item.bookshelf_id}>{item.bookshelf_name}</option>)
+    }, this);
+  return(
+    <div id="bookshelf-selector">
+      <label for="bookshelfsel">Which bookshelf? </label>
+      <select id="bookshelfsel" onChange={bookshelfChange}>{bookshelvesList}</select>
+    </div>
+  )
+}
+function RoomSelector({rooms, roomChange})
+{
+  let roomList = rooms.length > 0 && rooms.map((item, i) => {
+    return (<option key={i} value={item.room_id}>{item.room_name}</option>)
+    }, this);
+
+  return(
+    <div id="room-selector">
+      <label for="roomsel">Which room? </label>
+      <select id="roomsel" onChange={roomChange}> {roomList} </select>
+    </div>
+  )
+}
 
 function CurrentUser({ user }) {
   return (
@@ -58,7 +83,6 @@ function makeBook(book)
           </div>
       </div>
       <EditBookButton isbn={isbn}/>
-
     </p>
   )
 }
@@ -72,4 +96,4 @@ function BookList({ books }) {
   )
 }
 
-export { BookList, CurrentUser }
+export { BookList, CurrentUser, RoomSelector, BookshelfSelector }

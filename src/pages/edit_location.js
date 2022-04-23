@@ -1,12 +1,12 @@
 import {React, useState} from 'react';
 import { Link } from 'react-router-dom'
-import library_db from "../db_connect/sequelize_index"
+import { RoomSelector, BookshelfSelector } from "../library_components";
+import library_db from "../db_connect/sequelize_index";
 
 const Bookshelf = library_db.bookshelf;
 const Room = library_db.room;
 
 function EditLocation() {
-  // todo make these not-array as appropriate
   const[firstLoad, setFirstLoad] = useState( true );
   const[rooms, setRooms] = useState([]);
   const[selectedRoom, setSelectedRoom] = useState( null );
@@ -54,18 +54,6 @@ function EditLocation() {
           }
         });
   }
-
-  let roomList = rooms.length > 0 && rooms.map((item, i) => {
-  return (
-    <option key={i} value={item.room_id}>{item.room_name}</option>
-  )
-  }, this);
-
-  let bookshelvesList = bookshelves.length > 0 && bookshelves.map((item, i) => {
-  return (
-    <option key={i} value={item.bookshelf_id}>{item.bookshelf_name}</option>
-  )
-  }, this);
 
 
 /// from add book pg, needs rework!!! todotodotodo vvvvvvvvvvvvv
@@ -129,31 +117,21 @@ function EditLocation() {
     }
   }
 
-
   const handleRoomChange = e =>{
     setSelectedRoom( e.target.value );
-    console.log(e.target.value )
     fetchBookshelves( e.target.value )
   };
 
   const handleBookshelfChange = e =>{
-    setSelectedBookshelf({
-      ...selectedBookshelf,
-      [e.target.name]: e.target.value
-    });
-    console.log(e.target.value)
+    setSelectedBookshelf( e.target.value);
   };
 
   return (
     <div className="centered">
       <h1>Update or Delete Location</h1>
       <form onSubmit={handleSubmit}>
-      <label for="roomsel">Which room? </label>
-      <select id="roomsel" onChange={handleRoomChange}> {roomList} </select>
-      <br/>
-      <label for="bookshelfsel">Which bookshelf? </label>
-      <select id="bookshelfsel" onChange={handleBookshelfChange}>{bookshelvesList}</select>
-      <br/>
+      <RoomSelector rooms={rooms} roomChange={handleRoomChange}/>
+      <BookshelfSelector bookshelves={bookshelves} bookshelfChange={handleBookshelfChange}/>
       <input className="edit-button" id="submit-btn" type="submit" value="Make these changes" />
       </form>
       <button id="delete-bookshelf-btn" onClick={handleDeleteBookshelf}>Delete this bookshelf</button>
