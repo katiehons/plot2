@@ -8,11 +8,16 @@ function CurrentUser({ user }) {
 }
 
 // generate the book list
-function EditBookButton(isbn) {
+function EditBookButton({isbn}) {
+  console.log("making button for: ")
+  console.log( isbn )
   let history = useNavigate();
 
   return(
-    <button type="button" className="edit-button" onClick={() => history("/MetadataEdit?isbn=" + isbn)}>
+    <button type="button" className="edit-button" onClick={() => {
+      console.log("EditBookButton sending you to MetadataEdit page with ISBN ")
+      console.log(isbn)
+      history("/MetadataEdit?isbn=" + isbn)}}>
       Edit
     </button>
   )
@@ -52,7 +57,7 @@ function makeBook(book)
           Location: {room}, {bookshelf}
           </div>
       </div>
-      <EditBookButton isbn={book.isbn}/>
+      <EditBookButton isbn={isbn}/>
 
     </p>
   )
