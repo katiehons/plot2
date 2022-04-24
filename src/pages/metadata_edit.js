@@ -146,6 +146,10 @@ function MetadataEdit(props) {
     }
   }
 
+  const handleGoBack = e => {
+    history(-1);
+  }
+
   return (
     <div className='centered'>
     <h1>Input edits and "Save"</h1>
@@ -173,8 +177,9 @@ function MetadataEdit(props) {
       <button className="edit-button" id="submit-btn" type="submit">Save</button>
     </form>
     <button className="edit-button" id="delete-btn" onClick={handleDeleteBook}>Delete this book</button>
+    <button className="edit-button" id="back-btn" onClick={handleGoBack}>Go Back</button>
     <Link to={'/Home'} id='return-to-home'>
-        <button className="edit-button" id="abortButton" title="Deletes any unsaved changes">Return to Home</button>
+        <button className="edit-button" >Home</button>
     </Link>
     </div>
   )
