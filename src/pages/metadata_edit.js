@@ -28,19 +28,6 @@ function MetadataEdit(props) {
     Room.findAll({raw: true}).then((rooms) => {
       console.log("number of rooms: " + rooms.length)
           setRooms(rooms);
-          if( rooms.length > 0 )
-          {
-            // setSelectedRoom( rooms[0].room_id );
-            fetchBookshelves( rooms[0].room_id );
-          }
-          else
-          {
-            // setSelectedRoom(null)
-            setBookshelves([])
-            // setBook({ ...book, "bookshelf_id": bookshelves_result.[0].bookshelf_id });
-            //
-            // setSelectedBookshelf(null)
-          }
         });
     Book.findAll({
       where: {
@@ -64,8 +51,24 @@ function MetadataEdit(props) {
         console.log("the item exists");
         console.log(select_me.selected);
         select_me.selected = true;
+        setSelectedRoom( select_me.value );
+        fetchBookshelves( select_me.value ).then( () => {
+          console.log(book[0].bookshelf_id)
+          console.log("searching for " + "bookshelf-sel-"+book[0].bookshelf_id )
+          let select_me_shelf = document.getElementById("bookshelf-sel-"+book[0].bookshelf_id);
+          console.log(select_me_shelf);
+          if( select_me_shelf )
+          {
+            console.log("the item exists");
+            console.log(select_me_shelf.selected);
+            select_me_shelf.selected = true;
+            setBook({ ...book, "bookshelf_id": select_me_shelf.value });
+
+            // setSelectedRoom( select_me_shelf.value );
+          }
+        })
       }
-      
+
     })
     .catch(function(error)
         {
@@ -74,26 +77,26 @@ function MetadataEdit(props) {
         });
   };
 
-  function fetchBookshelves( room_id )
+  async function fetchBookshelves( room_id )
   {
     console.log("Fetching bookshelves..." + room_id )
-    Bookshelf.findAll({
+    return Bookshelf.findAll({
       where: {
       room_id: room_id
       },
       raw: true}).then((bookshelves_result) => {
         console.log("bookshelves: " + bookshelves_result)
         setBookshelves( bookshelves_result );
-        if( bookshelves_result.length > 0 )
-        {
-          setBook({ ...book, "bookshelf_id": bookshelves_result.[0].bookshelf_id });
-          // setSelectedBookshelf( bookshelves_result.[0].bookshelf_id );
-        }
-        else
-        {
-          setBook({ ...book, "bookshelf_id": null });
-          // setSelectedBookshelf(null);
-        }
+        // if( bookshelves_result.length > 0 )
+        // {
+        //   setBook({ ...book, "bookshelf_id": bookshelves_result.[0].bookshelf_id });
+        //   // setSelectedBookshelf( bookshelves_result.[0].bookshelf_id );
+        // }
+        // else
+        // {
+        //   setBook({ ...book, "bookshelf_id": null });
+        //   // setSelectedBookshelf(null);
+        // }
     });
   }
 

@@ -3,7 +3,7 @@ import { Link, useNavigate } from 'react-router-dom';
 function BookshelfSelector( {bookshelves, bookshelfChange} )
 {
   let bookshelvesList = bookshelves.length > 0 && bookshelves.map((item, i) => {
-    return (<option key={i} value={item.bookshelf_id}>{item.bookshelf_name}</option>)
+    return (<option key={i} value={item.bookshelf_id} id={"bookshelf-sel-"+item.bookshelf_id}>{item.bookshelf_name}</option>)
     }, this);
   return(
     <div id="bookshelf-selector">
