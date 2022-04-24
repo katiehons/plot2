@@ -1,4 +1,4 @@
-import React, { location, useState } from 'react';
+import React, { location, useState, useReducer } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
 import { RoomSelector, BookshelfSelector } from "../library_components";
 import library_db from "../db_connect/sequelize_index"
@@ -9,8 +9,25 @@ const Room = library_db.room;
 
 const queryString = require('query-string');
 
+// const initialState = { name: "Bob", occupation: "builder" };
+// const [state, updateState] = useReducer(
+//   (state, updates) => ({
+//     ...state,
+//     ...updates,
+//   }),
+//   initialState
+// );
+
 function MetadataEdit(props) {
-  const [book, setBook] = useState("");
+  const bookInitialState = { isbn: "", title: "", author: "", bookshelf_id: "" }
+  const [book, updateBook] = useReducer(
+    (book, bookUpdates) => ({
+      ...book,
+      ...bookUpdates,
+    }),
+    bookInitialState);
+
+  const [firstLoad, setFirstLoad] = useState( true );
   const [selectedRoom, setSelectedRoom] = useState( null );
   const [rooms, setRooms] = useState([]);
   const [bookshelves, setBookshelves] = useState([]);
@@ -23,7 +40,8 @@ function MetadataEdit(props) {
 
   var original_isbn = query.get("isbn")
 
-  if( book == "" ){
+  if( firstLoad ){
+    setFirstLoad(false)
     // console.log("had no book, getting new book");
     Room.findAll({raw: true}).then((rooms) => {
       console.log("number of rooms: " + rooms.length)
@@ -39,22 +57,22 @@ function MetadataEdit(props) {
         include: {
           model:Room,
           attributes: ["room_name"]
-        }}}).then((book) => {
-      console.log("book: ")
+        }}}).then((bookList) => {
+      let foundBook = bookList[0]
       console.log( book[0] )
-      setBook(book[0])
+      updateBook( {isbn: foundBook.isbn, title: foundBook.title, author: foundBook.author, bookshelf_id: foundBook.bookshelf_id })
 
-      let book_room_opt = document.getElementById("room-sel-"+book[0]["bookshelf.room.room_id"]);
+      let book_room_opt = document.getElementById("room-sel-"+foundBook["bookshelf.room.room_id"]);
       if( book_room_opt )
       {
         book_room_opt.selected = true;
         setSelectedRoom( book_room_opt.value );
         fetchBookshelves( book_room_opt.value, false ).then( () => {
-          let book_shelf_opt = document.getElementById("bookshelf-sel-"+book[0].bookshelf_id);
+          let book_shelf_opt = document.getElementById("bookshelf-sel-"+foundBook.bookshelf_id);
           if( book_shelf_opt )
           {
             book_shelf_opt.selected = true;
-            setBook({ ...book, "bookshelf_id": book_shelf_opt.value });
+            updateBook({ bookshelf_id: book_shelf_opt.value });
           }
         })
       }
@@ -79,12 +97,12 @@ function MetadataEdit(props) {
         setBookshelves( bookshelves_result );
         if( bookshelves_result.length > 0 && shouldSetBooksBookshelf )
         {
-          setBook({ ...book, "bookshelf_id": bookshelves_result.[0].bookshelf_id });
+          updateBook({ bookshelf_id: bookshelves_result.[0].bookshelf_id });
           // setSelectedBookshelf( bookshelves_result.[0].bookshelf_id );
         }
         else
         {
-          setBook({ ...book, "bookshelf_id": null });
+          updateBook({ bookshelf_id: null });
           // setSelectedBookshelf(null);
         }
     });
@@ -92,9 +110,10 @@ function MetadataEdit(props) {
 
   const saveEdits = function( event, original_isbn ) {
     event.preventDefault();
+    var bookshelf_name = document.getElementById("bookshelf-sel-"+book.bookshelf_id).text
 
     if ( window.confirm("Update book information to:\nTitle: " + book.title
-      + "\nISBN: " + book.isbn + "\nAuthor: " + book.author) ) {
+      + "\nISBN: " + book.isbn + "\nAuthor: " + book.author + "\nBookshelf: " + bookshelf_name) ) {
 
       Book.update(
         { isbn: book.isbn,
@@ -114,10 +133,11 @@ function MetadataEdit(props) {
   };
 
   const handleChange = bookEdit => {
-    setBook({
-      ...book,
-      [bookEdit.target.name]: bookEdit.target.value
-    });
+    updateBook({[bookEdit.target.name]: bookEdit.target.value})
+    // setBook({
+    //   ...book,
+    //   [bookEdit.target.name]: bookEdit.target.value
+    // });
   };
 
   const handleRoomChange = e => {
@@ -134,7 +154,7 @@ function MetadataEdit(props) {
   };
 
   const handleBookshelfChange = bookEdit => {
-    setBook({ ...book, "bookshelf_id": bookEdit.target.value });
+    updateBook({ bookshelf_id: bookEdit.target.value });
   };
 
   return (
