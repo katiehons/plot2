@@ -49,7 +49,7 @@ function MetadataEdit(props) {
       {
         book_room_opt.selected = true;
         setSelectedRoom( book_room_opt.value );
-        fetchBookshelves( book_room_opt.value ).then( () => {
+        fetchBookshelves( book_room_opt.value, false ).then( () => {
           let book_shelf_opt = document.getElementById("bookshelf-sel-"+book[0].bookshelf_id);
           if( book_shelf_opt )
           {
@@ -58,7 +58,6 @@ function MetadataEdit(props) {
           }
         })
       }
-
     })
     .catch(function(error)
         {
@@ -68,7 +67,7 @@ function MetadataEdit(props) {
         });
   };
 
-  async function fetchBookshelves( room_id )
+  async function fetchBookshelves( room_id, shouldSetBooksBookshelf=true )
   {
     console.log("Fetching bookshelves..." + room_id )
     return Bookshelf.findAll({
@@ -76,18 +75,18 @@ function MetadataEdit(props) {
       room_id: room_id
       },
       raw: true}).then((bookshelves_result) => {
-        console.log("bookshelves: " + bookshelves_result)
+        // console.log("bookshelves: " + bookshelves_result)
         setBookshelves( bookshelves_result );
-        // if( bookshelves_result.length > 0 )
-        // {
-        //   setBook({ ...book, "bookshelf_id": bookshelves_result.[0].bookshelf_id });
-        //   // setSelectedBookshelf( bookshelves_result.[0].bookshelf_id );
-        // }
-        // else
-        // {
-        //   setBook({ ...book, "bookshelf_id": null });
-        //   // setSelectedBookshelf(null);
-        // }
+        if( bookshelves_result.length > 0 && shouldSetBooksBookshelf )
+        {
+          setBook({ ...book, "bookshelf_id": bookshelves_result.[0].bookshelf_id });
+          // setSelectedBookshelf( bookshelves_result.[0].bookshelf_id );
+        }
+        else
+        {
+          setBook({ ...book, "bookshelf_id": null });
+          // setSelectedBookshelf(null);
+        }
     });
   }
 
@@ -123,8 +122,15 @@ function MetadataEdit(props) {
 
   const handleRoomChange = e => {
     setSelectedRoom( e.target.value );
-    console.log(e.target.value )
     fetchBookshelves( e.target.value )
+    // console.log(e.target.value )
+    // console.log("room changed")
+    // fetchBookshelves( e.target.value ).then(() =>
+    // {
+    //   console.log("setting shelves after fetch")
+    //   console.log(bookshelves)
+    //   // setBook({ ...book, "bookshelf_id": bookshelves[0].bookshelf_id })
+    // });
   };
 
   const handleBookshelfChange = bookEdit => {
