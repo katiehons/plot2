@@ -44,27 +44,17 @@ function MetadataEdit(props) {
       console.log( book[0] )
       setBook(book[0])
 
-      let select_me = document.getElementById("room-sel-"+book[0]["bookshelf.room.room_id"]);
-      console.log(select_me);
-      if( select_me )
+      let book_room_opt = document.getElementById("room-sel-"+book[0]["bookshelf.room.room_id"]);
+      if( book_room_opt )
       {
-        console.log("the item exists");
-        console.log(select_me.selected);
-        select_me.selected = true;
-        setSelectedRoom( select_me.value );
-        fetchBookshelves( select_me.value ).then( () => {
-          console.log(book[0].bookshelf_id)
-          console.log("searching for " + "bookshelf-sel-"+book[0].bookshelf_id )
-          let select_me_shelf = document.getElementById("bookshelf-sel-"+book[0].bookshelf_id);
-          console.log(select_me_shelf);
-          if( select_me_shelf )
+        book_room_opt.selected = true;
+        setSelectedRoom( book_room_opt.value );
+        fetchBookshelves( book_room_opt.value ).then( () => {
+          let book_shelf_opt = document.getElementById("bookshelf-sel-"+book[0].bookshelf_id);
+          if( book_shelf_opt )
           {
-            console.log("the item exists");
-            console.log(select_me_shelf.selected);
-            select_me_shelf.selected = true;
-            setBook({ ...book, "bookshelf_id": select_me_shelf.value });
-
-            // setSelectedRoom( select_me_shelf.value );
+            book_shelf_opt.selected = true;
+            setBook({ ...book, "bookshelf_id": book_shelf_opt.value });
           }
         })
       }
@@ -74,6 +64,7 @@ function MetadataEdit(props) {
         {
             console.log(error);
             window.alert("Something went wrong finding the book");
+            //todo, history.push another page so it doesn't stall
         });
   };
 
