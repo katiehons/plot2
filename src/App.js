@@ -13,8 +13,7 @@ import MetadataEdit from './pages/metadata_edit';
 import LocationMgr from './pages/location_mgr';
 import EditLocation from './pages/edit_location';
 import AddLocation from './pages/add_location';
-
-
+import BrowseLocations from './pages/browse_locations';
 
 
 import { useState, Fragment } from 'react';
@@ -55,6 +54,8 @@ function App() {
         <Route exact path='/LocationMgr' element={<LocationMgr />} />
         <Route exact path='/EditLocation' element={<EditLocation />} />
         <Route exact path='/AddLocation' element={<AddLocation />} />
+        <Route exact path='/BrowseLocations' element={<BrowseLocations />} />
+
       </Routes>
     </Router>
     </>
@@ -62,30 +63,3 @@ function App() {
 }
 
 export default App;
-// original template code below:
-
-// import logo from './logo.svg';
-// import './App.css';
-//
-// function App() {
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         <img src={logo} className="App-logo" alt="logo" />
-//         <p>
-//           Edit <code>src/App.js</code> and save to reload.
-//         </p>
-//         <a
-//           className="App-link"
-//           href="https://reactjs.org"
-//           target="_blank"
-//           rel="noopener noreferrer"
-//         >
-//           Learn React
-//         </a>
-//       </header>
-//     </div>
-//   );
-// }
-//
-// export default App;

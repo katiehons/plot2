@@ -17,10 +17,10 @@ function Search() {
   const handleSubmit = e => {
     e.preventDefault();
 
-    var block = document.getElementById('book-list');
-    while (block.hasChildNodes()) {
-      block.removeChild(block.lastChild);
-    }
+    // var block = document.getElementById('book-list');
+    // while (block.hasChildNodes()) {
+    //   block.removeChild(block.lastChild);
+    // }
 
     Book.findAll({where: {
                     [filter]: { [Op.like]: `%${searchTerm}%` } },
