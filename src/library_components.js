@@ -15,7 +15,7 @@ function BookshelfSelector( {bookshelves, bookshelfChange} )
 function RoomSelector({rooms, roomChange})
 {
   let roomList = rooms.length > 0 && rooms.map((item, i) => {
-    return (<option key={i} value={item.room_id}>{item.room_name}</option>)
+    return (<option key={i} value={item.room_id} id={"room-sel-"+item.room_id}>{item.room_name}</option>)
     }, this);
 
   return(
