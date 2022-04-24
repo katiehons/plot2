@@ -9,15 +9,6 @@ const Room = library_db.room;
 
 const queryString = require('query-string');
 
-// const initialState = { name: "Bob", occupation: "builder" };
-// const [state, updateState] = useReducer(
-//   (state, updates) => ({
-//     ...state,
-//     ...updates,
-//   }),
-//   initialState
-// );
-
 function MetadataEdit(props) {
   const bookInitialState = { isbn: "", title: "", author: "", bookshelf_id: "" }
   const [book, updateBook] = useReducer(
@@ -31,18 +22,14 @@ function MetadataEdit(props) {
   const [selectedRoom, setSelectedRoom] = useState( null );
   const [rooms, setRooms] = useState([]);
   const [bookshelves, setBookshelves] = useState([]);
-  // const [selectedBookshelf, setSelectedBookshelf] = useState( null );
   let history = useNavigate();
   const useQuery = () => new URLSearchParams(useLocation().search);
   let query = useQuery();
-
-  // console.log("rendering metadata page");
 
   var original_isbn = query.get("isbn")
 
   if( firstLoad ){
     setFirstLoad(false)
-    // console.log("had no book, getting new book");
     Room.findAll({raw: true}).then((rooms) => {
       console.log("number of rooms: " + rooms.length)
           setRooms(rooms);
@@ -81,6 +68,7 @@ function MetadataEdit(props) {
         {
             console.log(error);
             window.alert("Something went wrong finding the book");
+            history(-1);
             //todo, history.push another page so it doesn't stall
         });
   };
@@ -93,17 +81,14 @@ function MetadataEdit(props) {
       room_id: room_id
       },
       raw: true}).then((bookshelves_result) => {
-        // console.log("bookshelves: " + bookshelves_result)
         setBookshelves( bookshelves_result );
         if( bookshelves_result.length > 0 && shouldSetBooksBookshelf )
         {
           updateBook({ bookshelf_id: bookshelves_result.[0].bookshelf_id });
-          // setSelectedBookshelf( bookshelves_result.[0].bookshelf_id );
         }
         else
         {
           updateBook({ bookshelf_id: null });
-          // setSelectedBookshelf(null);
         }
     });
   }
@@ -132,30 +117,34 @@ function MetadataEdit(props) {
     }
   };
 
+  const deleteBook = function( delete_isbn ) {
+    Book.destroy({ where:{ isbn: delete_isbn } })
+    .then( ()=> {
+      Book.sync()
+      history(-1);
+    })
+  }
+
   const handleChange = bookEdit => {
     updateBook({[bookEdit.target.name]: bookEdit.target.value})
-    // setBook({
-    //   ...book,
-    //   [bookEdit.target.name]: bookEdit.target.value
-    // });
   };
 
   const handleRoomChange = e => {
     setSelectedRoom( e.target.value );
     fetchBookshelves( e.target.value )
-    // console.log(e.target.value )
-    // console.log("room changed")
-    // fetchBookshelves( e.target.value ).then(() =>
-    // {
-    //   console.log("setting shelves after fetch")
-    //   console.log(bookshelves)
-    //   // setBook({ ...book, "bookshelf_id": bookshelves[0].bookshelf_id })
-    // });
   };
 
   const handleBookshelfChange = bookEdit => {
     updateBook({ bookshelf_id: bookEdit.target.value });
   };
+
+  const handleDeleteBook = e =>{
+    if( window.confirm( "Do you want to delete this book?\nThis action cannot be undone."))
+    {
+      console.log("deleting book: " + book.isbn )
+      deleteBook( book.isbn );
+    }
+  }
 
   return (
     <div className='centered'>
@@ -183,6 +172,7 @@ function MetadataEdit(props) {
     <br/>
       <button className="edit-button" id="submit-btn" type="submit">Save</button>
     </form>
+    <button className="edit-button" id="delete-btn" onClick={handleDeleteBook}>Delete this book</button>
     <Link to={'/Home'} id='return-to-home'>
         <button className="edit-button" id="abortButton" title="Deletes any unsaved changes">Return to Home</button>
     </Link>
