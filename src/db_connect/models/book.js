@@ -19,16 +19,13 @@ module.exports = (sequelize) => {
     },
     bookshelf_id:
     {
-      type: DataTypes.INTEGER
+      type: DataTypes.INTEGER,
+      allowNull: false
     }
   },
   {
     timestamps: false,
   });
 
-  // todo, why isn't this happening?
-  // const Bookshelf = require('./bookshelf')(sequelize)
-  // Book.hasOne( Bookshelf, { foreignKey: "bookshelf_id" });
-  // Bookshelf.belongsToMany( Book, { foreignKey: "bookshelf_id" })
   return Book;
 };

@@ -11,17 +11,12 @@ module.exports = (sequelize) => {
     },
     room_name: {
       type: DataTypes.TEXT,
-      unique: true
+      unique: true,
+      allowNull: false
     }
   },
   {
     timestamps: false,
   });
-  // Room.belongsToMany( Bookshelf, { through: "rooms_bookshelves", foreignKey: "room_id", otherKey: "bookshelf_id" });
-  // Room.associate = function()
-  // {
-  //   Room.hasMany(Bookshelf, { foreignKey: "room_id" })
-  //   Bookshelf.belongsTo(Room, { foreignKey: "room_id" })
-  // }
   return Room;
 };
