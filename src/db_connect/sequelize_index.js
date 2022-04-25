@@ -45,7 +45,7 @@ library_db.room = require("./models/room")(sequelize);
 library_db.user = require("./models/user")(sequelize);
 
 library_db.book.belongsTo( library_db.bookshelf, { foreignKey: "bookshelf_id" })
-library_db.bookshelf.hasMany( library_db.book, { foreignKey: "bookshelf_id" })
+library_db.bookshelf.hasMany( library_db.book, { foreignKey: "bookshelf_id", onDelete: "SET NULL" })
 
 library_db.bookshelf.belongsTo( library_db.room, { foreignKey: "room_id" })
 library_db.room.hasMany( library_db.bookshelf, { foreignKey: "room_id" })

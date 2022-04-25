@@ -56,17 +56,9 @@ function AddLocation()
       room_id: bookshelfRoom
     }).then( (result) => {
       console.log(result);
-      // result.addRoom( bookshelfRoom.id );
       Bookshelf.sync();
-      // sequelize.query(
-      //   "INSERT INTO rooms_bookshelves SELECT rooms.room_id, bookshelves.bookshelf_id FROM rooms, bookshelves WHERE room_name = ? AND bookshelf_name = ?",
-      //   { replacements: [ bookshelfRoom, newBookshelf ],
-      //     raw: true })
-      //   .then((result) => {
       document.getElementById('new-bookshelf-name').value = "";
       setNewBookshelf("");
-      //     console.log(result);
-      //   });
     })
   }
 
