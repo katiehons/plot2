@@ -77,10 +77,11 @@ function AddBookAPI() {
             var authors = data.items[0].volumeInfo.authors;
             var isbn_13 = data.items[0].volumeInfo.industryIdentifiers[0].identifier;
             var cover = data.items[0].volumeInfo.imageLinks.thumbnail;
-            var books_room = selectedRoom;
-            var books_shelf = selectedBookshelf;
 
-            if (window.confirm("Add " + title + " by " + authors + "\nLocation: " + books_room +", " + books_shelf + " Shelf."))
+            var room_name = document.getElementById("room-sel-"+selectedRoom).text
+            var bookshelf_name = document.getElementById("bookshelf-sel-"+selectedBookshelf).text
+
+            if (window.confirm("Add " + title + " by " + authors + "\nLocation: " + room_name +", " + bookshelf_name ))
             {
                 console.log('Adding' + title + ", " + authors + ", isbn-13: " + isbn_13 );
                 console.log("author: " + authors);
