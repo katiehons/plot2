@@ -145,9 +145,6 @@ function AddBookAPI() {
       <Link to={'/AddBookManually'}>
         <button className="edit-button" id="submit-btn">Add manually</button>
       </Link>
-      <Link to={'/Home'} id='homelink-api-addpage'>
-        <button id="homelinkbtn-api-addpage" className="homepage-nav-button">Home</button>
-      </Link>
     </div>
   )
 }

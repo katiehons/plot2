@@ -46,21 +46,6 @@ function Home() {
   return (
     <div className='home'>
       <h1>Home</h1>
-      <Link to={'/Login'} id='loginlink'>
-        <button id="loginlinkbtn" className="homepage-nav-button">Switch Profiles</button>
-      </Link>
-      <Link to={'/Search'} id='searchlink'>
-        <button id="searchlinkbtn" className="homepage-nav-button">Search</button>
-      </Link>
-      <Link to={'/BrowseLocations'} id='browse-locations-link'>
-        <button id="browse-locations-link" className="homepage-nav-button">Browse by Location</button>
-      </Link>
-      <Link to={'/AddBookAPI'} id='addbooklink'>
-        <button id="addbooklinkbtn" className="homepage-nav-button">Add new book</button>
-      </Link>
-      <Link to={'/LocationMgr'} id='location_mgrlink'>
-        <button id="location_mgrlinkbtn" className="homepage-nav-button">Location Manager</button>
-      </Link>
       <CurrentUser user={user}/>
       <BookList books={books}/>
     </div>

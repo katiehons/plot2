@@ -95,9 +95,6 @@ function BrowseLocations()
   return (
     <div className= 'browse-locations'>
     <h1>Browse by Location</h1>
-    <Link to={'/Home'} id='return-to-home'>
-        <button className="edit-button" id="abortButton" title="Deletes any unsaved changes">Return to Home</button>
-    </Link>
     <RoomSelector rooms={rooms} roomChange={handleRoomChange}/>
     <BookshelfSelector bookshelves={bookshelves} bookshelfChange={handleBookshelfChange}/>
     <BookList books={books}/>

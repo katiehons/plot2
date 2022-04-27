@@ -178,9 +178,6 @@ function MetadataEdit(props) {
     </form>
     <button className="edit-button" id="delete-btn" onClick={handleDeleteBook}>Delete this book</button>
     <button className="edit-button" id="back-btn" onClick={handleGoBack}>Go Back</button>
-    <Link to={'/Home'} id='return-to-home'>
-        <button className="edit-button" >Home</button>
-    </Link>
     </div>
   )
 }

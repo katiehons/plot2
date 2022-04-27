@@ -138,7 +138,7 @@ function EditLocation() {
       <button id="delete-room-btn" onClick={handleDeleteRoom}>Delete this room</button>
 
       <Link to={'/LocationMgr'}>
-                  <button className="edit-button" id="locationabortButton">Back to all locations</button>
+                  <button className="edit-button" id="locationabortButton">Back to Location Manager</button>
                   </Link>
     </div>
   );

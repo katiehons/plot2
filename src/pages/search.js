@@ -52,9 +52,6 @@ function Search() {
   return (
     <div className= 'search'>
       <h1 id="search-header">Search</h1>
-      <Link to={'/Home'} id='homelink-searchpage'>
-        <button id="homelinkbtn" className="otherpage-nav-button">Back to home</button>
-      </Link>
       <form onSubmit={handleSubmit} className="centered">
         <select name="filter-value" id="filter-dropdown" onChange={handleDropdown}>
           <option value="author">Author</option>

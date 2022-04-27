@@ -6,9 +6,6 @@ function LocationMgr()
 return (
   <div className='centered'>
   <h1>Locations</h1>
-  <Link to={'/Home'} id='return-to-home'>
-      <button className="edit-button" id="abortButton"> Return to Home</button>
-  </Link>
   <Link to={'/AddLocation'}>
       <button className="edit-button" id="addLocationLinkbtn">Add a new location</button>
   </Link>
