@@ -9,34 +9,26 @@ const { ipcRenderer } = electron;
 const electron_store = window.require( 'electron-store' );
 const { store } = electron_store;
 
-// ipcRenderer.invoke('getPath').then((returned_path) => {
-//   console.log(returned_path);
-// });
-
 const Book = library_db.book;
 const Bookshelf = library_db.bookshelf;
 const Room = library_db.room;
 
 function Home() {
+  const [firstLoad, setFirstLoad] = useState( true )
   const [user, setUser] = useState(null);
   const[books, setBooks] = useState([]);
 
-  ipcRenderer.invoke('getPath').then((returned_path) => {
-    console.log(returned_path);
-  });
+  // get current user and all books
+  if ( firstLoad ) {
+    setFirstLoad(false);
 
-  // get and set the current user
-  if ( user == null ) {
     ipcRenderer.invoke('getStoreValue', 'current_user').then((result) => {
       if( result.length > 0)
       {
         setUser(result);
       }
     });
-  }
 
-  if( books.length == 0 )
-  {
     Book.findAll({raw: true,
                   include: {
                     model: Bookshelf,
