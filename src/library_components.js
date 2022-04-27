@@ -1,5 +1,25 @@
 import { Link, useNavigate } from 'react-router-dom';
 
+function LibraryHeader({ name }) {
+  return (
+    <h1 id='library_name'>The {name} Library</h1>
+  )
+}
+
+// username button
+function makeProfileButton(user, onProfileClick) {
+  return (
+    <button className="profiles-button" onClick={() => onProfileClick(user.username)}>{user.username}</button>
+  )
+}
+
+// all username buttons
+function ProfileButtons({ profiles, onProfileClick }) {
+  return (
+    <span id='generated-profilesButtons'>{profiles.map((user) => makeProfileButton(user, onProfileClick))}</span>
+  )
+}
+
 function BookshelfSelector( {bookshelves, bookshelfChange} )
 {
   let bookshelvesList = bookshelves.length > 0 && bookshelves.map((item, i) => {
@@ -96,4 +116,4 @@ function BookList({ books }) {
   )
 }
 
-export { BookList, CurrentUser, RoomSelector, BookshelfSelector }
+export { BookList, CurrentUser, RoomSelector, BookshelfSelector, LibraryHeader, ProfileButtons }
