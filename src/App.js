@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
-// import Navbar from './navbar/navbar_src/navbar';
-import { HashRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import Navbar from './navbar/navbar_src/navbar';
+import { HashRouter as Router, Routes, Route, Outlet, Navigate, useLocation } from 'react-router-dom';
 import AppLoading from './pages/app_loading';
 import Home from './pages/home';
 import Login from './pages/profiles';
@@ -40,6 +40,19 @@ function App() {
   // <Route exact path='/' element={( isLoaded ? ( isSetup ? <Login />: <Setup /> ) : <AppLoading /> )} />
 //          <Route exact path='/' element={ <AppLoading /> } />
 
+  function LayoutsWithNavbar() {
+   return (
+     <>
+       {/* Your navbar component */}
+       <Navbar />
+
+       {/* This Outlet is the place in which react-router will render your components that you need with the navbar */}
+       <Outlet />
+
+       {/* You can add a footer to get fancy in here :) */}
+     </>
+   );
+  }
   return (
     <>
     <Router>
@@ -49,16 +62,18 @@ function App() {
         <Route exact path='/Login' element={<Login />} />
         <Route exact path='/Setup' element={<Setup />} />
         <Route exact path='/AddProfile' element={<AddProfile />} />
-        <Route exact path='/Home' element={<Home />} />
-        <Route exact path='/Search' element={<Search />} />
-        <Route exact path='/AddBookAPI' element={<AddBookAPI />} />
-        <Route exact path='/AddBookManually' element={<AddBookManually />} />
-        <Route exact path='/MetadataEdit' element={<MetadataEdit />} />
-        <Route exact path='/LocationMgr' element={<LocationMgr />} />
-        <Route exact path='/EditLocation' element={<EditLocation />} />
-        <Route exact path='/AddLocation' element={<AddLocation />} />
-        <Route exact path='/BrowseLocations' element={<BrowseLocations />} />
 
+        <Route path="/" element={<LayoutsWithNavbar />}>
+          <Route exact path='/Home' element={<Home />} />
+          <Route exact path='/Search' element={<Search />} />
+          <Route exact path='/AddBookAPI' element={<AddBookAPI />} />
+          <Route exact path='/AddBookManually' element={<AddBookManually />} />
+          <Route exact path='/MetadataEdit' element={<MetadataEdit />} />
+          <Route exact path='/LocationMgr' element={<LocationMgr />} />
+          <Route exact path='/EditLocation' element={<EditLocation />} />
+          <Route exact path='/AddLocation' element={<AddLocation />} />
+          <Route exact path='/BrowseLocations' element={<BrowseLocations />} />
+        </Route>
       </Routes>
     </Router>
     </>
