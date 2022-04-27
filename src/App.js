@@ -1,7 +1,7 @@
 import logo from './logo.svg';
 import './App.css';
 // import Navbar from './navbar/navbar_src/navbar';
-import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import AppLoading from './pages/app_loading';
 import Home from './pages/home';
 import Login from './pages/profiles';
@@ -21,15 +21,12 @@ import { useState, Fragment } from 'react';
 // Used for conditional setup
 const { ipcRenderer } = window.require('electron');
 
-var firstPage;
-
 function App() {
   // If the PLOT software has not been set up locally, then the setup page is routed to by default.
   // Otherwise, the Login page will greet the user.
   const [isLoaded, setIsLoaded] = useState(false)
   const [isSetup, setIsSetup] = useState(null);
 
-  console.log(isSetup)
   if( !isLoaded )
   {
     console.log("loading setup state...")
@@ -38,7 +35,11 @@ function App() {
     })
   }
 
+  console.log("App is setup:")
   console.log(isSetup)
+  // <Route exact path='/' element={( isLoaded ? ( isSetup ? <Login />: <Setup /> ) : <AppLoading /> )} />
+//          <Route exact path='/' element={ <AppLoading /> } />
+
   return (
     <>
     <Router>
