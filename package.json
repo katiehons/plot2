@@ -1,6 +1,6 @@
 {
   "name": "plot",
-  "version": "0.2",
+  "version": "0.2.0",
   "homepage": "./",
   "private": true,
   "dependencies": {
@@ -34,11 +34,16 @@
   },
   "build": {
     "appId": "plot.app",
+    "asarUnpack": [
+      "src/*"
+    ],
     "files": [
-      "build/**/*",
       "src/**/*",
       "node_modules/**/*"
-    ]
+    ],
+    "directories":{
+      "buildResources": "assets"
+    }
   },
   "eslintConfig": {
     "extends": [

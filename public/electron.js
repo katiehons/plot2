@@ -5,9 +5,11 @@ const { app, BrowserWindow } = require('electron');
 const { ipcMain } = require('electron');
 const Store = require('electron-store');
 const isDev = require('electron-is-dev');
+// const { initialize, enable } = require("@electron/remote/main");
+// initialize();
 const DEBUG = true;
 
-require( "../src/db_connect/sequelize_index")
+require( "../src/db_connect/sequelize_index" )
 function createWindow() {
   // Create the browser window.
   const win = new BrowserWindow({
@@ -15,8 +17,9 @@ function createWindow() {
     height: 600,
     webPreferences: {
       nodeIntegration: true,
+      enableRemoteModule: true,
       contextIsolation: false
-    },
+    }
   });
 
   // and load the index.html of the app.
@@ -26,7 +29,13 @@ function createWindow() {
     isDev
       ? 'http://localhost:3000'
       : `file://${path.join(__dirname, '../build/index.html')}`
+      // : `file://${path.join(__dirname, '../src/plot/index.js')}`
   );
+
+  // : `file://${path.join(__dirname, '../dist/plot/index.html')}`
+
+  // chromewebdata/:1 Not allowed to load local resource: file:///Users/katiebug/Classes/SPU/CSC/proj_plot_v2/plot2/dist/mac/plot.app/Contents/Resources/app.asar/dist/plot/index.html
+
   // Open the DevTools.
   if (isDev) {
     win.webContents.openDevTools({ mode: 'detach' });
@@ -37,6 +46,8 @@ function createWindow() {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(createWindow);
+console.log("non-dev path: ")
+console.log( `file://${path.join(__dirname, '../build/index.html')}` )
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
@@ -91,3 +102,11 @@ ipcMain.handle('setStoreValue', (event, key, value) => {
   }
     return library_state.set(key, value);
 });
+
+// ipcMain.handle('getPath', () => app.getPath('userData'));
+ipcMain.handle('getPath', () => 'we would love to get the userData path');
+
+// Preload path value
+// contextBridge.exposeInMainWorld('electronAPI', {
+//     getPath: () => ipcRenderer.invoke('getPath')
+// });
