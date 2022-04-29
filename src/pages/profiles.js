@@ -42,10 +42,10 @@ function Login() {
       <h2>Select a profile to view books</h2>
       <div id='profileButtons'>
         <ProfileButtons profiles={profiles} onProfileClick={setCurrentUser}/>
-        <button className="profiles-button" onClick={() => setCurrentUser("Guest")}>Guest</button>
         <Link to={'/AddProfile'} id='newProfileLink'>
           <button id="newProfileButton" className="profiles-button">Add Profile</button>
         </Link>
+        <button id="guestProfileButton" className="profiles-button" onClick={() => setCurrentUser("Guest")}>Guest</button>
       </div>
     </div>
   )

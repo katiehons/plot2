@@ -81,19 +81,17 @@ function AddLocation()
     <div className='centered'>
     <h1>Add New Location</h1>
     <form onSubmit={handleRoomSubmit} id="new-room-form">
-    <input id="new-room" type="text" placeholder="New Room…" onChange={handleNewRoomChange}/>
+    <label for="new-room" class="input-label">New Room</label> <br/>
+    <input id="new-room" type="text" placeholder="Room Name…" onChange={handleNewRoomChange}/> <br/>
     <input id="submit-new-room" type="submit" value="Add This Room" />
     </form>
     <br/> <br/>
     <form onSubmit={handleBookshelfSubmit} id="new-bookshelf-form">
-    <RoomSelector rooms={rooms} roomChange={handleBookshelfRoomChange}/>
-    <input id="new-bookshelf-name" type="text" placeholder="New Bookshelf…" onChange={handleNewBookshelfChange}/>
-    <input id="submit-new-room" type="submit" value="Add This Bookshelf" />
-    <br/>
+    <label for="new-bookshelf-name" id="new-bookshelf-label" class="input-label" >New Bookshelf</label><br/>
+    <RoomSelector rooms={rooms} roomChange={handleBookshelfRoomChange}/><br/>
+    <input id="new-bookshelf-name" type="text" placeholder="Bookshelf Name…" onChange={handleNewBookshelfChange}/><br/>
+    <input id="submit-new-room" type="submit" value="Add This Bookshelf" /><br/>
     </form>
-    <Link to={'/LocationMgr'}>
-                <button id="locationabortButton">Back to location manager</button>
-                </Link>
     </div>
   )
 }

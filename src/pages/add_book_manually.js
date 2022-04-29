@@ -103,25 +103,26 @@ function AddBookManually() {
 
   return (
     <div className="centered">
-      <h1>Add Book (By manual entry)</h1>
+      <h1>Add a New Book</h1>
       <form id="manual-add-form" onSubmit={handleSubmit}>
-        <input id="smaller-input" name="author" type="text"
+        <input class="user-input" name="author" type="text"
               placeholder="Author" onChange={handleChange}/>
         <br/>
-        <input id="smaller-input" name="title" type="text"
+        <input class="user-input" name="title" type="text"
               placeholder="Book Title" onChange={handleChange}/>
         <br/>
-        <input id="smaller-input" name="isbn" type="ISBN"
+        <input class="user-input" name="isbn" type="ISBN"
               placeholder="ISBN" onChange={handleChange}/>
         <br/>
-        <input className="edit-button" id="submit-btn" type="submit" value="Add Book" />
+        <RoomSelector rooms={rooms} roomChange={handleRoomChange}/>
+        <br/>
+        <BookshelfSelector bookshelves={bookshelves} bookshelfChange={handleBookshelfChange}/>
+        <br/>
+        <input id="submit-btn" type="submit" value="Add Book" />
       </form>
-      <div>Location:</div>
-      <RoomSelector rooms={rooms} roomChange={handleRoomChange}/>
-      <BookshelfSelector bookshelves={bookshelves} bookshelfChange={handleBookshelfChange}/>
 
       <Link to={'/AddBookAPI'}>
-                  <button className="edit-button" id="abortButton">Back to add by search</button>
+                  <button id="abortButton">Add by Searching</button>
                   </Link>
     </div>
   );

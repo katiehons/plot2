@@ -61,7 +61,7 @@ function Search() {
 
        <input className="userInput" id="search-input" name="isbn" type="text"
              placeholder="Search for…" onChange={handleChange}/>
-       <input className="edit-button" id="search-btn" type="submit" value="Go" />
+       <input id="search-btn" type="submit" value="Go" />
       </form>
       <div id="no-books-found" hidden><br/> No items in the library matched your search </div>
       <BookList books={books}/>

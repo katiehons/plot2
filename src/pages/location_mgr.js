@@ -5,12 +5,12 @@ function LocationMgr()
 //todo display all locations on this page
 return (
   <div className='centered'>
-  <h1>Locations</h1>
+  <h1>Manage Locations</h1>
   <Link to={'/AddLocation'}>
-      <button className="edit-button" id="addLocationLinkbtn">Add a new location</button>
+      <button id="addLocationLinkbtn">Add a location</button>
   </Link>
   <Link to={'/EditLocation'}>
-      <button className="edit-button" id="editLocationLinkbtn">Edit an existing location</button>
+      <button id="editLocationLinkbtn">Delete a location</button>
   </Link>
   </div>
 )

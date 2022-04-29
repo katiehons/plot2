@@ -128,18 +128,11 @@ function EditLocation() {
 
   return (
     <div className="centered">
-      <h1>Update or Delete Location</h1>
-      <form onSubmit={handleSubmit}>
+      <h1>Delete a Location</h1>
       <RoomSelector rooms={rooms} roomChange={handleRoomChange}/>
+      <button id="delete-room-btn" onClick={handleDeleteRoom}>Delete this room</button><br/>
       <BookshelfSelector bookshelves={bookshelves} bookshelfChange={handleBookshelfChange}/>
-      <input className="edit-button" id="submit-btn" type="submit" value="Make these changes" />
-      </form>
-      <button id="delete-bookshelf-btn" onClick={handleDeleteBookshelf}>Delete this bookshelf</button>
-      <button id="delete-room-btn" onClick={handleDeleteRoom}>Delete this room</button>
-
-      <Link to={'/LocationMgr'}>
-                  <button className="edit-button" id="locationabortButton">Back to Location Manager</button>
-                  </Link>
+      <button id="delete-bookshelf-btn" onClick={handleDeleteBookshelf}>Delete this bookshelf</button><br/>
     </div>
   );
 }

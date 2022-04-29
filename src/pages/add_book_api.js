@@ -131,19 +131,19 @@ function AddBookAPI() {
 
   return (
     <div className='centered'>
-    <h1>Add Book (by search) </h1>
+    <h1>Add a New Book</h1>
       <form onSubmit={handleSubmit}>
-        <input className="userInput" id="isbn-input" type="text"
+        <input className="user-input" id="isbn-input" type="text"
               placeholder="Enter ISBN" onChange={handleChange}/>
         <br/>
-        <div>Location:</div>
         <RoomSelector rooms={rooms} roomChange={handleRoomChange}/>
+        <br/>
         <BookshelfSelector bookshelves={bookshelves} bookshelfChange={handleBookshelfChange}/>
         <br/>
-        <input className="edit-button" id="search-btn" type="submit" value="Search" />
+        <input type="submit" value="Search" />
       </form>
       <Link to={'/AddBookManually'}>
-        <button className="edit-button" id="submit-btn">Add manually</button>
+        <button id="submit-btn">Add manually</button>
       </Link>
     </div>
   )

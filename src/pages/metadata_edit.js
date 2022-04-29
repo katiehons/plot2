@@ -154,30 +154,21 @@ function MetadataEdit(props) {
     <div className='centered'>
     <h1>Input edits and "Save"</h1>
     <form onSubmit={( event ) => saveEdits(event, original_isbn)}>
-    <label className="metadata-edit-label">
-      Title: &emsp;
-      <input className="userInput" name="title" id="smaller-input" type="text"
-           value={book.title} onChange={handleChange}/>
-    </label>
-    <br/>
-    <label className="metadata-edit-label">
-      ISBN: &emsp;
-      <input className="userInput" name="isbn" id="smaller-input" type="ISBN"
-          value={book.isbn} onChange={handleChange}/>
-    </label>
-    <br/>
-    <label className="metadata-edit-label">
-      Author: &emsp;
-      <input className="userInput" name="author" id="smaller-input" type="text"
-          value={book.author} onChange={handleChange}/>
-    </label>
-    <RoomSelector id="room-sel" rooms={rooms} roomChange={handleRoomChange}/>
-    <BookshelfSelector bookshelves={bookshelves} bookshelfChange={handleBookshelfChange}/>
-    <br/>
-      <button className="edit-button" id="submit-btn" type="submit">Save</button>
+    <label class="input-label" >Title:</label>
+    <input className="userInput" name="title" type="text" value={book.title}
+           onChange={handleChange}/><br/>
+    <label class="input-label">ISBN:</label>
+    <input className="userInput" name="isbn" type="ISBN"
+          value={book.isbn} onChange={handleChange}/><br/>
+    <label class="input-label">Author:</label>
+    <input className="userInput" name="author" type="text"
+          value={book.author} onChange={handleChange}/><br/>
+    <RoomSelector id="room-sel" rooms={rooms} roomChange={handleRoomChange}/><br/>
+    <BookshelfSelector bookshelves={bookshelves} bookshelfChange={handleBookshelfChange}/><br/>
+    <button id="back-btn" onClick={handleGoBack}>Go Back</button>
+    <button id="delete-btn" onClick={handleDeleteBook}>Delete this book</button>
+    <button id="submit-btn" type="submit">Save</button>
     </form>
-    <button className="edit-button" id="delete-btn" onClick={handleDeleteBook}>Delete this book</button>
-    <button className="edit-button" id="back-btn" onClick={handleGoBack}>Go Back</button>
     </div>
   )
 }

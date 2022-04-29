@@ -1,4 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
+import imageNotFound from './images/imageNotFound.svg';
 
 function LibraryHeader({ name }) {
   return (
@@ -26,10 +27,10 @@ function BookshelfSelector( {bookshelves, bookshelfChange} )
     return (<option key={i} value={item.bookshelf_id} id={"bookshelf-sel-"+item.bookshelf_id}>{item.bookshelf_name}</option>)
     }, this);
   return(
-    <div id="bookshelf-selector">
-      <label for="bookshelfsel">Which bookshelf? </label>
+    <>
+      <label for="bookshelfsel" class="input-label">Bookshelf: </label>
       <select id="bookshelfsel" onChange={bookshelfChange}>{bookshelvesList}</select>
-    </div>
+    </>
   )
 }
 function RoomSelector({rooms, roomChange})
@@ -39,10 +40,10 @@ function RoomSelector({rooms, roomChange})
     }, this);
 
   return(
-    <div id="room-selector">
-      <label for="roomsel">Which room? </label>
+    <>
+      <label for="roomsel" class="input-label">Room: </label>
       <select id="roomsel" onChange={roomChange}> {roomList} </select>
-    </div>
+    </>
   )
 }
 
@@ -73,12 +74,12 @@ function makeBook(book)
   console.log("lookin at book:")
   console.log( book)
   //get the image for each cover and set custom image if none found
-  // var cover;
-  // if(book.cover != null){
-  //   cover = book.cover;
-  // }else{
-  //   cover = imageNotFound;
-  // }
+  var cover;
+  if(book.cover != null){
+    cover = book.cover;
+  }else{
+    cover = imageNotFound;
+  }
 
   var title = book.title;
   var isbn = book.isbn;
@@ -88,6 +89,7 @@ function makeBook(book)
 
   return(
     <p class="list-block">
+      <img id="cover-block" src={cover}/>
       <div id="metadata-block">
           <div class="metadata-item" id="title">
           Title: {title}
@@ -101,8 +103,8 @@ function makeBook(book)
           <div class="metadata-item" id="author">
           Location: {room}, {bookshelf}
           </div>
+          <EditBookButton isbn={isbn}/>
       </div>
-      <EditBookButton isbn={isbn}/>
     </p>
   )
 }
