@@ -1,15 +1,13 @@
 // NOTE: the analogous file is src/main.js in the original
 const path = require('path');
+const process = require('process');
 
 const { app, BrowserWindow } = require('electron');
 const { ipcMain } = require('electron');
 const Store = require('electron-store');
 const isDev = require('electron-is-dev');
-// const { initialize, enable } = require("@electron/remote/main");
-// initialize();
 const DEBUG = true;
 
-require( "../src/db_connect/sequelize_index" )
 function createWindow() {
   // Create the browser window.
   const win = new BrowserWindow({
@@ -22,19 +20,10 @@ function createWindow() {
     }
   });
 
-  // and load the index.html of the app.
-  // win.loadFile("index.html");
-  win.loadURL(
-//TODO don't use the conditional operator. please.
-    isDev
-      ? 'http://localhost:3000'
-      : `file://${path.join(__dirname, '../build/index.html')}`
-      // : `file://${path.join(__dirname, '../src/plot/index.js')}`
-  );
+  user_data_path = app.getPath('userData')
 
-  // : `file://${path.join(__dirname, '../dist/plot/index.html')}`
-
-  // chromewebdata/:1 Not allowed to load local resource: file:///Users/katiebug/Classes/SPU/CSC/proj_plot_v2/plot2/dist/mac/plot.app/Contents/Resources/app.asar/dist/plot/index.html
+  let this_url = ( isDev ? 'http://localhost:3000' : `file://${path.join(__dirname, '../build/index.html')}` )
+  win.loadURL( this_url + "?user_data_path=" + user_data_path );
 
   // Open the DevTools.
   if (isDev) {
@@ -53,6 +42,7 @@ console.log( `file://${path.join(__dirname, '../build/index.html')}` )
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
 app.on('window-all-closed', () => {
+  // todo: this isn't working because I think our platform is always "browser"
   if (process.platform !== 'darwin') {
     app.quit();
   }
@@ -103,8 +93,10 @@ ipcMain.handle('setStoreValue', (event, key, value) => {
     return library_state.set(key, value);
 });
 
-// ipcMain.handle('getPath', () => app.getPath('userData'));
-ipcMain.handle('getPath', () => 'we would love to get the userData path');
+ipcMain.handle('getPath', () => {
+  return app.getPath('userData')
+});
+// ipcMain.handle('getPath', () => 'we would love to get the userData path');
 
 // Preload path value
 // contextBridge.exposeInMainWorld('electronAPI', {
