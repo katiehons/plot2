@@ -3,7 +3,7 @@ const { Sequelize, DataTypes } = require("sequelize");
 module.exports = (sequelize) => {
   const Book = sequelize.define("books", {
     isbn: {
-      type: DataTypes.INTEGER,
+      type: DataTypes.TEXT,
       primaryKey: true
     },
     title: {
