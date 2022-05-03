@@ -1,6 +1,10 @@
 import {React, useState} from 'react';
-import Sequelize from 'sequelize'
 import { Link } from 'react-router-dom'
+import { RoomSelector } from "../library_components";
+import library_db from "../db_connect/sequelize_index"
+
+const Bookshelf = library_db.bookshelf;
+const Room = library_db.room;
 
 function AddLocation()
 {
@@ -9,28 +13,6 @@ function AddLocation()
   const[newBookshelf, setNewBookshelf] = useState();
   const[rooms, setRooms] = useState([]);
   const[bookshelfRoom, setBookshelfRoom] = useState(null);
-
-  const sequelize = new Sequelize({
-    dialect: 'sqlite',
-    storage: './data/library.db',
-    define: {
-      timestamps: false
-    }
-  });
-
-  (async function() {
-    try {
-      await sequelize.authenticate();
-      console.log('Metadata: sequelize Connection has been established successfully.');
-    } catch (error) {
-      console.error('Unable to connect to the sequelize database:', error);
-    }
-  })();
-
-  const Bookshelf = require('../db_connect/models/bookshelf')(sequelize);
-  const Room = require('../db_connect/models/room')(sequelize);
-
-
 
   if( firstLoad )
   {
@@ -51,14 +33,7 @@ function AddLocation()
           }
         });
   }
-
-  let roomList = rooms.length > 0 && rooms.map((item, i) => {
-    console.log("listing room: " + item.room_name + " " + item.room_id)
-  return (
-    <option key={i} value={item.room_id}>{item.room_name}</option>
-  )
-  }, this);
-
+  
   const handleRoomSubmit = e => {
     e.preventDefault();
     Room.create({
@@ -88,8 +63,8 @@ function AddLocation()
       //   { replacements: [ bookshelfRoom, newBookshelf ],
       //     raw: true })
       //   .then((result) => {
-      //     document.getElementById('new-bookshelf-name').value = "";
-      //     setNewBookshelf("");
+      document.getElementById('new-bookshelf-name').value = "";
+      setNewBookshelf("");
       //     console.log(result);
       //   });
     })
@@ -116,17 +91,16 @@ function AddLocation()
     <form onSubmit={handleRoomSubmit} id="new-room-form">
     <input id="new-room" type="text" placeholder="New Room…" onChange={handleNewRoomChange}/>
     <input id="submit-new-room" type="submit" value="Add This Room" />
-    <br/>
     </form>
-
+    <br/> <br/>
     <form onSubmit={handleBookshelfSubmit} id="new-bookshelf-form">
-    <select id="roomsel" onChange={handleBookshelfRoomChange}> {roomList} </select>
+    <RoomSelector rooms={rooms} roomChange={handleBookshelfRoomChange}/>
     <input id="new-bookshelf-name" type="text" placeholder="New Bookshelf…" onChange={handleNewBookshelfChange}/>
     <input id="submit-new-room" type="submit" value="Add This Bookshelf" />
     <br/>
     </form>
     <Link to={'/LocationMgr'}>
-                <button id="locationabortButton">Back to all locations</button>
+                <button id="locationabortButton">Back to location manager</button>
                 </Link>
     </div>
   )

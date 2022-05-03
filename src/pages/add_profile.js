@@ -1,8 +1,9 @@
 import { React, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import { Sequelize } from 'sequelize';
+import library_db from "../db_connect/sequelize_index"
 
+const User = library_db.user;
 
 function AddProfile() {
   let history = useNavigate();
@@ -13,28 +14,8 @@ function AddProfile() {
     e.preventDefault();
     if( newUsername )
     {
-      const sequelize = new Sequelize({
-        dialect: 'sqlite',
-        storage: './data/library.db',
-        define: {
-          timestamps: false
-        }
-      });
-
-      (async function(){
-        try {
-          await sequelize.authenticate();
-          console.log('sequelize Connection has been established successfully.');
-        } catch (error) {
-          console.error('Unable to connect to the sequelize database:', error);
-        }
-      })();
-
-      const User = require('../db_connect/models/user')(sequelize)
-
       User.create( { username: newUsername } ).then(() => {
         User.sync().then(() => {
-          sequelize.close();
           history('/Login');
         });
       });
@@ -62,9 +43,6 @@ function AddProfile() {
             </Link>
         </div>
     )
-  // return(
-  //   <h1>add profile</h1>
-  // )
 }
 
 export default AddProfile;

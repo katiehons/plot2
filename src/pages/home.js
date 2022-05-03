@@ -1,6 +1,7 @@
 import { React, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Sequelize } from 'sequelize';
+import { Link } from 'react-router-dom';
+import { BookList, CurrentUser } from "../library_components"
+import library_db from "../db_connect/sequelize_index"
 import imageNotFound from '../images/imageNotFound.svg';
 
 const electron = window.require( 'electron' );
@@ -8,20 +9,16 @@ const { ipcRenderer } = electron;
 const electron_store = window.require( 'electron-store' );
 const { store } = electron_store;
 
+const Book = library_db.book;
+const Bookshelf = library_db.bookshelf;
+const Room = library_db.room;
 
 function Home() {
-  let history = useNavigate();
-  const [user, setUser] = useState([]);
-
+  const [user, setUser] = useState(null);
+  const[books, setBooks] = useState([]);
 
   // get and set the current user
-  function CurrentUser({ user }) {
-    return (
-      <h3 id='current_user'>Current user: {user}</h3>
-    )
-  }
-
-  if ( user.length === 0 ) {
+  if ( user == null ) {
     ipcRenderer.invoke('getStoreValue', 'current_user').then((result) => {
       if( result.length > 0)
       {
@@ -30,83 +27,21 @@ function Home() {
     });
   }
 
-  // generate the book list
-  const editBook = ( isbn ) => {
-    history("/MetadataEdit?isbn=" + isbn);
-  }
-
-  function makeBook(book)
-  {
-    //get the image for each cover and set custom image if none found
-    // var cover;
-    // if(book.cover != null){
-    //   cover = book.cover;
-    // }else{
-    //   cover = imageNotFound;
-    // }
-
-    var title = book.title;
-    var isbn = book.isbn;
-    var author = book.author;
-
-    // was formerly immediately above id="title" div
-    // <img id="cover-block" src={cover}/>
-
-    return(
-      <p class="list-block">
-        <div id="metadata-block">
-            <div class="metadata-item" id="title">
-            Title: {title}
-            </div>
-            <div class="metadata-item" id="isbn">
-            ISBN: {isbn}
-            </div>
-            <div class="metadata-item" id="author">
-            Author: {author}
-            </div>
-        </div>
-        <button type="button" className="edit-button" onClick={() => editBook(isbn)}>
-          Edit
-        </button>
-      </p>
-    )
-  }
-
-  function BookList({ books }) {
-    console.log("displaying books" + books);
-    return (
-      <div id='book-list'>{books.map((book) => makeBook(book))}</div>
-    )
-  }
-
-  const sequelize = new Sequelize({
-    dialect: 'sqlite',
-    storage: './data/library.db',
-    define: {
-      timestamps: false
-    }
-  });
-
-  (async function(){
-    try {
-      await sequelize.authenticate();
-      console.log('sequelize Connection has been established successfully.');
-    } catch (error) {
-      console.error('Unable to connect to the sequelize database:', error);
-    }
-  })();
-
-  const[books, setBooks] = useState([]);
-
-  const Book = require('../db_connect/models/book')(sequelize)
   if( books.length == 0 )
   {
-    Book.findAll({raw: true}).then((books) => {
-      console.log("(home)All books, before stringify:", books);
-      setBooks( books );
+    Book.findAll({raw: true,
+                  include: {
+                    model: Bookshelf,
+                    attributes: ["bookshelf_name"],
+                    include: {
+                      model:Room,
+                      attributes: ["room_name"]
+                    }}}
+                  ).then((books_result) => {
+      console.log("(home)All books:", books_result);
+      setBooks( books_result );
     });
   }
-
 // for-each html tags to generate header/headers/list
   return (
     <div className='home'>
@@ -116,6 +51,9 @@ function Home() {
       </Link>
       <Link to={'/Search'} id='searchlink'>
         <button id="searchlinkbtn" className="homepage-nav-button">Search</button>
+      </Link>
+      <Link to={'/BrowseLocations'} id='browse-locations-link'>
+        <button id="browse-locations-link" className="homepage-nav-button">Browse by Location</button>
       </Link>
       <Link to={'/AddBookAPI'} id='addbooklink'>
         <button id="addbooklinkbtn" className="homepage-nav-button">Add new book</button>

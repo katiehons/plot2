@@ -1,101 +1,37 @@
 import {  React, useState } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
-import { Sequelize, Op } from 'sequelize';
+import { Link } from 'react-router-dom';
+import { Op } from 'sequelize';
+import { BookList } from "../library_components";
 import imageNotFound from '../images/imageNotFound.svg';
+import library_db from "../db_connect/sequelize_index"
+
+const Book = library_db.book;
+const Bookshelf = library_db.bookshelf;
+const Room = library_db.room;
 
 function Search() {
   const [searchTerm, setSearchTerm] = useState();
   const [filter, setFilter] = useState( "author" );
   const [books, setBooks] = useState([]);
 
-////////////////////
-// copied from home.js
-// generate the book list
-  let history = useNavigate();
-
-  const editBook = ( isbn ) => {
-    console.log("sending " + "/MetadataEdit?isbn=" + isbn )
-    history("/MetadataEdit?isbn=" + isbn);
-  }
-
-  function makeBook(book)
-  {
-    console.log("creating " + book.title);
-
-    //get the image for each cover and set custom image if none found
-    // var cover;
-    // if(book.cover != null){
-    //   cover = book.cover;
-    // }else{
-    //   cover = imageNotFound;
-    // }
-
-    var title = book.title;
-    var isbn = book.isbn;
-    var author = book.author;
-
-    // was formerly immediately above id="title" div
-    // <img id="cover-block" src={cover}/>
-
-    return(
-      <p class="list-block">
-        <div id="metadata-block">
-            <div class="metadata-item" id="title">
-            Title: {title}
-            </div>
-            <div class="metadata-item" id="isbn">
-            ISBN: {isbn}
-            </div>
-            <div class="metadata-item" id="author">
-            Author: {author}
-            </div>
-        </div>
-        <button type="button" className="edit-button" onClick={() => editBook(isbn)}>
-          Edit
-        </button>
-      </p>
-    )
-  }
-
-  function BookList({books}) {
-    console.log("displaying books" + books);
-    return (
-      <div id='book-list'>{books.map((book) => makeBook(book))}</div>
-    )
-  }
-// fin copied from home.js
-///////////////
-
   const handleSubmit = e => {
     e.preventDefault();
 
-    var block = document.getElementById('book-list');
-    while (block.hasChildNodes()) {
-      block.removeChild(block.lastChild);
-    }
-
-    const sequelize = new Sequelize({
-      dialect: 'sqlite',
-      storage: './data/library.db',
-      define: {
-        timestamps: false
-      }
-    });
-
-    (async function(){
-      try {
-        await sequelize.authenticate();
-        console.log('sequelize Connection has been established successfully.');
-      } catch (error) {
-        console.error('Unable to connect to the sequelize database:', error);
-      }
-    })();
-
-    const Book = require('../db_connect/models/book')(sequelize)
+    // var block = document.getElementById('book-list');
+    // while (block.hasChildNodes()) {
+    //   block.removeChild(block.lastChild);
+    // }
 
     Book.findAll({where: {
                     [filter]: { [Op.like]: `%${searchTerm}%` } },
-                    raw: true})
+                    raw: true,
+                    include: {
+                      model: Bookshelf,
+                      attributes: ["bookshelf_name"],
+                      include: {
+                        model:Room,
+                        attributes: ["room_name"]
+                      }}})
       .then((books) => {
       console.log("we found:" + books);
       console.log( "num books:" + books.length)

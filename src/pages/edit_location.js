@@ -1,60 +1,36 @@
 import {React, useState} from 'react';
-import Sequelize from 'sequelize'
 import { Link } from 'react-router-dom'
+import { RoomSelector, BookshelfSelector } from "../library_components";
+import library_db from "../db_connect/sequelize_index";
+
+const Bookshelf = library_db.bookshelf;
+const Room = library_db.room;
 
 function EditLocation() {
-  // todo make these not-array as appropriate
   const[firstLoad, setFirstLoad] = useState( true );
   const[rooms, setRooms] = useState([]);
-  const[selectedRoom, setSelectedRoom] = useState( 0 );
+  const[selectedRoom, setSelectedRoom] = useState( null );
   const[bookshelves, setBookshelves] = useState([]);
-  const[selectedBookshelf, setSelectedBookshelf] = useState( 0 );
-  const[shelves, setshelves] = useState([]);
-  const[selectedShelves, setSelectedShelves] = useState([]);
+  const[selectedBookshelf, setSelectedBookshelf] = useState( null );
 
-  const sequelize = new Sequelize({
-    dialect: 'sqlite',
-    storage: './data/library.db',
-    define: {
-      timestamps: false
-    }
-  });
-
-  (async function(){
-    try {
-      await sequelize.authenticate();
-      console.log('PROFILES: sequelize Connection has been established successfully.');
-    } catch (error) {
-      console.error('Unable to connect to the sequelize database:', error);
-    }
-  })();
-
-  const Bookshelf = require('../db_connect/models/bookshelf')(sequelize);
-  const Room = require('../db_connect/models/room')(sequelize);
-
-
-  function fetchBookshelves( room )
+  function fetchBookshelves( room_id )
   {
-    console.log("Fetching bookshelves..." + room )
-    // get the bookshelves in that room
-        // var sql_get_bookshelves = "SELECT bookshelf_name FROM bookshelves JOIN rooms_bookshelves ON bookshelves.bookshelf_id = rooms_bookshelves.bookshelf_id JOIN rooms ON rooms.room_id = rooms_bookshelves.room_id WHERE rooms.room_name = ?;";
-
-    // todo next: get the bookshelves only from the right room
+    console.log("Fetching bookshelves..." + room_id )
     Bookshelf.findAll({
       where: {
-      room_id: 1
+      room_id: room_id
       },
-        raw: true}).then((bookshelves) => {
-      console.log("bookshelves: " + bookshelves)
-      setBookshelves( bookshelves );
-      if( bookshelves.length > 0 )
-      {
-        setSelectedBookshelf( bookshelves.[0].bookshelf_name );
-      }
-      else
-      {
-        setSelectedBookshelf("");
-      }
+      raw: true}).then((bookshelves_result) => {
+        console.log("bookshelves: " + bookshelves_result)
+        setBookshelves( bookshelves_result );
+        if( bookshelves_result.length > 0 )
+        {
+          setSelectedBookshelf( bookshelves_result.[0].bookshelf_id );
+        }
+        else
+        {
+          setSelectedBookshelf(null);
+        }
     });
   }
 
@@ -63,75 +39,71 @@ function EditLocation() {
     console.log("Working on first load…")
     setFirstLoad( false )
     Room.findAll({raw: true}).then((rooms) => {
-      console.log("rooms: " + rooms)
+      console.log("number of rooms: " + rooms.length)
           setRooms(rooms);
           if( rooms.length > 0 )
           {
-            setSelectedRoom( rooms[0].room_name );
-            fetchBookshelves( rooms[0].room_name );
+            setSelectedRoom( rooms[0].room_id );
+            fetchBookshelves( rooms[0].room_id );
           }
           else
           {
-            setSelectedRoom("")
+            setSelectedRoom(null)
+            setBookshelves([])
+            setSelectedBookshelf(null)
           }
         });
   }
 
-  let roomList = rooms.length > 0 && rooms.map((item, i) => {
-  return (
-    <option key={i} value={item.room_name}>{item.room_name}</option>
-  )
-  }, this);
-
-  let bookshelvesList = bookshelves.length > 0 && bookshelves.map((item, i) => {
-  return (
-    <option key={i} value={item.bookshelf_name}>{item.bookshelf_name}</option>
-  )
-  }, this);
-
 
 /// from add book pg, needs rework!!! todotodotodo vvvvvvvvvvvvv
-  const [state, setState] = useState({ author: "", book: "", isbn: "" });
+  // const [state, setState] = useState({ author: "", book: "", isbn: "" });
   const handleSubmit = e => {
-    e.preventDefault();
-    //display success or failure message
-    console.log(state);
+  //   e.preventDefault();
+  //   //display success or failure message
+  //   console.log(state);
   };
 
 ///^^^^^^^^^^^^^^^^^^
-  function deleteBookshelf( bookshelf )
+  function deleteBookshelf( bookshelf_id, from_room_delete=false )
   {
     Bookshelf.destroy({
       where: {
-        bookshelf_name: bookshelf
+        bookshelf_id: bookshelf_id
       }
     }).then( () => {
       Bookshelf.sync()
-      console.log( "Current room: " + selectedRoom[""] );
-      fetchBookshelves( selectedRoom[""] );
+      console.log( "Current room: " + selectedRoom );
+      if( !from_room_delete )
+      {
+        fetchBookshelves( selectedRoom );
+      }
     });
   }
 
   const handleDeleteBookshelf = e =>{
     var bookshelf_sel = document.getElementById("bookshelfsel")
     var bookshelf_name = bookshelf_sel.options[bookshelf_sel.selectedIndex].text
+    var bookshelf_id = bookshelf_sel.options[bookshelf_sel.selectedIndex].value
 
     if( window.confirm( "Are you sure you want to delete bookshelf \"" + bookshelf_name + "\"?\nThis will unset location for all books on this shelf."))
     {
-      deleteBookshelf( bookshelf_name );
+      console.log("deleting bookshelf: " + bookshelf_name + " id: " + bookshelf_id )
+      deleteBookshelf( bookshelf_id );
     }
   }
 
   const handleDeleteRoom = e =>{
     var room_sel = document.getElementById("roomsel")
     var room_name = room_sel.options[room_sel.selectedIndex].text
+    var room_id = room_sel.options[room_sel.selectedIndex].value
 
     if( window.confirm( "Are you sure you want to delete room \"" + room_name + "\"?\nThis will also delete all bookshelves in this room."))
     {
       // this takes care of deleting bookshelfs and room-bookshelf associations
       for (var i = 0; i < bookshelves.length; i++) {
-          console.log(bookshelves[i].bookshelf_name);
-          deleteBookshelf( bookshelves[i].bookshelf_name );
+          // console.log("From room delete, deleting bookshelf: " + bookshelves[i].bookshelf_name);
+          deleteBookshelf( bookshelves[i].bookshelf_id, true );
       }
 
     Room.destroy({
@@ -140,39 +112,26 @@ function EditLocation() {
       }
     }).then( () => {
       Room.sync()
-        // todo re-fetch rooms
+      setFirstLoad(true)
     });
     }
   }
 
-
   const handleRoomChange = e =>{
-    setSelectedRoom({
-      ...selectedRoom,
-      [e.target.name]: e.target.value
-    });
-    console.log(e.target.value )
+    setSelectedRoom( e.target.value );
     fetchBookshelves( e.target.value )
   };
 
   const handleBookshelfChange = e =>{
-    setSelectedBookshelf({
-      ...selectedBookshelf,
-      [e.target.name]: e.target.value
-    });
-    console.log(e.target.value)
+    setSelectedBookshelf( e.target.value);
   };
 
   return (
     <div className="centered">
       <h1>Update or Delete Location</h1>
       <form onSubmit={handleSubmit}>
-      <label for="roomsel">Which room? </label>
-      <select id="roomsel" onChange={handleRoomChange}> {roomList} </select>
-      <br/>
-      <label for="bookshelfsel">Which bookshelf? </label>
-      <select id="bookshelfsel" onChange={handleBookshelfChange}>{bookshelvesList}</select>
-      <br/>
+      <RoomSelector rooms={rooms} roomChange={handleRoomChange}/>
+      <BookshelfSelector bookshelves={bookshelves} bookshelfChange={handleBookshelfChange}/>
       <input className="edit-button" id="submit-btn" type="submit" value="Make these changes" />
       </form>
       <button id="delete-bookshelf-btn" onClick={handleDeleteBookshelf}>Delete this bookshelf</button>

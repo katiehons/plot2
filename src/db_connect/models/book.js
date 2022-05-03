@@ -16,14 +16,16 @@ module.exports = (sequelize) => {
     },
     cover: {
       type: DataTypes.BLOB
+    },
+    bookshelf_id:
+    {
+      type: DataTypes.INTEGER,
+      allowNull: false
     }
   },
   {
     timestamps: false,
   });
 
-  // todo, why isn't this happening?
-  const Bookshelf = require('./bookshelf')(sequelize)
-  Book.hasOne( Bookshelf );
   return Book;
 };

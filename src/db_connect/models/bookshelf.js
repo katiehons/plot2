@@ -10,19 +10,18 @@ module.exports = (sequelize) => {
     bookshelf_name:
     {
       type: DataTypes.TEXT,
-      unique: true
+      unique: true,
+      allowNull: false
     },
     room_id:
     {
-      type: DataTypes.INTEGER
+      type: DataTypes.INTEGER,
+      allowNull: false
     }
   },
   {
     timestamps: false,
   });
 
-  // const Room = require('./room')(sequelize)
-  // // Room.belongsToMany( Bookshelf, { through: "rooms_bookshelves", foreignKey: "room_id", otherKey: "bookshelf_id" });
-  // Bookshelf.belongsTo(Room)
   return Bookshelf;
 };
