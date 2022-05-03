@@ -2,6 +2,7 @@ import logo from './logo.svg';
 import './App.css';
 // import Navbar from './navbar/navbar_src/navbar';
 import { BrowserRouter as Router, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+import AppLoading from './pages/app_loading';
 import Home from './pages/home';
 import Login from './pages/profiles';
 import Setup from './pages/setup';
@@ -10,6 +11,11 @@ import AddProfile from './pages/add_profile';
 import AddBookManually from './pages/add_book_manually';
 import AddBookAPI from './pages/add_book_api';
 import MetadataEdit from './pages/metadata_edit';
+import LocationMgr from './pages/location_mgr';
+import EditLocation from './pages/edit_location';
+import AddLocation from './pages/add_location';
+import BrowseLocations from './pages/browse_locations';
+
 
 import { useState, Fragment } from 'react';
 // Used for conditional setup
@@ -20,24 +26,25 @@ var firstPage;
 function App() {
   // If the PLOT software has not been set up locally, then the setup page is routed to by default.
   // Otherwise, the Login page will greet the user.
-  const [isSetup, setIsSetup] = useState([]);
+  const [isLoaded, setIsLoaded] = useState(false)
+  const [isSetup, setIsSetup] = useState(null);
 
-  const checkSetup = async () => {
-    const setupState = await ipcRenderer.invoke('getStoreValue','library_setup');
-    console.log("library is setup: " + setupState);
-    setIsSetup( setupState );
-  };
+  console.log(isSetup)
+  if( !isLoaded )
+  {
+    console.log("loading setup state...")
+    ipcRenderer.invoke('getStoreValue','library_setup').then( (setupResult) => {
+      setIsSetup(setupResult, setIsLoaded(true))
+    })
+  }
 
-  if(isSetup.length === 0) {
-    setIsSetup(false);
-    checkSetup();
-  };
-
+  console.log(isSetup)
   return (
     <>
     <Router>
       <Routes>
-        <Route exact path='/' element={((isSetup) ? <Login />: <Setup />)} />
+        <Route exact path='/' element={( isLoaded ? ( isSetup ? <Login />: <Setup /> ) : <AppLoading /> )} />
+        <Route exact path='/AppLoading' element={<AppLoading />} />
         <Route exact path='/Login' element={<Login />} />
         <Route exact path='/Setup' element={<Setup />} />
         <Route exact path='/AddProfile' element={<AddProfile />} />
@@ -46,6 +53,11 @@ function App() {
         <Route exact path='/AddBookAPI' element={<AddBookAPI />} />
         <Route exact path='/AddBookManually' element={<AddBookManually />} />
         <Route exact path='/MetadataEdit' element={<MetadataEdit />} />
+        <Route exact path='/LocationMgr' element={<LocationMgr />} />
+        <Route exact path='/EditLocation' element={<EditLocation />} />
+        <Route exact path='/AddLocation' element={<AddLocation />} />
+        <Route exact path='/BrowseLocations' element={<BrowseLocations />} />
+
       </Routes>
     </Router>
     </>
@@ -53,30 +65,3 @@ function App() {
 }
 
 export default App;
-// original template code below:
-
-// import logo from './logo.svg';
-// import './App.css';
-//
-// function App() {
-//   return (
-//     <div className="App">
-//       <header className="App-header">
-//         <img src={logo} className="App-logo" alt="logo" />
-//         <p>
-//           Edit <code>src/App.js</code> and save to reload.
-//         </p>
-//         <a
-//           className="App-link"
-//           href="https://reactjs.org"
-//           target="_blank"
-//           rel="noopener noreferrer"
-//         >
-//           Learn React
-//         </a>
-//       </header>
-//     </div>
-//   );
-// }
-//
-// export default App;

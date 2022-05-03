@@ -1,57 +1,154 @@
-import React, { location, useState } from 'react';
+import React, { location, useState, useReducer } from 'react';
 import { Link, useNavigate, useLocation } from 'react-router-dom';
-import sendAsync from '../db_connect/renderer';
+import { RoomSelector, BookshelfSelector } from "../library_components";
+import library_db from "../db_connect/sequelize_index"
+
+const Book = library_db.book;
+const Bookshelf = library_db.bookshelf;
+const Room = library_db.room;
+
 const queryString = require('query-string');
 
-
 function MetadataEdit(props) {
-  const [book, setBook] = useState([]);
+  const bookInitialState = { isbn: "", title: "", author: "", bookshelf_id: "" }
+  const [book, updateBook] = useReducer(
+    (book, bookUpdates) => ({
+      ...book,
+      ...bookUpdates,
+    }),
+    bookInitialState);
+
+  const [firstLoad, setFirstLoad] = useState( true );
+  const [selectedRoom, setSelectedRoom] = useState( null );
+  const [rooms, setRooms] = useState([]);
+  const [bookshelves, setBookshelves] = useState([]);
   let history = useNavigate();
   const useQuery = () => new URLSearchParams(useLocation().search);
   let query = useQuery();
 
-//todo start here: https://betterprogramming.pub/using-url-parameters-and-query-strings-with-react-router-fffdcea7a8e9
-
-  console.log("rendering metadata page");
-  // console.log( {props.location} );
-  // var original_isbn = queryString.parse(this.props.location.search).isbn
   var original_isbn = query.get("isbn")
 
-  if( book.length == 0 ){
-    var sqlGetBook = "SELECT * FROM books WHERE isbn = ?;";
-    var params = [original_isbn]
-    sendAsync(sqlGetBook, params).then((result) => {
-      console.log("result from the db: " + result);
-      setBook(result[0]);
+  if( firstLoad ){
+    setFirstLoad(false)
+    Room.findAll({raw: true}).then((rooms) => {
+      console.log("number of rooms: " + rooms.length)
+          setRooms(rooms);
+        });
+    Book.findAll({
+      where: {
+        isbn: original_isbn },
+      raw: true,
+      include: {
+        model: Bookshelf,
+        attributes: ["bookshelf_name"],
+        include: {
+          model:Room,
+          attributes: ["room_name"]
+        }}}).then((bookList) => {
+      let foundBook = bookList[0]
+      console.log( book[0] )
+      updateBook( {isbn: foundBook.isbn, title: foundBook.title, author: foundBook.author, bookshelf_id: foundBook.bookshelf_id })
+
+      let book_room_opt = document.getElementById("room-sel-"+foundBook["bookshelf.room.room_id"]);
+      if( book_room_opt )
+      {
+        book_room_opt.selected = true;
+        setSelectedRoom( book_room_opt.value );
+        fetchBookshelves( book_room_opt.value, false ).then( () => {
+          let book_shelf_opt = document.getElementById("bookshelf-sel-"+foundBook.bookshelf_id);
+          if( book_shelf_opt )
+          {
+            book_shelf_opt.selected = true;
+            updateBook({ bookshelf_id: book_shelf_opt.value });
+          }
+        })
+      }
     })
     .catch(function(error)
-    {
-        console.log(error);
-        window.alert("Something went wrong updating the book");
-    })};
+        {
+            console.log(error);
+            window.alert("Something went wrong finding the book");
+            history(-1);
+            //todo, history.push another page so it doesn't stall
+        });
+  };
+
+  async function fetchBookshelves( room_id, shouldSetBooksBookshelf=true )
+  {
+    console.log("Fetching bookshelves..." + room_id )
+    return Bookshelf.findAll({
+      where: {
+      room_id: room_id
+      },
+      raw: true}).then((bookshelves_result) => {
+        setBookshelves( bookshelves_result );
+        if( bookshelves_result.length > 0 && shouldSetBooksBookshelf )
+        {
+          updateBook({ bookshelf_id: bookshelves_result.[0].bookshelf_id });
+        }
+        else
+        {
+          updateBook({ bookshelf_id: null });
+        }
+    });
+  }
 
   const saveEdits = function( event, original_isbn ) {
+    event.preventDefault();
+    var bookshelf_name = document.getElementById("bookshelf-sel-"+book.bookshelf_id).text
+
     if ( window.confirm("Update book information to:\nTitle: " + book.title
-      + "\nISBN: " + book.isbn + "\nAuthor: " + book.author) ) {
-    console.log("save book, original isbn:" + original_isbn);
-    var sqlUpdateBook = "UPDATE books SET isbn = ?, title = ?, author = ? WHERE isbn = ?;";
-    var params = [book.isbn, book.title, book.author, original_isbn];
-    console.log("update sql string: \n" + sqlUpdateBook)
-    sendAsync(sqlUpdateBook, params).then((result) => {
-      console.log("update sql result:\n" + result);
-    });
+      + "\nISBN: " + book.isbn + "\nAuthor: " + book.author + "\nBookshelf: " + bookshelf_name) ) {
+
+      Book.update(
+        { isbn: book.isbn,
+          title: book.title,
+          author: book.author,
+          bookshelf_id: book.bookshelf_id
+        },
+        {
+          where: {
+            isbn: original_isbn
+            }
+        }).then( Book.sync() );
   }
     else {
       console.log("cancelled book update");
     }
   };
 
+  const deleteBook = function( delete_isbn ) {
+    Book.destroy({ where:{ isbn: delete_isbn } })
+    .then( ()=> {
+      Book.sync()
+      history(-1);
+    })
+  }
+
   const handleChange = bookEdit => {
-    setBook({
-      ...book,
-      [bookEdit.target.name]: bookEdit.target.value
-    });
+    updateBook({[bookEdit.target.name]: bookEdit.target.value})
   };
+
+  const handleRoomChange = e => {
+    setSelectedRoom( e.target.value );
+    fetchBookshelves( e.target.value )
+  };
+
+  const handleBookshelfChange = bookEdit => {
+    updateBook({ bookshelf_id: bookEdit.target.value });
+  };
+
+  const handleDeleteBook = e =>{
+    if( window.confirm( "Do you want to delete this book?\nThis action cannot be undone."))
+    {
+      console.log("deleting book: " + book.isbn )
+      deleteBook( book.isbn );
+    }
+  }
+
+  const handleGoBack = e => {
+    history(-1);
+  }
 
   return (
     <div className='centered'>
@@ -74,17 +171,18 @@ function MetadataEdit(props) {
       <input className="userInput" name="author" id="smaller-input" type="text"
           value={book.author} onChange={handleChange}/>
     </label>
+    <RoomSelector id="room-sel" rooms={rooms} roomChange={handleRoomChange}/>
+    <BookshelfSelector bookshelves={bookshelves} bookshelfChange={handleBookshelfChange}/>
     <br/>
       <button className="edit-button" id="submit-btn" type="submit">Save</button>
     </form>
+    <button className="edit-button" id="delete-btn" onClick={handleDeleteBook}>Delete this book</button>
+    <button className="edit-button" id="back-btn" onClick={handleGoBack}>Go Back</button>
     <Link to={'/Home'} id='return-to-home'>
-        <button className="edit-button" id="abortButton" title="Deletes any unsaved changes">Return to Home</button>
+        <button className="edit-button" >Home</button>
     </Link>
     </div>
   )
-  // return(
-  //   <h1>metadata edit</h1>
-  // )
 }
 
 export default MetadataEdit;

@@ -1,35 +1,32 @@
-import React from 'react';
+import { React, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import sendAsync from '../db_connect/renderer';
+import library_db from "../db_connect/sequelize_index"
 
+const User = library_db.user;
 
 function AddProfile() {
   let history = useNavigate();
 
-  const [state, setState] = React.useState({ newUsername: ""});
+  const [newUsername, setNewUsername] = useState( "" );
+
   const handleSubmit = e => {
     e.preventDefault();
-    // //log state.author, state.book, state.isbn to the database instead of console
-    if( state.newUsername )
+    if( newUsername )
     {
-      var sqlInsert = "INSERT INTO users(username)\nVALUES(?);";
-      var params = [state.newUsername];
-      console.log("sql string: \n" + sqlInsert)
-      sendAsync(sqlInsert, params)
-      .then((result) => console.log(result))
-      .then(history('/Login'));
+      User.create( { username: newUsername } ).then(() => {
+        User.sync().then(() => {
+          history('/Login');
+        });
+      });
     }
     else {
       console.log("empty username string");
-      window.alert("Username " + state.newUsername + " is invalid. Please try again.")
+      window.alert("Username \"" + newUsername + "\" is invalid. Please try again.")
     }
   };
   const handleChange = e => {
-    setState({
-      ...state,
-      [e.target.name]: e.target.value
-    });
+    setNewUsername( e.target.value );
   };
     return (
         <div className='centered'>
@@ -46,9 +43,6 @@ function AddProfile() {
             </Link>
         </div>
     )
-  // return(
-  //   <h1>add profile</h1>
-  // )
 }
 
 export default AddProfile;
