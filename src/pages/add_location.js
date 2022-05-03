@@ -33,7 +33,7 @@ function AddLocation()
           }
         });
   }
-
+  
   const handleRoomSubmit = e => {
     e.preventDefault();
     Room.create({
