@@ -1,5 +1,5 @@
 import {React, useState} from 'react';
-import sendAsync from '../db_connect/renderer';
+import Sequelize from 'sequelize'
 import { Link } from 'react-router-dom'
 
 function EditLocation() {
@@ -12,17 +12,49 @@ function EditLocation() {
   const[shelves, setshelves] = useState([]);
   const[selectedShelves, setSelectedShelves] = useState([]);
 
+  const sequelize = new Sequelize({
+    dialect: 'sqlite',
+    storage: './data/library.db',
+    define: {
+      timestamps: false
+    }
+  });
+
+  (async function(){
+    try {
+      await sequelize.authenticate();
+      console.log('PROFILES: sequelize Connection has been established successfully.');
+    } catch (error) {
+      console.error('Unable to connect to the sequelize database:', error);
+    }
+  })();
+
+  const Bookshelf = require('../db_connect/models/bookshelf')(sequelize);
+  const Room = require('../db_connect/models/room')(sequelize);
+
+
   function fetchBookshelves( room )
   {
     console.log("Fetching bookshelves..." + room )
     // get the bookshelves in that room
-    var sql_get_bookshelves = "SELECT bookshelf_name FROM bookshelves JOIN rooms_bookshelves ON bookshelves.bookshelf_id = rooms_bookshelves.bookshelf_id JOIN rooms ON rooms.room_id = rooms_bookshelves.room_id WHERE rooms.room_name = ?;";
+        // var sql_get_bookshelves = "SELECT bookshelf_name FROM bookshelves JOIN rooms_bookshelves ON bookshelves.bookshelf_id = rooms_bookshelves.bookshelf_id JOIN rooms ON rooms.room_id = rooms_bookshelves.room_id WHERE rooms.room_name = ?;";
 
-    var params = [room];
-    sendAsync(sql_get_bookshelves, params).then((result) => {
-      console.log("got shelves from db");
-      console.log(result);
-      setBookshelves(result);
+    // todo next: get the bookshelves only from the right room
+    Bookshelf.findAll({
+      where: {
+      room_id: 1
+      },
+        raw: true}).then((bookshelves) => {
+      console.log("bookshelves: " + bookshelves)
+      setBookshelves( bookshelves );
+      if( bookshelves.length > 0 )
+      {
+        setSelectedBookshelf( bookshelves.[0].bookshelf_name );
+      }
+      else
+      {
+        setSelectedBookshelf("");
+      }
     });
   }
 
@@ -30,16 +62,19 @@ function EditLocation() {
   {
     console.log("Working on first load…")
     setFirstLoad( false )
-    var sql_get_rooms = "SELECT room_name FROM rooms";
-    sendAsync(sql_get_rooms).then((result) => {
-      console.log("got rooms from db");
-      console.log(result);
-      if( result.length > 0) {
-        setRooms(result);
-        setSelectedRoom( result[0].room_name );
-        fetchBookshelves( result[0].room_name );
-      }
-    });
+    Room.findAll({raw: true}).then((rooms) => {
+      console.log("rooms: " + rooms)
+          setRooms(rooms);
+          if( rooms.length > 0 )
+          {
+            setSelectedRoom( rooms[0].room_name );
+            fetchBookshelves( rooms[0].room_name );
+          }
+          else
+          {
+            setSelectedRoom("")
+          }
+        });
   }
 
   let roomList = rooms.length > 0 && rooms.map((item, i) => {
@@ -66,19 +101,14 @@ function EditLocation() {
 ///^^^^^^^^^^^^^^^^^^
   function deleteBookshelf( bookshelf )
   {
-    var sql_delete_shelf_from_room = "DELETE FROM rooms_bookshelves WHERE bookshelf_id IN (SELECT bookshelf_id FROM rooms_bookshelves JOIN bookshelves ON bookshelves.bookshelf_id = rooms_bookshelves.bookshelf_id WHERE bookshelves.bookshelf_name = ?);"// DELETE FROM bookshelves WHERE bookshelf_name = ?;"
-    var sql_delete_shelf = "DELETE FROM bookshelves WHERE bookshelf_name = ?;"
-
-    var params = [bookshelf]
-    console.log("Trying to delete: " + params)
-
-    sendAsync(sql_delete_shelf_from_room, params).then((result) => {
-      console.log(result)
-      sendAsync(sql_delete_shelf, params).then((result) => {
-        console.log(result)
-        console.log( "Current room: " + selectedRoom[""] )
-        fetchBookshelves( selectedRoom[""] )
-      });
+    Bookshelf.destroy({
+      where: {
+        bookshelf_name: bookshelf
+      }
+    }).then( () => {
+      Bookshelf.sync()
+      console.log( "Current room: " + selectedRoom[""] );
+      fetchBookshelves( selectedRoom[""] );
     });
   }
 
@@ -89,20 +119,6 @@ function EditLocation() {
     if( window.confirm( "Are you sure you want to delete bookshelf \"" + bookshelf_name + "\"?\nThis will unset location for all books on this shelf."))
     {
       deleteBookshelf( bookshelf_name );
-      // var sql_delete_shelf_from_room = "DELETE FROM rooms_books WHERE shelf_id IN (SELECT shelf_id FROM rooms_books JOIN bookshelves ON bookshelves.bookshelf_id = rooms_books.shelf_id WHERE bookshelves.bookshelf_name = ?);"// DELETE FROM bookshelves WHERE bookshelf_name = ?;"
-      // var sql_delete_shelf = "DELETE FROM bookshelves WHERE bookshelf_name = ?;"
-      //
-      // var params = [bookshelf_name]
-      // console.log("Trying to delete: " + params)
-      //
-      // sendAsync(sql_delete_shelf_from_room, params).then((result) => {
-      //   console.log(result)
-      //   sendAsync(sql_delete_shelf, params).then((result) => {
-      //     console.log(result)
-      //     console.log( "Current room: " + selectedRoom[""] )
-      //     fetchBookshelves( selectedRoom[""] )
-      //   });
-      // });
     }
   }
 
@@ -118,22 +134,17 @@ function EditLocation() {
           deleteBookshelf( bookshelves[i].bookshelf_name );
       }
 
-      // var sql_delete_shelf_from_room = "DELETE FROM rooms_books WHERE shelf_id IN (SELECT shelf_id FROM rooms_books JOIN bookshelves ON bookshelves.bookshelf_id = rooms_books.shelf_id WHERE bookshelves.bookshelf_name = ?);"// DELETE FROM bookshelves WHERE bookshelf_name = ?;"
-      var sql_delete_room = "DELETE FROM rooms WHERE room_name = ?;"
-
-      var params = [room_name]
-      console.log("Trying to delete: " + params)
-
-      sendAsync(sql_delete_room, params).then((result) => {
-        console.log(result)
+    Room.destroy({
+      where: {
+        room_name: room_name
+      }
+    }).then( () => {
+      Room.sync()
         // todo re-fetch rooms
-        });
+    });
     }
   }
 
-  // const deleteRoom = e =>{
-  //   var sql_delete_loc =
-  // }
 
   const handleRoomChange = e =>{
     setSelectedRoom({
@@ -142,17 +153,6 @@ function EditLocation() {
     });
     console.log(e.target.value )
     fetchBookshelves( e.target.value )
-
-
-    // // get the bookshelves in that room
-    // var sql_get_rooms = "SELECT bookshelf_name, rooms.room_name FROM bookshelves JOIN rooms_books ON bookshelves.bookshelf_id = rooms_books.shelf_id JOIN rooms ON rooms.room_id = rooms_books.room_id WHERE rooms.room_name = ?;"
-    //
-    // var params = [e.target.value]
-    // sendAsync(sql_get_rooms, params).then((result) => {
-    //   console.log("got shelves from db");
-    //   console.log(result);
-    //   setBookshelves(result);
-    // });
   };
 
   const handleBookshelfChange = e =>{
@@ -161,18 +161,8 @@ function EditLocation() {
       [e.target.name]: e.target.value
     });
     console.log(e.target.value)
-    //todo: set the current number of shelves based on which bookshelf
   };
 
-  // const handleShelfChange = e =>{
-  //   setSelectedRoom({
-  //     ...selectedBookshelf,
-  //     [e.target.name]: e.target.value
-  //   });
-  //   console.log(e.target.value)
-  // };
-  // <label for="shelfsel">How many shelves? </label>
-  // <select id="shelfsel" onChange={handleShelfChange}> {shelvesList} </select>
   return (
     <div className="centered">
       <h1>Update or Delete Location</h1>
@@ -194,6 +184,5 @@ function EditLocation() {
     </div>
   );
 }
-// <button id="delete-room-btn" onClick={deleteRoom}>Delete this room</button>
 
 export default EditLocation;

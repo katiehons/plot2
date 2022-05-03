@@ -1,48 +1,42 @@
-import {React, useState} from 'react';
+import { React, useState } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import sendAsync from '../db_connect/renderer';
+import { Sequelize } from 'sequelize';
 import imageNotFound from '../images/imageNotFound.svg';
-const electron = window.require('electron');
+
+const electron = window.require( 'electron' );
 const { ipcRenderer } = electron;
-const electron_store = window.require('electron-store');
+const electron_store = window.require( 'electron-store' );
 const { store } = electron_store;
 
 
 function Home() {
   let history = useNavigate();
+  const [user, setUser] = useState([]);
+
 
   // get and set the current user
   function CurrentUser({ user }) {
-    console.log("getting user");
-    console.log(user);
     return (
       <h3 id='current_user'>Current user: {user}</h3>
     )
   }
 
-  const [user, setUser] = useState([]);
-  console.log(user);
-  if (user.length === 0) {
+  if ( user.length === 0 ) {
     ipcRenderer.invoke('getStoreValue', 'current_user').then((result) => {
-      console.log("current user: " + result);
       if( result.length > 0)
       {
         setUser(result);
       }
-    }
-    );
+    });
   }
 
   // generate the book list
   const editBook = ( isbn ) => {
-    console.log("sending " + "/MetadataEdit?isbn=" + isbn )
     history("/MetadataEdit?isbn=" + isbn);
   }
 
   function makeBook(book)
   {
-    console.log("creating " + book.title);
-
     //get the image for each cover and set custom image if none found
     // var cover;
     // if(book.cover != null){
@@ -54,8 +48,6 @@ function Home() {
     var title = book.title;
     var isbn = book.isbn;
     var author = book.author;
-
-    //TODO flexibly generate metadata-block display items
 
     // was formerly immediately above id="title" div
     // <img id="cover-block" src={cover}/>
@@ -80,24 +72,38 @@ function Home() {
     )
   }
 
-  function BookList({books}) {
+  function BookList({ books }) {
     console.log("displaying books" + books);
     return (
       <div id='book-list'>{books.map((book) => makeBook(book))}</div>
     )
   }
 
+  const sequelize = new Sequelize({
+    dialect: 'sqlite',
+    storage: './data/library.db',
+    define: {
+      timestamps: false
+    }
+  });
+
+  (async function(){
+    try {
+      await sequelize.authenticate();
+      console.log('sequelize Connection has been established successfully.');
+    } catch (error) {
+      console.error('Unable to connect to the sequelize database:', error);
+    }
+  })();
+
   const[books, setBooks] = useState([]);
 
+  const Book = require('../db_connect/models/book')(sequelize)
   if( books.length == 0 )
   {
-    var sql_get_books = "SELECT * FROM books";
-    sendAsync(sql_get_books).then((result) => {
-      console.log("got books from db");
-      console.log(result);
-      if( result.length > 0) {
-        setBooks(result);
-      }
+    Book.findAll({raw: true}).then((books) => {
+      console.log("(home)All books, before stringify:", books);
+      setBooks( books );
     });
   }
 

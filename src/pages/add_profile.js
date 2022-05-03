@@ -1,35 +1,51 @@
-import React from 'react';
+import { React, useState } from 'react';
 import { Link } from 'react-router-dom';
 import { useNavigate } from 'react-router-dom';
-import sendAsync from '../db_connect/renderer';
+import { Sequelize } from 'sequelize';
 
 
 function AddProfile() {
   let history = useNavigate();
 
-  const [state, setState] = React.useState({ newUsername: ""});
+  const [newUsername, setNewUsername] = useState( "" );
+
   const handleSubmit = e => {
     e.preventDefault();
-    // //log state.author, state.book, state.isbn to the database instead of console
-    if( state.newUsername )
+    if( newUsername )
     {
-      var sqlInsert = "INSERT INTO users(username)\nVALUES(?);";
-      var params = [state.newUsername];
-      console.log("sql string: \n" + sqlInsert)
-      sendAsync(sqlInsert, params)
-      .then((result) => console.log(result))
-      .then(history('/Login'));
+      const sequelize = new Sequelize({
+        dialect: 'sqlite',
+        storage: './data/library.db',
+        define: {
+          timestamps: false
+        }
+      });
+
+      (async function(){
+        try {
+          await sequelize.authenticate();
+          console.log('sequelize Connection has been established successfully.');
+        } catch (error) {
+          console.error('Unable to connect to the sequelize database:', error);
+        }
+      })();
+
+      const User = require('../db_connect/models/user')(sequelize)
+
+      User.create( { username: newUsername } ).then(() => {
+        User.sync().then(() => {
+          sequelize.close();
+          history('/Login');
+        });
+      });
     }
     else {
       console.log("empty username string");
-      window.alert("Username " + state.newUsername + " is invalid. Please try again.")
+      window.alert("Username \"" + newUsername + "\" is invalid. Please try again.")
     }
   };
   const handleChange = e => {
-    setState({
-      ...state,
-      [e.target.name]: e.target.value
-    });
+    setNewUsername( e.target.value );
   };
     return (
         <div className='centered'>

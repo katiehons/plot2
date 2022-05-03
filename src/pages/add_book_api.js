@@ -1,18 +1,17 @@
-import React, { useState } from 'react';
-import sendAsync from '../db_connect/renderer';
+import { React, useState } from 'react';
 import { Link } from 'react-router-dom'
+import { Sequelize } from 'sequelize';
 
 //TODO test, handle multiple authors
 
 function AddBookAPI() {
   const [firstLoad, setFirstLoad] = useState( true );
-  const [message, setMessage] = useState('SELECT * FROM books');
   const [response, setResponse] = useState();
-  const [rooms, setRooms] = useState([]);
-  const [bookshelfRoom, setBookshelfRoom] = useState();
+  // const [rooms, setRooms] = useState([]);
+  // const [bookshelfRoom, setBookshelfRoom] = useState();
   const [isbn, setISBN] = useState();
 
-//todo: Add location sel's 
+//todo: Add location sel's
   // if( firstLoad )
   // {
   //   console.log("Working on first load…")
@@ -37,10 +36,8 @@ function AddBookAPI() {
   //   });
   // }
 
-  function send(sql) {
-    sendAsync(sql).then((result) => setResponse(result));
-  }
 
+  // todo: check if the book is already in the db/display sql error
     // Fetch the book info and submit it to the db
     const handleSubmit = e => {
         e.preventDefault();
@@ -59,13 +56,42 @@ function AddBookAPI() {
             if (window.confirm("Add " + title + " by " + authors)) {
                 console.log('Adding' + title + ", " + authors + ", isbn-13: " + isbn_13);
 
-                var sqlInsert = "INSERT INTO books(isbn, title, author, cover)\nVALUES(?, ?, ?, ?);";
-                var params = [isbn_13, title, authors, cover];
-                console.log("sql string: \n" + sqlInsert)
-                sendAsync(sqlInsert, params).then((result) => console.log(result));
+                const sequelize = new Sequelize({
+                  dialect: 'sqlite',
+                  storage: './data/library.db',
+                  define: {
+                    timestamps: false
+                  }
+                });
+
+                (async function(){
+                  try {
+                    await sequelize.authenticate();
+                    console.log('sequelize Connection has been established successfully.');
+                  } catch (error) {
+                    console.error('Unable to connect to the sequelize database:', error);
+                  }
+                })();
+
+                const Book = require( '../db_connect/models/book')(sequelize);
+
+                console.log("author: " + authors);
+                Book.create( {
+                  isbn: isbn_13,
+                  title: title,
+                  author: authors.toString(),
+                  cover: cover
+                }).then(() => {
+                  Book.sync().then((response) => {
+                    sequelize.close();
+                    setISBN("");
+                    document.getElementById.value = isbn;
+
+                  });
+                });
             }
             else {
-                console.log('cancel');
+                console.log('add canceled');
             }
             return;
         })
@@ -84,7 +110,7 @@ function AddBookAPI() {
     <div className='centered'>
     <h1>Add Book (by search) </h1>
       <form onSubmit={handleSubmit}>
-        <input className="userInput" id="smaller-input" name="isbn" type="text"
+        <input className="userInput" id="isbn-input" type="text"
               placeholder="Enter ISBN" onChange={handleChange}/>
         <input className="edit-button" id="search-btn" type="submit" value="Search the www" />
       </form>
