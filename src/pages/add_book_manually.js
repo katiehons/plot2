@@ -4,20 +4,16 @@ import { Link } from 'react-router-dom'
 
 
 function AddBookManually() {
-  const [bookInfo, setBookInfo] = useState({ author: "", book: "", isbn: "" });
+  const [bookInfo, setBookInfo] = useState({ author: "", title: "", isbn: "" });
 
   const handleSubmit = e => {
     e.preventDefault();
     //log bookInfo.author, bookInfo.book, bookInfo.isbn to the database instead of console
     //display success or failure message
     console.log(bookInfo);
-    if( bookInfo.isbn.length == 0 )
+    if( bookInfo.isbn.length == 0 ||  bookInfo.title.length == 0  || bookInfo.author.length == 0 )
     {
-      window.alert("Please enter an ISBN");
-    }
-    else if( isNaN(bookInfo.isbn) )
-    {
-      window.alert("ISBN must be a number");
+      window.alert("The book definition must include an ISBN, author, and title.\nPlease include all these items; otherwise it cannot be added to the library.");
     }
     else if (window.confirm("Add " + bookInfo.title + ", " + bookInfo.isbn + " by " + bookInfo.author + "?") ){
       const sequelize = new Sequelize({
