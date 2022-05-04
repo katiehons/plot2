@@ -15,11 +15,6 @@ function Search() {
   const handleSubmit = e => {
     e.preventDefault();
 
-    // var block = document.getElementById('book-list');
-    // while (block.hasChildNodes()) {
-    //   block.removeChild(block.lastChild);
-    // }
-
     Book.findAll({where: {
                     [filter]: { [Op.like]: `%${searchTerm}%` } },
                     raw: true,
@@ -31,9 +26,6 @@ function Search() {
                         attributes: ["room_name"]
                       }}})
       .then((books) => {
-      console.log("we found:" + books);
-      console.log( "num books:" + books.length)
-      console.log( "books == 0: " + (books.length === 0));
       setBooks( books );
       document.getElementById("no-books-found").hidden = ( books.length !== 0);
     });
@@ -46,7 +38,6 @@ function Search() {
     setFilter(e.target.value);
   };
 
-//todo flexibly generate filter types based on what columns in the db are
   return (
     <div className= 'search'>
       <h1 id="search-header">Search</h1>

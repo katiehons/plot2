@@ -1,4 +1,3 @@
-// NOTE: the analogous file is src/main.js in the original
 const path = require('path');
 const process = require('process');
 
@@ -6,7 +5,6 @@ const { app, BrowserWindow } = require('electron');
 const { ipcMain } = require('electron');
 const Store = require('electron-store');
 const isDev = require('electron-is-dev');
-const DEBUG = true;
 
 function createWindow() {
   // Create the browser window.
@@ -35,14 +33,12 @@ function createWindow() {
 // initialization and is ready to create browser windows.
 // Some APIs can only be used after this event occurs.
 app.whenReady().then(createWindow);
-console.log("non-dev path: ")
-console.log( `file://${path.join(__dirname, '../build/index.html')}` )
 
 // Quit when all windows are closed, except on macOS. There, it's common
 // for applications and their menu bar to stay active until the user quits
 // explicitly with Cmd + Q.
 app.on('window-all-closed', () => {
-  // todo: this isn't working because I think our platform is always "browser"
+  // todo: this isn't working because our platform is always "browser"
   if (process.platform !== 'darwin') {
     app.quit();
   }
@@ -77,28 +73,14 @@ const library_state = new Store({ schema });
 
 // Retrieves data of current profile
 ipcMain.handle('getStoreValue', (event, key) => {
-    if (DEBUG === true){
-      console.log("Library state for " + key + " requested: " + library_state.get(key));
-      console.log("PATH: " + app.getPath('userData'));
-    }
     return library_state.get(key);
 });
 
 // Sets data for current profile
 ipcMain.handle('setStoreValue', (event, key, value) => {
-  if (DEBUG === true) {
-    console.log("Library state for " + key + " is now " + value);
-    console.log("PATH: " + app.getPath('userData'));
-  }
     return library_state.set(key, value);
 });
 
 ipcMain.handle('getPath', () => {
   return app.getPath('userData')
 });
-// ipcMain.handle('getPath', () => 'we would love to get the userData path');
-
-// Preload path value
-// contextBridge.exposeInMainWorld('electronAPI', {
-//     getPath: () => ipcRenderer.invoke('getPath')
-// });

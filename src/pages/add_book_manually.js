@@ -16,13 +16,11 @@ function AddBookManually() {
 
   function fetchBookshelves( room_id )
   {
-    console.log("Fetching bookshelves..." + room_id )
     Bookshelf.findAll({
       where: {
       room_id: room_id
       },
       raw: true}).then((bookshelves_result) => {
-        console.log("bookshelves: " + bookshelves_result)
         setBookshelves( bookshelves_result );
         if( bookshelves_result.length > 0 )
         {
@@ -37,10 +35,8 @@ function AddBookManually() {
 
   if( firstLoad )
   {
-    console.log("Working on first load…")
     setFirstLoad( false )
     Room.findAll({raw: true}).then((rooms) => {
-      console.log("number of rooms: " + rooms.length)
           setRooms(rooms);
           if( rooms.length > 0 )
           {
@@ -56,9 +52,7 @@ function AddBookManually() {
 
   const handleSubmit = e => {
     e.preventDefault();
-    //log bookInfo.author, bookInfo.book, bookInfo.isbn to the database instead of console
     //display success or failure message
-    console.log(bookInfo);
     if( bookInfo.isbn.length === 0 ||  bookInfo.title.length === 0  || bookInfo.author.length === 0 )
     {
       window.alert("The book definition must include an ISBN, author, and title.\nPlease include all these items; otherwise it cannot be added to the library.");
@@ -84,13 +78,11 @@ function AddBookManually() {
   };
 
   const handleRoomChange = e =>{
-    console.log(e.target.value )
     fetchBookshelves( e.target.value )
   };
 
   const handleBookshelfChange = e =>{
     setSelectedBookshelf(e.target.value);
-    console.log(e.target.value)
   };
 
   return (

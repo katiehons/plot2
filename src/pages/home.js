@@ -38,7 +38,7 @@ function Home() {
       setBooks( books_result );
     });
   }
-// for-each html tags to generate header/headers/list
+
   return (
     <div className='home'>
       <h1>Home</h1>

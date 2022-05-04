@@ -13,23 +13,19 @@ function EditLocation() {
 
   function fetchBookshelves( room_id )
   {
-    console.log("Fetching bookshelves..." + room_id )
     Bookshelf.findAll({
       where: {
       room_id: room_id
       },
       raw: true}).then((bookshelves_result) => {
-        console.log("bookshelves: " + bookshelves_result)
         setBookshelves( bookshelves_result );
     });
   }
 
   if( firstLoad )
   {
-    console.log("Working on first load…")
     setFirstLoad( false )
     Room.findAll({raw: true}).then((rooms) => {
-      console.log("number of rooms: " + rooms.length)
           setRooms(rooms);
           if( rooms.length > 0 )
           {
@@ -52,7 +48,6 @@ function EditLocation() {
       }
     }).then( () => {
       Bookshelf.sync()
-      console.log( "Current room: " + selectedRoom );
       if( !from_room_delete )
       {
         fetchBookshelves( selectedRoom );
@@ -67,7 +62,6 @@ function EditLocation() {
 
     if( window.confirm( "Are you sure you want to delete bookshelf \"" + bookshelf_name + "\"?\nThis will unset location for all books on this shelf."))
     {
-      console.log("deleting bookshelf: " + bookshelf_name + " id: " + bookshelf_id )
       deleteBookshelf( bookshelf_id );
     }
   }
@@ -81,7 +75,6 @@ function EditLocation() {
     {
       // this takes care of deleting bookshelfs and room-bookshelf associations
       for (var i = 0; i < bookshelves.length; i++) {
-          // console.log("From room delete, deleting bookshelf: " + bookshelves[i].bookshelf_name);
           deleteBookshelf( bookshelves[i].bookshelf_id, true );
       }
 

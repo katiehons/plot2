@@ -19,13 +19,11 @@ function AddBookAPI() {
   /// same as edit_location, should probably refactor
   function fetchBookshelves( room_id )
   {
-    console.log("Fetching bookshelves..." + room_id )
     Bookshelf.findAll({
       where: {
       room_id: room_id
       },
       raw: true}).then((bookshelves_result) => {
-        console.log("bookshelves: " + bookshelves_result)
         setBookshelves( bookshelves_result );
         if( bookshelves_result.length > 0 )
         {
@@ -40,10 +38,8 @@ function AddBookAPI() {
 
   if( firstLoad )
   {
-    console.log("Working on first load…")
     setFirstLoad( false )
     Room.findAll({raw: true}).then((rooms) => {
-      console.log("number of rooms: " + rooms.length)
           setRooms(rooms);
           if( rooms.length > 0 )
           {
@@ -67,7 +63,6 @@ function AddBookAPI() {
     const handleSubmit = e => {
         e.preventDefault();
         //display success or failure message
-        console.log("sending: " + isbn)
         fetch('https://www.googleapis.com/books/v1/volumes?q=isbn:'+isbn+'&key=AIzaSyCD09mSVM0FXfqGBT3tS0M-jRlu72FP-WI')
         .then(response => response.json())
         .then(function(data)
@@ -82,8 +77,6 @@ function AddBookAPI() {
 
             if (window.confirm("Add " + title + " by " + authors + "\nLocation: " + room_name +", " + bookshelf_name ))
             {
-                console.log('Adding' + title + ", " + authors + ", isbn-13: " + isbn_13 );
-                console.log("author: " + authors);
                 Book.create( {
                   isbn: isbn_13,
                   title: title,
@@ -101,9 +94,6 @@ function AddBookAPI() {
                   console.log(err);
                 });
             }
-            else {
-                console.log('add canceled');
-            }
             return;
         })
         .catch(function(error)
@@ -119,13 +109,11 @@ function AddBookAPI() {
 
   const handleRoomChange = e =>{
     setSelectedRoom( e.target.value );
-    console.log(e.target.value )
     fetchBookshelves( e.target.value )
   };
 
   const handleBookshelfChange = e =>{
     setSelectedBookshelf(e.target.value);
-    console.log(e.target.value)
   };
 
   return (

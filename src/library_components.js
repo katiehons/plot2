@@ -33,6 +33,7 @@ function BookshelfSelector( {bookshelves, bookshelfChange} )
     </>
   )
 }
+
 function RoomSelector({rooms, roomChange})
 {
   let roomList = rooms.length > 0 && rooms.map((item, i) => {
@@ -55,14 +56,10 @@ function CurrentUser({ user }) {
 
 // generate the book list
 function EditBookButton({isbn}) {
-  console.log("making button for: ")
-  console.log( isbn )
   let history = useNavigate();
 
   return(
     <button type="button" className="edit-button" onClick={() => {
-      console.log("EditBookButton sending you to MetadataEdit page with ISBN ")
-      console.log(isbn)
       history("/MetadataEdit?isbn=" + isbn)}}>
       Edit
     </button>
@@ -71,8 +68,6 @@ function EditBookButton({isbn}) {
 
 function makeBook(book)
 {
-  console.log("lookin at book:")
-  console.log( book)
   //get the image for each cover and set custom image if none found
   var cover;
   if(book.cover != null){
@@ -88,8 +83,6 @@ function makeBook(book)
   var room = book["bookshelf.room.room_name"];
 
   var img_alt_text = title + " cover image"
-  console.log("isbn:")
-  console.log(isbn)
 
   return(
     <div key={isbn} className="list-block">
@@ -114,7 +107,6 @@ function makeBook(book)
 }
 
 function BookList({ books }) {
-  console.log("displaying books" + books);
   return (
     <div id='book-list'>{books.map((book) => makeBook(book))}</div>
   )

@@ -21,7 +21,7 @@ function AddProfile() {
       });
     }
     else {
-      console.log("empty username string");
+      console.log("Error: empty username string");
       window.alert("Username \"" + newUsername + "\" is invalid. Please try again.")
     }
   };

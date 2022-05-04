@@ -29,27 +29,17 @@ function App() {
 
   if( !isLoaded )
   {
-    console.log("loading setup state...")
     ipcRenderer.invoke('getStoreValue','library_setup').then( (setupResult) => {
       setIsSetup(setupResult, setIsLoaded(true))
     })
   }
 
-  console.log("App is setup:")
-  console.log(isSetup)
-  // <Route exact path='/' element={( isLoaded ? ( isSetup ? <Login />: <Setup /> ) : <AppLoading /> )} />
-//          <Route exact path='/' element={ <AppLoading /> } />
 
   function LayoutsWithNavbar() {
    return (
      <>
-       {/* Your navbar component */}
        <Navbar />
-
-       {/* This Outlet is the place in which react-router will render your components that you need with the navbar */}
        <Outlet />
-
-       {/* You can add a footer to get fancy in here :) */}
      </>
    );
   }

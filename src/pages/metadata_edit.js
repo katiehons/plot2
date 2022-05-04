@@ -29,7 +29,6 @@ function MetadataEdit(props) {
   if( firstLoad ){
     setFirstLoad(false)
     Room.findAll({raw: true}).then((rooms) => {
-      console.log("number of rooms: " + rooms.length)
           setRooms(rooms);
         });
     Book.findAll({
@@ -44,7 +43,6 @@ function MetadataEdit(props) {
           attributes: ["room_name"]
         }}}).then((bookList) => {
       let foundBook = bookList[0]
-      console.log( book[0] )
       updateBook( {isbn: foundBook.isbn, title: foundBook.title, author: foundBook.author, bookshelf_id: foundBook.bookshelf_id })
 
       let book_room_opt = document.getElementById("room-sel-"+foundBook["bookshelf.room.room_id"]);
@@ -72,7 +70,6 @@ function MetadataEdit(props) {
 
   async function fetchBookshelves( room_id, shouldSetBooksBookshelf=true )
   {
-    console.log("Fetching bookshelves..." + room_id )
     return Bookshelf.findAll({
       where: {
       room_id: room_id
@@ -109,9 +106,6 @@ function MetadataEdit(props) {
             }
         }).then( Book.sync() );
   }
-    else {
-      console.log("cancelled book update");
-    }
   };
 
   const deleteBook = function( delete_isbn ) {
@@ -137,7 +131,6 @@ function MetadataEdit(props) {
   const handleDeleteBook = e =>{
     if( window.confirm( "Do you want to delete this book?\nThis action cannot be undone."))
     {
-      console.log("deleting book: " + book.isbn )
       deleteBook( book.isbn );
     }
   }

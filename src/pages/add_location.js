@@ -7,7 +7,7 @@ const Room = library_db.room;
 
 function AddLocation()
 {
-  const[firstLoad, setFirstLoad] = useState( true ); //rename to something like reload/load
+  const[firstLoad, setFirstLoad] = useState( true ); //rename to something like reload/load?
   const[newRoom, setNewRoom] = useState();
   const[newBookshelf, setNewBookshelf] = useState();
   const[rooms, setRooms] = useState([]);
@@ -15,11 +15,8 @@ function AddLocation()
 
   if( firstLoad )
   {
-    console.log("Working on first load…")
     setFirstLoad( false )
     Room.findAll({raw: true}).then((rooms) => {
-      console.log("rooms: " + rooms)
-      console.log("room 0: " + rooms[0])
           setRooms(rooms);
           if( rooms.length > 0 )
           {
@@ -48,13 +45,11 @@ function AddLocation()
 
   const handleBookshelfSubmit = e => {
     e.preventDefault();
-    console.log("new bookshelf: " + newBookshelf + " into: " + bookshelfRoom );
 
     Bookshelf.create({
       bookshelf_name: newBookshelf,
       room_id: bookshelfRoom
     }).then( (result) => {
-      console.log(result);
       Bookshelf.sync();
       document.getElementById('new-bookshelf-name').value = "";
       setNewBookshelf("");
@@ -62,17 +57,14 @@ function AddLocation()
   }
 
   const handleNewRoomChange = e => {
-    console.log(e.target.value);
     setNewRoom(e.target.value);
   };
 
   const handleBookshelfRoomChange = e =>{
     setBookshelfRoom( e.target.value );
-    console.log( bookshelfRoom )
   };
 
   const handleNewBookshelfChange = e => {
-    console.log(e.target.value);
     setNewBookshelf(e.target.value);
   };
 

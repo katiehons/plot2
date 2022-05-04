@@ -15,13 +15,11 @@ function BrowseLocations()
 
   function fetchBookshelves( room_id )
   {
-    console.log("Fetching bookshelves..." + room_id )
     Bookshelf.findAll({
       where: {
       room_id: room_id
       },
       raw: true}).then((bookshelves_result) => {
-        console.log("bookshelves: " + bookshelves_result)
         setBookshelves( bookshelves_result );
         if( bookshelves_result.length > 0 )
         {
@@ -43,9 +41,6 @@ function BrowseLocations()
                         attributes: ["room_name"]
                       }}})
       .then((books) => {
-      console.log("we found:" + books);
-      console.log( "num books:" + books.length)
-      console.log( "books == 0: " + (books.length === 0));
       setBooks( books );
       document.getElementById("no-books-found").hidden = ( books.length !== 0);
     });
@@ -53,10 +48,8 @@ function BrowseLocations()
 
   if( firstLoad )
   {
-    console.log("Working on first load…")
     setFirstLoad( false )
     Room.findAll({raw: true}).then((rooms) => {
-      console.log("number of rooms: " + rooms.length)
           setRooms(rooms);
           if( rooms.length > 0 )
           {
@@ -70,13 +63,11 @@ function BrowseLocations()
   }
 
   const handleRoomChange = e =>{
-    console.log(e.target.value )
     fetchBookshelves( e.target.value )
   };
 
   const handleBookshelfChange = e =>{
     fetchBooks(e.target.value)
-    console.log(e.target.value)
   };
 
   return (

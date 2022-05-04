@@ -1,13 +1,10 @@
 import React from 'react';
 import { useNavigate } from 'react-router-dom';
-// import library_db from "../db_connect/sequelize_index"
 
 const electron = window.require('electron');
 const { ipcRenderer } = electron;
 
 function Setup() {
-  console.log("setup")
-
   let history = useNavigate();
   const [libraryName, setLibraryName] = React.useState();
 
@@ -19,8 +16,8 @@ function Setup() {
           .then(ipcRenderer.invoke('setStoreValue', 'library_setup', true))
           .then(history('/Login'));
       }else{
-          console.log("empty library name");
-          window.alert("Please choose a name with more than 0 characters.");
+          console.log("Error: empty library name");
+          window.alert("Please enter a name.");
       }
   };
 
