@@ -1,5 +1,5 @@
 import { useNavigate } from 'react-router-dom';
-import imageNotFound from './images/imageNotFound.svg';
+import imageNotFound from './images/book_blank_cover.png';
 
 function LibraryHeader({ name }) {
   return (

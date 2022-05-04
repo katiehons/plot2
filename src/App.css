@@ -64,6 +64,27 @@ button, select, input, .input-label{
   margin-bottom: 5px;
 }
 
+a{
+  color: #757575;
+  font-size: 10;
+}
+
+.links-and-sep{
+  left: 0px;
+  margin-left: 0px
+}
+
+#icon-attribution{
+  color: #757575;
+  font-size: 10;
+  display: inline;
+  position:absolute;
+  bottom:5px;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
 .user-input{
   width: 30%
 }

@@ -1,5 +1,5 @@
 {
-  "name": "plot",
+  "name": "Plot",
   "version": "0.2.0",
   "homepage": "./",
   "private": true,
@@ -35,6 +35,29 @@
   },
   "build": {
     "appId": "plot.app",
+    "dmg": {
+      "contents": [
+        {
+          "x": 110,
+          "y": 150
+        },
+        {
+          "x": 240,
+          "y": 150,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "linux": {
+      "target": [
+        "AppImage",
+        "deb"
+      ]
+    },
+    "win": {
+      "target": "squirrel"
+    },
     "asarUnpack": [
       "src/*"
     ],
@@ -43,7 +66,7 @@
       "node_modules/**/*"
     ],
     "directories": {
-      "buildResources": "assets"
+      "buildResources": "src"
     }
   },
   "eslintConfig": {

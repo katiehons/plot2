@@ -45,6 +45,11 @@ function Login() {
         </Link>
         <button id="guestProfileButton" className="profiles-button" onClick={() => setCurrentUser("Guest")}>Guest</button>
       </div>
+      <div id="icon-attribution">
+      <a href="https://www.flaticon.com/free-icons/bookshelf" title="bookshelf icons" >Bookshelf icons created by Daniel Ceha</a>
+      <span id="links-and-sep"> and </span>
+      <a href="https://www.flaticon.com/free-icons/book" title="book icons">bqlqn</a>
+      </div>
     </div>
   )
 }
