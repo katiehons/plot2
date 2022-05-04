@@ -29,11 +29,11 @@ function Setup() {
     };
 
     return (
-        <div id="setup_block" class="fullycentered">
+        <div id="setup_block" className="fullycentered">
             <center><h1>Welcome!</h1></center>
             <form onSubmit={handleSubmit}>
-                <center><label for="libraryName">Enter the name of your new library:</label></center><br/>
-                <center class="input-label">The <input className="userInput" id="smaller-input" name="libName" type="text"
+                <center><label>Enter the name of your new library:</label></center><br/>
+                <center className="input-label">The <input className="userInput" id="smaller-input" name="libName" type="text"
                     placeholder="Library Name..." onChange={handleChange} /> Library</center>
                 <br />
                 <center><input className="userSubmit" id="search-btn" type="submit" value="Next" /></center>
