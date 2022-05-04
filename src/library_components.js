@@ -10,7 +10,7 @@ function LibraryHeader({ name }) {
 // username button
 function makeProfileButton(user, onProfileClick) {
   return (
-    <button className="profiles-button" onClick={() => onProfileClick(user.username)}>{user.username}</button>
+    <button className="profiles-button" key={user.username} onClick={() => onProfileClick(user.username)}>{user.username}</button>
   )
 }
 
@@ -28,7 +28,7 @@ function BookshelfSelector( {bookshelves, bookshelfChange} )
     }, this);
   return(
     <>
-      <label for="bookshelfsel" class="input-label">Bookshelf: </label>
+      <label className="input-label">Bookshelf: </label>
       <select id="bookshelfsel" onChange={bookshelfChange}>{bookshelvesList}</select>
     </>
   )
@@ -41,7 +41,7 @@ function RoomSelector({rooms, roomChange})
 
   return(
     <>
-      <label for="roomsel" class="input-label">Room: </label>
+      <label className="input-label">Room: </label>
       <select id="roomsel" onChange={roomChange}> {roomList} </select>
     </>
   )
@@ -88,26 +88,28 @@ function makeBook(book)
   var room = book["bookshelf.room.room_name"];
 
   var img_alt_text = title + " cover image"
+  console.log("isbn:")
+  console.log(isbn)
 
   return(
-    <p class="list-block">
+    <div key={isbn} className="list-block">
       <img id="cover-block" src={cover} alt={img_alt_text}/>
       <div id="metadata-block">
-          <div class="metadata-item" id="title">
+          <div className="metadata-item" id="title">
           Title: {title}
           </div>
-          <div class="metadata-item" id="isbn">
+          <div className="metadata-item" id="isbn">
           ISBN: {isbn}
           </div>
-          <div class="metadata-item" id="author">
+          <div className="metadata-item" id="author">
           Author: {author}
           </div>
-          <div class="metadata-item" id="author">
+          <div className="metadata-item" id="author">
           Location: {room}, {bookshelf}
           </div>
           <EditBookButton isbn={isbn}/>
       </div>
-    </p>
+    </div>
   )
 }
 

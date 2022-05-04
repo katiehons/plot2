@@ -97,13 +97,13 @@ function AddBookManually() {
     <div className="centered">
       <h1>Add a New Book</h1>
       <form id="manual-add-form" onSubmit={handleSubmit}>
-        <input class="user-input" name="author" type="text"
+        <input className="user-input" name="author" type="text"
               placeholder="Author" onChange={handleChange}/>
         <br/>
-        <input class="user-input" name="title" type="text"
+        <input className="user-input" name="title" type="text"
               placeholder="Book Title" onChange={handleChange}/>
         <br/>
-        <input class="user-input" name="isbn" type="ISBN"
+        <input className="user-input" name="isbn" type="ISBN"
               placeholder="ISBN" onChange={handleChange}/>
         <br/>
         <RoomSelector rooms={rooms} roomChange={handleRoomChange}/>

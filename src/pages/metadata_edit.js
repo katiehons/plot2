@@ -150,13 +150,13 @@ function MetadataEdit(props) {
     <div className='centered'>
     <h1>Input edits and "Save"</h1>
     <form onSubmit={( event ) => saveEdits(event, original_isbn)}>
-    <label class="input-label" >Title:</label>
+    <label className="input-label" >Title:</label>
     <input className="userInput" name="title" type="text" value={book.title}
            onChange={handleChange}/><br/>
-    <label class="input-label">ISBN:</label>
+    <label className="input-label">ISBN:</label>
     <input className="userInput" name="isbn" type="ISBN"
           value={book.isbn} onChange={handleChange}/><br/>
-    <label class="input-label">Author:</label>
+    <label className="input-label">Author:</label>
     <input className="userInput" name="author" type="text"
           value={book.author} onChange={handleChange}/><br/>
     <RoomSelector id="room-sel" rooms={rooms} roomChange={handleRoomChange}/><br/>

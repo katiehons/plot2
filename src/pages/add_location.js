@@ -80,13 +80,13 @@ function AddLocation()
     <div className='centered'>
     <h1>Add New Location</h1>
     <form onSubmit={handleRoomSubmit} id="new-room-form">
-    <label for="new-room" class="input-label">New Room</label> <br/>
+    <label className="input-label">New Room</label> <br/>
     <input id="new-room" type="text" placeholder="Room Name…" onChange={handleNewRoomChange}/> <br/>
     <input id="submit-new-room" type="submit" value="Add This Room" />
     </form>
     <br/> <br/>
     <form onSubmit={handleBookshelfSubmit} id="new-bookshelf-form">
-    <label for="new-bookshelf-name" id="new-bookshelf-label" class="input-label" >New Bookshelf</label><br/>
+    <label for="new-bookshelf-name" id="new-bookshelf-label" className="input-label" >New Bookshelf</label><br/>
     <RoomSelector rooms={rooms} roomChange={handleBookshelfRoomChange}/><br/>
     <input id="new-bookshelf-name" type="text" placeholder="Bookshelf Name…" onChange={handleNewBookshelfChange}/><br/>
     <input id="submit-new-room" type="submit" value="Add This Bookshelf" /><br/>
