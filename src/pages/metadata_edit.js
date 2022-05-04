@@ -1,13 +1,11 @@
-import React, { location, useState, useReducer } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import React, { useState, useReducer } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { RoomSelector, BookshelfSelector } from "../library_components";
 import library_db from "../db_connect/sequelize_index"
 
 const Book = library_db.book;
 const Bookshelf = library_db.bookshelf;
 const Room = library_db.room;
-
-const queryString = require('query-string');
 
 function MetadataEdit(props) {
   const bookInitialState = { isbn: "", title: "", author: "", bookshelf_id: "" }
@@ -19,9 +17,9 @@ function MetadataEdit(props) {
     bookInitialState);
 
   const [firstLoad, setFirstLoad] = useState( true );
-  const [selectedRoom, setSelectedRoom] = useState( null );
   const [rooms, setRooms] = useState([]);
   const [bookshelves, setBookshelves] = useState([]);
+
   let history = useNavigate();
   const useQuery = () => new URLSearchParams(useLocation().search);
   let query = useQuery();
@@ -53,7 +51,6 @@ function MetadataEdit(props) {
       if( book_room_opt )
       {
         book_room_opt.selected = true;
-        setSelectedRoom( book_room_opt.value );
         fetchBookshelves( book_room_opt.value, false ).then( () => {
           let book_shelf_opt = document.getElementById("bookshelf-sel-"+foundBook.bookshelf_id);
           if( book_shelf_opt )
@@ -130,7 +127,6 @@ function MetadataEdit(props) {
   };
 
   const handleRoomChange = e => {
-    setSelectedRoom( e.target.value );
     fetchBookshelves( e.target.value )
   };
 

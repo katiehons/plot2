@@ -1,5 +1,4 @@
 import {React, useState} from 'react';
-import { Link } from 'react-router-dom'
 import { RoomSelector } from "../library_components";
 import library_db from "../db_connect/sequelize_index"
 
@@ -33,7 +32,7 @@ function AddLocation()
           }
         });
   }
-  
+
   const handleRoomSubmit = e => {
     e.preventDefault();
     Room.create({

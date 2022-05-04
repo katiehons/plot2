@@ -10,7 +10,6 @@ const Room = library_db.room;
 
 function AddBookAPI() {
   const [firstLoad, setFirstLoad] = useState( true );
-  const [response, setResponse] = useState();
   const [rooms, setRooms] = useState([]);
   const [selectedRoom, setSelectedRoom] = useState( null );
   const [bookshelves, setBookshelves] = useState([]);

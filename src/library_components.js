@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router-dom';
 import imageNotFound from './images/imageNotFound.svg';
 
 function LibraryHeader({ name }) {
@@ -87,9 +87,11 @@ function makeBook(book)
   var bookshelf = book["bookshelf.bookshelf_name"];
   var room = book["bookshelf.room.room_name"];
 
+  var img_alt_text = title + " cover image"
+
   return(
     <p class="list-block">
-      <img id="cover-block" src={cover}/>
+      <img id="cover-block" src={cover} alt={img_alt_text}/>
       <div id="metadata-block">
           <div class="metadata-item" id="title">
           Title: {title}
@@ -110,8 +112,6 @@ function makeBook(book)
 }
 
 function BookList({ books }) {
-  let history = useNavigate();
-
   console.log("displaying books" + books);
   return (
     <div id='book-list'>{books.map((book) => makeBook(book))}</div>

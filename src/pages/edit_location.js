@@ -1,5 +1,4 @@
 import {React, useState} from 'react';
-import { Link } from 'react-router-dom'
 import { RoomSelector, BookshelfSelector } from "../library_components";
 import library_db from "../db_connect/sequelize_index";
 
@@ -11,7 +10,6 @@ function EditLocation() {
   const[rooms, setRooms] = useState([]);
   const[selectedRoom, setSelectedRoom] = useState( null );
   const[bookshelves, setBookshelves] = useState([]);
-  const[selectedBookshelf, setSelectedBookshelf] = useState( null );
 
   function fetchBookshelves( room_id )
   {
@@ -23,14 +21,6 @@ function EditLocation() {
       raw: true}).then((bookshelves_result) => {
         console.log("bookshelves: " + bookshelves_result)
         setBookshelves( bookshelves_result );
-        if( bookshelves_result.length > 0 )
-        {
-          setSelectedBookshelf( bookshelves_result.[0].bookshelf_id );
-        }
-        else
-        {
-          setSelectedBookshelf(null);
-        }
     });
   }
 
@@ -50,21 +40,10 @@ function EditLocation() {
           {
             setSelectedRoom(null)
             setBookshelves([])
-            setSelectedBookshelf(null)
           }
         });
   }
 
-
-/// from add book pg, needs rework!!! todotodotodo vvvvvvvvvvvvv
-  // const [state, setState] = useState({ author: "", book: "", isbn: "" });
-  const handleSubmit = e => {
-  //   e.preventDefault();
-  //   //display success or failure message
-  //   console.log(state);
-  };
-
-///^^^^^^^^^^^^^^^^^^
   function deleteBookshelf( bookshelf_id, from_room_delete=false )
   {
     Bookshelf.destroy({
@@ -108,7 +87,7 @@ function EditLocation() {
 
     Room.destroy({
       where: {
-        room_name: room_name
+        room_id: room_id
       }
     }).then( () => {
       Room.sync()
@@ -123,7 +102,7 @@ function EditLocation() {
   };
 
   const handleBookshelfChange = e =>{
-    setSelectedBookshelf( e.target.value);
+    //todo, now that we're not using selectedbookshelf, is there something we should do in this function?
   };
 
   return (

@@ -1,7 +1,6 @@
-import logo from './logo.svg';
 import './App.css';
 import Navbar from './navbar/navbar_src/navbar';
-import { HashRouter as Router, Routes, Route, Outlet, Navigate, useLocation } from 'react-router-dom';
+import { HashRouter as Router, Routes, Route, Outlet } from 'react-router-dom';
 import AppLoading from './pages/app_loading';
 import Home from './pages/home';
 import Login from './pages/profiles';
@@ -18,6 +17,7 @@ import BrowseLocations from './pages/browse_locations';
 
 
 import { useState, Fragment } from 'react';
+
 // Used for conditional setup
 const { ipcRenderer } = window.require('electron');
 

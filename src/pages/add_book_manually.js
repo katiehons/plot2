@@ -11,7 +11,6 @@ function AddBookManually() {
   const [firstLoad, setFirstLoad] = useState( true );
   const [bookInfo, setBookInfo] = useState({ author: "", title: "", isbn: "" });
   const [rooms, setRooms] = useState([]);
-  const [selectedRoom, setSelectedRoom] = useState( null );
   const [bookshelves, setBookshelves] = useState([]);
   const [selectedBookshelf, setSelectedBookshelf] = useState( null );
 
@@ -45,12 +44,10 @@ function AddBookManually() {
           setRooms(rooms);
           if( rooms.length > 0 )
           {
-            setSelectedRoom( rooms[0].room_id );
             fetchBookshelves( rooms[0].room_id );
           }
           else
           {
-            setSelectedRoom(null)
             setBookshelves([])
             setSelectedBookshelf(null)
           }
@@ -62,7 +59,7 @@ function AddBookManually() {
     //log bookInfo.author, bookInfo.book, bookInfo.isbn to the database instead of console
     //display success or failure message
     console.log(bookInfo);
-    if( bookInfo.isbn.length == 0 ||  bookInfo.title.length == 0  || bookInfo.author.length == 0 )
+    if( bookInfo.isbn.length === 0 ||  bookInfo.title.length === 0  || bookInfo.author.length === 0 )
     {
       window.alert("The book definition must include an ISBN, author, and title.\nPlease include all these items; otherwise it cannot be added to the library.");
     }
@@ -87,7 +84,6 @@ function AddBookManually() {
   };
 
   const handleRoomChange = e =>{
-    setSelectedRoom( e.target.value );
     console.log(e.target.value )
     fetchBookshelves( e.target.value )
   };

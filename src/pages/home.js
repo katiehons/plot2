@@ -1,13 +1,9 @@
 import { React, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { BookList, CurrentUser } from "../library_components"
 import library_db from "../db_connect/sequelize_index"
-import imageNotFound from '../images/imageNotFound.svg';
 
 const electron = window.require( 'electron' );
 const { ipcRenderer } = electron;
-const electron_store = window.require( 'electron-store' );
-const { store } = electron_store;
 
 const Book = library_db.book;
 const Bookshelf = library_db.bookshelf;

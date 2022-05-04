@@ -1,8 +1,6 @@
 import {  React, useState } from 'react';
-import { Link } from 'react-router-dom';
 import { Op } from 'sequelize';
 import { BookList } from "../library_components";
-import imageNotFound from '../images/imageNotFound.svg';
 import library_db from "../db_connect/sequelize_index"
 
 const Book = library_db.book;
@@ -35,9 +33,9 @@ function Search() {
       .then((books) => {
       console.log("we found:" + books);
       console.log( "num books:" + books.length)
-      console.log( "books == 0: " + (books.length == 0));
+      console.log( "books == 0: " + (books.length === 0));
       setBooks( books );
-      document.getElementById("no-books-found").hidden = ( books.length != 0);
+      document.getElementById("no-books-found").hidden = ( books.length !== 0);
     });
   };
   const handleChange = e => {
