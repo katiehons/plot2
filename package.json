@@ -7,6 +7,7 @@
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
+    "electron-builder-squirrel-windows": "^23.0.8",
     "electron-is-dev": "^2.0.0",
     "electron-store": "^8.0.1",
     "node": "16.9.1",
@@ -29,6 +30,7 @@
     "test": "react-app-rewired test",
     "eject": "react-app-rewired eject",
     "electron-pack": "electron-builder --dir",
+    "electron-dist": "electron-builder -mwl",
     "preelectron-pack": "yarn build",
     "dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\"",
     "postinstall": "electron-builder install-app-deps"
@@ -66,7 +68,7 @@
       "node_modules/**/*"
     ],
     "directories": {
-      "buildResources": "src"
+      "buildResources": "src/images"
     }
   },
   "eslintConfig": {
