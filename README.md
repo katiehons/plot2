@@ -27,12 +27,14 @@ App icons created by [Daniel Ceha](https://www.flaticon.com/free-icons/bookshelf
 
 ---
 ## FIXME Installation Guide
-App images for MacOS (`.dmg`) and Linux (`.AppImage`) are available in the [`distributions`](dist) directory. Windows OS is coming soon. To install, simply download and open the appropriate file. (this won't work because I can't push the img's)  
+App images for MacOS (`.dmg`) and Linux (`.AppImage`) are available in the [`dist`](dist) directory. Windows OS is coming soon. To install, simply download and open the appropriate file.  
+##### Some MacOS-specific notes
+On MacOS, since I didn't buy an app certificate from Apple, you will probably get a security warning when you go to open the app. If it won't open with a simple click, you should be able to open it if you right-click on the app and choose "open".
 
 
 ## User Guide
 ### Library setup
-The first time you open PLOT, you will see a screen like the one above. Give your library a name! It **will be** displayed later as "The _Yourname_ Library". If you input "The Yourname Library" into the text box, it will turn into "The The Yourname Library Library". Then you can sign in as guest right awwy, or add a user first. Either way, you should add a location before you add a book because of an existing issue (FIXME TODO INSERT THE ISSUE NO. of the metadata edit locations bug). After clicking the Menu button (☰) go to Manage Locations > Add a location. You'll need to add a room first and then a bookshelf. Then you can start adding books under Menu > Add Book! See the below section for more information.
+The first time you open PLOT, you will see a screen like the one above. Give your library a name! It will be displayed later as "The _Yourname_ Library". If you input "The Yourname Library" into the text box, it will turn into "The The Yourname Library Library". Then you can sign in as guest right away, or add a user first. Either way, you should add a location before you add a book because of [this existing issue](https://github.com/katiehons/plot2/issues/5). After clicking the Menu button (☰) go to Manage Locations > Add a location. You'll need to add a room first and then a bookshelf. Then you can start adding books under Menu > Add Book! See the below section for more information.
 
 ### Profiles
 You can add a new profile from the profiles page, which you'll see immediately after you open on the app. You can also get to the profiles page through Menu > Switch Profiles. Usernames can't be empty, which the app will tell you if you try to "Save and return" before entering a name. Other than that there are no restrictions on characters or length for usernames. There is also currently no way to delete a user, so be careful who you add!
@@ -57,10 +59,10 @@ The pages in the library, a brief description of their purpose, and how to navig
 **Home**: Library homepage. View which user is signed in, and scroll through an unordered list of books. Access by clicking any profile button on the Profiles page, or through Menu > Library Home  
 **Browse Bookshelves**: Scroll through books on a particular bookshelf. Menu > Browse Locations   
 **Search**: Search the books in your own library by Title, Author, or ISBN. Menu > Search Books  
-**Add a New Book (ISBN search)**: Add a book to the library by entering only its ISBN. Menu > Add Book or from Add Book (Manually) click "Add by Searching" button.
+**Add a New Book (ISBN search)**: Add a book to the library by entering only its ISBN. Menu > Add Book or from Add Book (Manually) click "Add by Searching" button.  
 **Add a New Book (Manually)**: Menu > Add Book > "Add Manually" button  
 **Edit (Book)**: Edit title, author, ISBN, and location of a particular book. Click the "Edit" button on a book tile anywhere it's visible: Home, Search, or Browse Bookshelves.  
 **Manage Locations**: Navigate to add or delete locations page. View all locations that exist in the library. Menu > Manage Locations  
-**Add New Location** Add a room or bookshelf. Manage Locations > "Add Location" button
+**Add New Location** Add a room or bookshelf. Manage Locations > "Add Location" button  
 **Delete a Location** Remove a room or bookshelf from your library. Manage Locations > "Delete Location" button  
 **Setup** Set your library name. Visible only the first time you open the app; no way to navigate back to it after setup is complete.

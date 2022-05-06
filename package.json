@@ -3,6 +3,9 @@
   "version": "0.2.0",
   "homepage": "./",
   "private": true,
+  "author": "Katie Honsinger",
+  "email": "katiebug@spu.edu",
+  "description": "Personal Library Organization and Tracking",
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
@@ -52,10 +55,8 @@
       ]
     },
     "linux": {
-      "target": [
-        "AppImage",
-        "deb"
-      ]
+      "target": "AppImage",
+      "category": "Application"
     },
     "win": {
       "target": "squirrel"
