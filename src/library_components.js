@@ -1,5 +1,77 @@
+import { useState } from 'react';
 import { useNavigate } from 'react-router-dom';
 import imageNotFound from './images/book_blank_cover.png';
+import library_db from "./db_connect/sequelize_index"
+
+function RoomMap(room){
+  console.log("roommap")
+  console.log(room)
+  console.log(room.bookshelves)
+
+  let bookshelves_div = <></>
+  if( room.bookshelves )
+  {
+    console.log(room.bookshelves);
+    bookshelves_div = room["bookshelves"].map( (bookshelf) =>  <div key={bookshelf.bookshelf_name} id="loc-map-bookshelf">{bookshelf.bookshelf_name}</div> )
+  }
+  else {
+    console.log("no bookshelves yet")
+  }
+  // console.log(this_room_bookshelves);
+  // let bookshelves_div = room["bookshelves"].map( (bookshelf) =>  <div key={bookshelf.bookshelf_name} id="loc-map-bookshelf">{bookshelf.bookshelf_name}</div> )
+
+  return(
+    <>
+      <div className="loc-map-room" key={room.room_name} >{room.room_name}</div>
+      {bookshelves_div} <br/>
+    </>
+  )
+}
+
+function LocationMap(){
+  const [firstLoad, setFirstLoad] = useState(true);
+  const [rooms, setRooms] = useState([]);
+
+  const Room = library_db.room;
+  const Bookshelf = library_db.bookshelf;
+
+  console.log("foo")
+  if( firstLoad )
+  {
+    setFirstLoad(false);
+    Room.findAll({raw: true}).then((rooms_returned) => {
+      console.log(rooms_returned)
+      for( let i = 0; i < rooms_returned.length; i++ )
+      {
+        console.log("room:")
+        console.log(rooms_returned[i].room_id)
+        Bookshelf.findAll({
+            where: { room_id: rooms_returned[i].room_id },
+                     raw: true}).then((bookshelves_result) => {
+              console.log(bookshelves_result);
+              rooms_returned[i].bookshelves = bookshelves_result;
+              if (i === ( rooms_returned.length - 1 ) )
+              {
+                console.log("end room:" + i);
+                console.log(rooms_returned[i]);
+                setRooms(rooms_returned);
+              }
+            });
+      }
+      console.log("after getting bookshelves")
+      console.log(rooms_returned)
+      // setRooms(rooms_returned);
+      //todo wait for ALLLL the bookshelves to get got before setting rooms
+    });
+  }
+
+  return (
+    <>
+      <h2 id="loc-map-header">All Locations:</h2>
+      <span id='locations-map'>{rooms.map((room) => RoomMap(room))}</span>
+    </>
+  )
+}
 
 function LibraryHeader({ name }) {
   return (
@@ -112,4 +184,5 @@ function BookList({ books }) {
   )
 }
 
-export { BookList, CurrentUser, RoomSelector, BookshelfSelector, LibraryHeader, ProfileButtons }
+//todo, sort this list and the file in a sensible manner
+export { BookList, CurrentUser, RoomSelector, BookshelfSelector, LibraryHeader, ProfileButtons, LocationMap }

@@ -38,7 +38,6 @@ function Home() {
                       attributes: ["room_name"]
                     }}}
                   ).then((books_result) => {
-      console.log("(home)All books:", books_result);
       setBooks( books_result );
     });
   }

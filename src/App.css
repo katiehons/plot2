@@ -198,51 +198,13 @@ a{
 .centered{
   text-align: center;
 }
-/*
-#submit-btn{
-  font-size: 20px;
-  position: absolute;
-  right: 15%;
-  bottom: 20%;
+
+
+.loc-map-room, #loc-map-header{
+  font-weight: bold;
+  font-family: Bitter, serif;
 }
 
-#abortButton{
-  font-size: 20px;
-  position: absolute;
-  left: 15%;
-  bottom: 20%;
+.loc-map-room, .loc-map-bookshelf{
+  font-size: 15pt;
 }
-
-#text-input{
-  height: auto;
-  width: 60%;
-  font-size: 25px;
-  margin-top: 15%;
-}
-
-#filter-dropdown{
-  font-size: 15px;
-
-}
-
-#search-input{
-  height: auto;
-  width: 50%;
-  font-size: 20px;
-}
-
-#search-btn{
-  font-size: 20px;
-}
-
-#smaller-input{
-  margin-top: 3%;
-  font-size: 18px;
-  height: auto;
-  width: 40%;
-}
-
-
-.metadata-edit-label{
-  font-size: 18pt;
-} */

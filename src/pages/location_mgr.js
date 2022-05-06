@@ -1,5 +1,5 @@
 import { Link } from 'react-router-dom';
-
+import { LocationMap } from '../library_components'
 function LocationMgr()
 {
 //todo display all locations on this page
@@ -11,7 +11,8 @@ return (
   </Link>
   <Link to={'/EditLocation'}>
       <button id="editLocationLinkbtn">Delete a location</button>
-  </Link>
+  </Link> <br/> <br/>
+  <LocationMap/>
   </div>
 )
 }
