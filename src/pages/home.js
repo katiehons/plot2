@@ -1,5 +1,5 @@
 import { React, useState } from 'react';
-import { BookList, CurrentUser } from "../library_components"
+import { BookList, CurrentUser, LibraryHeader } from "../library_components"
 import library_db from "../db_connect/sequelize_index"
 
 const electron = window.require( 'electron' );
@@ -11,12 +11,16 @@ const Room = library_db.room;
 
 function Home() {
   const [firstLoad, setFirstLoad] = useState( true )
+  const [libName, setLibName] = useState();
   const [user, setUser] = useState(null);
   const[books, setBooks] = useState([]);
 
   // get current user and all books
   if ( firstLoad ) {
     setFirstLoad(false);
+    ipcRenderer.invoke('getStoreValue', 'library_name').then((result) => {
+      setLibName(result);
+    })
 
     ipcRenderer.invoke('getStoreValue', 'current_user').then((result) => {
       if( result.length > 0)
@@ -41,7 +45,7 @@ function Home() {
 
   return (
     <div className='home'>
-      <h1>Home</h1>
+      <LibraryHeader name={libName}/>
       <CurrentUser user={user}/>
       <BookList books={books}/>
     </div>

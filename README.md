@@ -1,70 +1,66 @@
-# Getting Started with Create React App
+# Personal Library Organization and Tracking (PLOT)
+---
+## Application Overview
+This project is inspired by my family's gloriously unmanageable book collection. Its primary goal is to provide a simple way to track your book collection, to avoid double-buying and help disorganized book-lovers everywhere stay sane! You can also track where a particular book is physically (or at least, where it should be!). There are a few features I'd still like to implement (mentioned below), but mainly I want this app to stay simple so it is easy to use and maintain.  
 
-This project was bootstrapped with [Create React App](https://github.com/facebook/create-react-app).
+##### Some technical details
+PLOT is built on the [Electron](https://www.electronjs.org/) Framework. It also uses [React](https://reactjs.org/) for UI rendering and management. The [SQLite](https://www.sqlite.org/index.html) database is created and modified using [Sequelize](https://sequelize.org/). The [Google Books API](https://developers.google.com/books) provides book details from a given ISBN.
 
-## Available Scripts
+## Next features
+##### Reading History and TBR
+As you may notice, the ability to view books as a particular user goes completely unused at this point. The vision for this feature is to implement a reading history and to be read list. A user will be able to add books from the library to their own list.
 
-In the project directory, you can run:
+##### Select and Move Multiple Books
+I would like to add the ability to move multiple books at once from one location to another. With the current feature set, if you move several books from one shelf to another you would need to change their location in PLOT one at a time, which could be heinously tedious depending on how many books you move at once.
 
-### `yarn start`
+##### User-defined Tags
+Users would be able to define their own categories and assign books to them.
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in the browser.
+##### What would you like to see?
+I welcome feature suggestions and other input. If you have an idea for refinement of an existing feature or if there is a feature you would love to see, create an issue in this repo to let me know! This is also the best way to report bugs.
 
-The page will reload if you make edits.\
-You will also see any lint errors in the console.
+## Acknowledgements
+Many thanks to the student developer team who started this project with me: Max Briggs, Nathan Lee, Kevin Mach, and Jordan Mielbrecht. Thank you, Dr. Arias, for always encouraging me and for mentoring my Honors Project; and my family, for fostering my love of books, technology, and creativity. Finally, I am so grateful to my father and first software mentor, Bradey Honsinger, for advising me through every step of creating PLOT.  
 
-### `yarn test`
+App icons created by [Daniel Ceha](https://www.flaticon.com/free-icons/bookshelf) and [bqlqn](https://www.flaticon.com/free-icons/book)
 
-Launches the test runner in the interactive watch mode.\
-See the section about [running tests](https://facebook.github.io/create-react-app/docs/running-tests) for more information.
 
-### `yarn build`
+---
+## FIXME Installation Guide
+App images for MacOS (`.dmg`) and Linux (`.AppImage`) are available in the [`distributions`](dist) directory. Windows OS is coming soon. To install, simply download and open the appropriate file. (this won't work because I can't push the img's)  
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
 
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
+## User Guide
+### Library setup
+The first time you open PLOT, you will see a screen like the one above. Give your library a name! It **will be** displayed later as "The _Yourname_ Library". If you input "The Yourname Library" into the text box, it will turn into "The The Yourname Library Library". Then you can sign in as guest right awwy, or add a user first. Either way, you should add a location before you add a book because of an existing issue (FIXME TODO INSERT THE ISSUE NO. of the metadata edit locations bug). After clicking the Menu button (☰) go to Manage Locations > Add a location. You'll need to add a room first and then a bookshelf. Then you can start adding books under Menu > Add Book! See the below section for more information.
 
-See the section about [deployment](https://facebook.github.io/create-react-app/docs/deployment) for more information.
+### Profiles
+You can add a new profile from the profiles page, which you'll see immediately after you open on the app. You can also get to the profiles page through Menu > Switch Profiles. Usernames can't be empty, which the app will tell you if you try to "Save and return" before entering a name. Other than that there are no restrictions on characters or length for usernames. There is also currently no way to delete a user, so be careful who you add!
 
-### `yarn eject`
+### Locations
+##### Managing Locations
+You can add and delete locations from "Manage Locations". Deleting a room also deletes all of its bookshelves. Location will be unset for any books stored on the bookshelf or in the room you delete. Set the location of a particular book through its "Edit" button  
 
-**Note: this is a one-way operation. Once you `eject`, you can’t go back!**
+##### View Books by Location
+On the "Browse Bookshelves" page you can see all the books located on a bookshelf. My vision for this feature was to mimic browsing your shelves looking for something to read.
 
-If you aren’t satisfied with the build tool and configuration choices, you can `eject` at any time. This command will remove the single build dependency from your project.
+### Books
+##### Adding a book
+On the "Add Book" page, you can add a new book by entering an ISBN. If you are going to be adding many books, I recommend getting a barcode scanner; all you need to do is connect the scanner to your computer and it can get the ISBN from a book's barcode. PLOT looks on Google Books to find information about the book you're adding. It is a large but not exhaustive database of books; if you are getting a message that it failed to find a book with your ISBN and you are sure there are no errors in the ISBN, try searching [books.google.com](https://books.google.com) by title, and see if there is a comparable book. If you find something close enough, you can copy and paste the ISBN from that listing. You can also use the "Add Manually" button to enter information without searching. There is no formatting or other error checking for the input fields though, so be careful!    
 
-Instead, it will copy all the configuration files and the transitive dependencies (webpack, Babel, ESLint, etc) right into your project so you have full control over them. All of the commands except `eject` will still work, but they will point to the copied scripts so you can tweak them. At this point you’re on your own.
+### Page List
+The pages in the library, a brief description of their purpose, and how to navigate to them.  
 
-You don’t have to ever use `eject`. The curated feature set is suitable for small and middle deployments, and you shouldn’t feel obligated to use this feature. However we understand that this tool wouldn’t be useful if you couldn’t customize it when you are ready for it.
-
-## Learn More
-
-You can learn more in the [Create React App documentation](https://facebook.github.io/create-react-app/docs/getting-started).
-
-To learn React, check out the [React documentation](https://reactjs.org/).
-
-### Code Splitting
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/code-splitting](https://facebook.github.io/create-react-app/docs/code-splitting)
-
-### Analyzing the Bundle Size
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size](https://facebook.github.io/create-react-app/docs/analyzing-the-bundle-size)
-
-### Making a Progressive Web App
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app](https://facebook.github.io/create-react-app/docs/making-a-progressive-web-app)
-
-### Advanced Configuration
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/advanced-configuration](https://facebook.github.io/create-react-app/docs/advanced-configuration)
-
-### Deployment
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/deployment](https://facebook.github.io/create-react-app/docs/deployment)
-
-### `yarn build` fails to minify
-
-This section has moved here: [https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify](https://facebook.github.io/create-react-app/docs/troubleshooting#npm-run-build-fails-to-minify)
+**Menu**: PLOT's toolbar for page navigation. Accessible under the hamburger menu icon "☰" from most pages  
+**Profiles**: Select profile. First page shown after opening the app, and is also under Menu > Switch Profiles  
+**Add Profile**: Create a new user. Profiles > "Add Profile" button  
+**Home**: Library homepage. View which user is signed in, and scroll through an unordered list of books. Access by clicking any profile button on the Profiles page, or through Menu > Library Home  
+**Browse Bookshelves**: Scroll through books on a particular bookshelf. Menu > Browse Locations   
+**Search**: Search the books in your own library by Title, Author, or ISBN. Menu > Search Books  
+**Add a New Book (ISBN search)**: Add a book to the library by entering only its ISBN. Menu > Add Book or from Add Book (Manually) click "Add by Searching" button.
+**Add a New Book (Manually)**: Menu > Add Book > "Add Manually" button  
+**Edit (Book)**: Edit title, author, ISBN, and location of a particular book. Click the "Edit" button on a book tile anywhere it's visible: Home, Search, or Browse Bookshelves.  
+**Manage Locations**: Navigate to add or delete locations page. View all locations that exist in the library. Menu > Manage Locations  
+**Add New Location** Add a room or bookshelf. Manage Locations > "Add Location" button
+**Delete a Location** Remove a room or bookshelf from your library. Manage Locations > "Delete Location" button  
+**Setup** Set your library name. Visible only the first time you open the app; no way to navigate back to it after setup is complete.

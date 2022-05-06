@@ -72,7 +72,7 @@ function BrowseLocations()
 
   return (
     <div className= 'browse-locations'>
-    <h1>Browse by Location</h1>
+    <h1>Browse Bookshelves</h1>
     <center><RoomSelector rooms={rooms} roomChange={handleRoomChange}/></center>
     <center><BookshelfSelector bookshelves={bookshelves} bookshelfChange={handleBookshelfChange}/></center>
     <BookList books={books}/>
