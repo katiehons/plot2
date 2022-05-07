@@ -44,46 +44,46 @@ On the "Add Book" page, you can add a new book by entering an ISBN. If you are g
 ### Page List
 The pages in the library, a brief description of their purpose, and how to navigate to them.  
 
-**Menu**: PLOT's toolbar for page navigation. Accessible under the hamburger menu
+**Menu:** PLOT's toolbar for page navigation. Accessible under the hamburger menu
  icon "☰" from most pages  
- <img src="./plot_screencaps/menu_bar.png" alt="library setup screen" width=50%><br/>  
+ <img src="./plot_screencaps/menu_bar.png" alt="menu bar" width=50%><br/>  
 
-**Profiles**: Select profile. First page shown after opening the app, and is also under Menu > Switch Profiles  
-<img src="./plot_screencaps/profiles.png" alt="library setup screen" width=50%><br/>  
+**Profiles:** Select profile. First page shown after opening the app, and is also under Menu > Switch Profiles  
+<img src="./plot_screencaps/profiles.png" alt="profiles page" width=50%><br/>  
 
-**Add Profile**: Create a new user. Profiles > "Add Profile" button  
-<img src="./plot_screencaps/add_profile.png" alt="library setup screen" width=50%><br/>  
+**Add Profile:** Create a new user. Profiles > "Add Profile" button  
+<img src="./plot_screencaps/add_profile.png" alt="new profile page" width=50%><br/>  
 
-**Home**: Library homepage. View which user is signed in, and scroll through an unordered list of books. Access by clicking any profile button on the Profiles page, or through Menu > Library Home  
-<img src="./plot_screencaps/home.png" alt="library setup screen" width=50%><br/>  
+**Home:** Library homepage. View which user is signed in, and scroll through an unordered list of books. Access by clicking any profile button on the Profiles page, or through Menu > Library Home  
+<img src="./plot_screencaps/home.png" alt="home page" width=50%><br/>  
 
-**Browse Bookshelves**: Scroll through books on a particular bookshelf. Menu > Browse Locations   
-<img src="./plot_screencaps/browse_bookshelves.png" alt="library setup screen" width=50%><br/>  
+**Browse Bookshelves:** Scroll through books on a particular bookshelf. Menu > Browse Locations   
+<img src="./plot_screencaps/browse_bookshelves.png" alt="browse bookshelves page" width=50%><br/>  
 
-**Search**: Search the books in your own library by Title, Author, or ISBN. Menu > Search Books  
-<img src="./plot_screencaps/search.png" alt="library setup screen" width=50%><br/>
+**Search:** Search the books in your own library by Title, Author, or ISBN. Menu > Search Books  
+<img src="./plot_screencaps/search.png" alt="search page" width=50%><br/>
 
-**Add a New Book (ISBN search)**: Add a book to the library by entering only its ISBN. Menu > Add Book or from Add Book (Manually) click "Add by Searching" button.  
-<img src="./plot_screencaps/add_book_isbn.png" alt="library setup screen" width=50%><br/>
-<img src="./plot_screencaps/add_isbn_confirm.png" alt="library setup screen" width=50%><br/>
+**Add a New Book (ISBN search):** Add a book to the library by entering only its ISBN. Menu > Add Book or from Add Book (Manually) click "Add by Searching" button.  
+<img src="./plot_screencaps/add_book_isbn.png" alt="add book by isbn" width=50%><br/>
+<img src="./plot_screencaps/add_isbn_confirm.png" alt="add book by isbn: confirmation" width=50%><br/>
 
 **Add a New Book (Manually)**: Menu > Add Book > "Add Manually" button  
-<img src="./plot_screencaps/add_man.png" alt="library setup screen" width=50%><br/>
-<img src="./plot_screencaps/add_man_confirm.png" alt="library setup screen" width=50%><br/>
+<img src="./plot_screencaps/add_man.png" alt="add book manually" width=50%><br/>
+<img src="./plot_screencaps/add_man_confirm.png" alt="add book manually: confirmation" width=50%><br/>
 
 **Edit (Book)**: Edit title, author, ISBN, and location of a particular book. Click the "Edit" button on a book tile anywhere it's visible: Home, Search, or Browse Bookshelves.  
-<img src="./plot_screencaps/edit_book.png" alt="library setup screen" width=50%><br/>
+<img src="./plot_screencaps/edit_book.png" alt="edit book page" width=50%><br/>
 
-**Manage Locations**: Navigate to add or delete locations page. View all locations that exist in the library. Menu > Manage Locations  
-<img src="./plot_screencaps/manage_locations.png" alt="library setup screen" width=50%><br/>
+**Manage Locations:** Navigate to add or delete locations page. View all locations that exist in the library. Menu > Manage Locations  
+<img src="./plot_screencaps/manage_locations.png" alt="manage locations" width=50%><br/>
 
-**Add New Location** Add a room or bookshelf. Manage Locations > "Add Location" button  
-<img src="./plot_screencaps/add_loc.png" alt="library setup screen" width=50%><br/>
+**Add New Location:** Add a room or bookshelf. Manage Locations > "Add Location" button  
+<img src="./plot_screencaps/add_loc.png" alt="add location" width=50%><br/>
 
-**Delete a Location** Remove a room or bookshelf from your library. Manage Locations > "Delete Location" button  
-<img src="./plot_screencaps/del_loc.png" alt="library setup screen" width=50%><br/>
+**Delete a Location:** Remove a room or bookshelf from your library. Manage Locations > "Delete Location" button  
+<img src="./plot_screencaps/del_loc.png" alt="delete location" width=50%><br/>
 
-**Setup** Set your library name. Visible only the first time you open the app; no way to navigate back to it after setup is complete.  
+**Setup:** Set your library name. Visible only the first time you open the app; no way to navigate back to it after setup is complete.  
 <img src="./plot_screencaps/library_setup.png" alt="library setup screen" width=50%><br/>
 
 ## Planned Features
