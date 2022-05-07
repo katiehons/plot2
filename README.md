@@ -21,7 +21,7 @@ On MacOS, since I didn't buy an app certificate from Apple, you will probably ge
 
 ## User Guide
 ### Library setup
-![library setup](../plot_screencaps/library_setup.png)
+<img src="./plot_screencaps/library_setup.png" alt="library setup screen" width=75%><br/>  
 The first time you open PLOT, you will see a screen like the one above. Give your library a name! It will be displayed later as "The _Yourname_ Library". If you input "The Yourname Library" into the text box, it will turn into "The The Yourname Library Library". Then you can sign in as guest right away, or add a user first. Either way, you should add a location before you add a book because of [this existing issue](https://github.com/katiehons/plot2/issues/5). After clicking the Menu button (☰) go to Manage Locations > Add a location. You'll need to add a room first and then a bookshelf. Then you can start adding books under Menu > Add Book! See the below section for more information.
 
 ### Profiles
