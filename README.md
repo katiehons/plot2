@@ -21,13 +21,15 @@ On MacOS, since I didn't buy an app certificate from Apple, you will probably ge
 
 ## User Guide
 ### Library setup
-<img src="./plot_screencaps/library_setup.png" alt="library setup screen" width=75%><br/>  
+<img src="./plot_screencaps/library_setup.png" alt="library setup page" width=75%><br/>  
 The first time you open PLOT, you will see a screen like the one above. Give your library a name! It will be displayed later as "The _Yourname_ Library". If you input "The Yourname Library" into the text box, it will turn into "The The Yourname Library Library". Then you can sign in as guest right away, or add a user first. Either way, you should add a location before you add a book because of [this existing issue](https://github.com/katiehons/plot2/issues/5). After clicking the Menu button (☰) go to Manage Locations > Add a location. You'll need to add a room first and then a bookshelf. Then you can start adding books under Menu > Add Book! See the below section for more information.
 
 ### Profiles
+<img src="./plot_screencaps/profiles.png" alt="profiles page" width=75%><br/>  
 You can add a new profile from the profiles page, which you'll see immediately after you open on the app. You can also get to the profiles page through Menu > Switch Profiles. Usernames can't be empty, which the app will tell you if you try to "Save and return" before entering a name. Other than that there are no restrictions on characters or length for usernames. There is also currently no way to delete a user, so be careful who you add!
 
 ### Locations
+<img src="./plot_screencaps/manage_locations.png" alt="manage locations page" width=75%><br/>  
 ##### Managing Locations
 You can add and delete locations from "Manage Locations". Deleting a room also deletes all of its bookshelves. Location will be unset for any books stored on the bookshelf or in the room you delete. Set the location of a particular book through its "Edit" button  
 
@@ -35,27 +37,56 @@ You can add and delete locations from "Manage Locations". Deleting a room also d
 On the "Browse Bookshelves" page you can see all the books located on a bookshelf. My vision for this feature was to mimic browsing your shelves looking for something to read.
 
 ### Books
+<img src="./plot_screencaps/home_books.png" alt="home screen books" width=75%><br/>  
 ##### Adding a book
-On the "Add Book" page, you can add a new book by entering an ISBN. If you are going to be adding many books, I recommend getting a barcode scanner; all you need to do is connect the scanner to your computer and it can get the ISBN from a book's barcode. PLOT looks on Google Books to find information about the book you're adding. It is a large but not exhaustive database of books; if you are getting a message that it failed to find a book with your ISBN and you are sure there are no errors in the ISBN, try searching [books.google.com](https://books.google.com) by title, and see if there is a comparable book. If you find something close enough, you can copy and paste the ISBN from that listing. You can also use the "Add Manually" button to enter information without searching. There is no formatting or other error checking for the input fields though, so be careful!    
+On the "Add Book" page, you can add a new book by entering an ISBN. If you are going to be adding many books, I recommend getting a barcode scanner; all you need to do is connect the scanner to your computer and it can get the ISBN from a book's barcode. PLOT looks on Google Books to find information about the book you're adding. It is a large but not exhaustive database of books; if you are getting a message that it failed to find a book with your ISBN and you are sure there are no errors in the ISBN, try searching [books.google.com](https://books.google.com) by title, and see if there is a comparable book. If you find something close enough, you can copy and paste the ISBN from that listing. You can also use the "Add Manually" button to enter information without searching. There is no way to add a cover image manually, so the default image will be used. There is no formatting or other error checking for the input fields though, so be careful!    
 
 ### Page List
 The pages in the library, a brief description of their purpose, and how to navigate to them.  
 
-**Menu**: PLOT's toolbar for page navigation. Accessible under the hamburger menu icon "☰" from most pages  
-**Profiles**: Select profile. First page shown after opening the app, and is also under Menu > Switch Profiles  
-**Add Profile**: Create a new user. Profiles > "Add Profile" button  
-**Home**: Library homepage. View which user is signed in, and scroll through an unordered list of books. Access by clicking any profile button on the Profiles page, or through Menu > Library Home  
-**Browse Bookshelves**: Scroll through books on a particular bookshelf. Menu > Browse Locations   
-**Search**: Search the books in your own library by Title, Author, or ISBN. Menu > Search Books  
-**Add a New Book (ISBN search)**: Add a book to the library by entering only its ISBN. Menu > Add Book or from Add Book (Manually) click "Add by Searching" button.  
-**Add a New Book (Manually)**: Menu > Add Book > "Add Manually" button  
-**Edit (Book)**: Edit title, author, ISBN, and location of a particular book. Click the "Edit" button on a book tile anywhere it's visible: Home, Search, or Browse Bookshelves.  
-**Manage Locations**: Navigate to add or delete locations page. View all locations that exist in the library. Menu > Manage Locations  
-**Add New Location** Add a room or bookshelf. Manage Locations > "Add Location" button  
-**Delete a Location** Remove a room or bookshelf from your library. Manage Locations > "Delete Location" button  
-**Setup** Set your library name. Visible only the first time you open the app; no way to navigate back to it after setup is complete.  
+**Menu**: PLOT's toolbar for page navigation. Accessible under the hamburger menu
+ icon "☰" from most pages  
+ <img src="./plot_screencaps/menu_bar.png" alt="library setup screen" width=50%><br/>  
 
-## Planned features
+**Profiles**: Select profile. First page shown after opening the app, and is also under Menu > Switch Profiles  
+<img src="./plot_screencaps/profiles.png" alt="library setup screen" width=50%><br/>  
+
+**Add Profile**: Create a new user. Profiles > "Add Profile" button  
+<img src="./plot_screencaps/add_profile.png" alt="library setup screen" width=50%><br/>  
+
+**Home**: Library homepage. View which user is signed in, and scroll through an unordered list of books. Access by clicking any profile button on the Profiles page, or through Menu > Library Home  
+<img src="./plot_screencaps/home.png" alt="library setup screen" width=50%><br/>  
+
+**Browse Bookshelves**: Scroll through books on a particular bookshelf. Menu > Browse Locations   
+<img src="./plot_screencaps/browse_bookshelves.png" alt="library setup screen" width=50%><br/>  
+
+**Search**: Search the books in your own library by Title, Author, or ISBN. Menu > Search Books  
+<img src="./plot_screencaps/search.png" alt="library setup screen" width=50%><br/>
+
+**Add a New Book (ISBN search)**: Add a book to the library by entering only its ISBN. Menu > Add Book or from Add Book (Manually) click "Add by Searching" button.  
+<img src="./plot_screencaps/add_book_isbn.png" alt="library setup screen" width=50%><br/>
+<img src="./plot_screencaps/add_isbn_confirm.png" alt="library setup screen" width=50%><br/>
+
+**Add a New Book (Manually)**: Menu > Add Book > "Add Manually" button  
+<img src="./plot_screencaps/add_man.png" alt="library setup screen" width=50%><br/>
+<img src="./plot_screencaps/add_man_confirm.png" alt="library setup screen" width=50%><br/>
+
+**Edit (Book)**: Edit title, author, ISBN, and location of a particular book. Click the "Edit" button on a book tile anywhere it's visible: Home, Search, or Browse Bookshelves.  
+<img src="./plot_screencaps/edit_book.png" alt="library setup screen" width=50%><br/>
+
+**Manage Locations**: Navigate to add or delete locations page. View all locations that exist in the library. Menu > Manage Locations  
+<img src="./plot_screencaps/manage_locations.png" alt="library setup screen" width=50%><br/>
+
+**Add New Location** Add a room or bookshelf. Manage Locations > "Add Location" button  
+<img src="./plot_screencaps/add_loc.png" alt="library setup screen" width=50%><br/>
+
+**Delete a Location** Remove a room or bookshelf from your library. Manage Locations > "Delete Location" button  
+<img src="./plot_screencaps/del_loc.png" alt="library setup screen" width=50%><br/>
+
+**Setup** Set your library name. Visible only the first time you open the app; no way to navigate back to it after setup is complete.  
+<img src="./plot_screencaps/library_setup.png" alt="library setup screen" width=50%><br/>
+
+## Planned Features
 ##### Reading History and TBR
 As you may notice, the ability to view books as a particular user goes completely unused at this point. The vision for this feature is to implement a reading history and to be read list. A user will be able to add books from the library to their own list.
 
