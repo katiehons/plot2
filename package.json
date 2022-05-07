@@ -1,6 +1,6 @@
 {
   "name": "Plot",
-  "version": "0.2.0",
+  "version": "1.0.0",
   "homepage": "./",
   "private": true,
   "author": "Katie Honsinger",
@@ -60,7 +60,7 @@
       "category": "Application"
     },
     "win": {
-      "target": "squirrel"
+      "target": "nsis"
     },
     "asarUnpack": [
       "src/*"
