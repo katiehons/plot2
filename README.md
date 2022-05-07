@@ -12,11 +12,19 @@ Many thanks to the student developer team who started this project with me: Max 
 App icons created by [Daniel Ceha](https://www.flaticon.com/free-icons/bookshelf) and [bqlqn](https://www.flaticon.com/free-icons/book)
 
 ---
-## FIXME Installation Guide
-todo: link to releases page
-App images for MacOS (`.dmg`) and Linux (`.AppImage`) are available in the [`dist`](dist) directory. Windows OS is coming soon. To install, simply download and open the appropriate file.  
-##### Some MacOS-specific notes
-On MacOS, since I didn't buy an app certificate from Apple, you will probably get a security warning when you go to open the app. If it won't open with a simple click, you should be able to open it if you right-click on the app and choose "open".
+## Installation Guide
+To download the app, go to the [releases page](https://github.com/katiehons/plot2/releases) or click the "releases" link in the sidebar.
+App images are available for MacOS (`.dmg`), Linux (`.AppImage`), and Windows (`.exe`).
+
+##### MacOS-specific notes
+Since I didn't buy an application certificate from Apple, you will probably get a security warning when you go to open the app. If it gives you a warning dialog and won't open with a simple click, you should be able to open it if you right-click on the app and choose "open".
+
+##### Windows-specific notes
+You may also get warnings about unknown developers on Windows. It should be more straightforward to click through them on MacOS; I needed to click "Read More" and then I could "Run Anyways"
+
+##### Linux-specific notes
+If you click the app to open it and you get a message about not having an application to open files of this type, you probably need to edit the file permissions. Right-click on the app and select "properties" from the menu that pops up. Go to the "Permissions" tab and select the box that says "Allow executing file as program". Then when you click the app, it should run!
+
 
 
 ## User Guide
