@@ -1,3 +1,4 @@
+@import url('https://fonts.googleapis.com/css?family=Open+Sans');
 .App {
   text-align: center;
 }
@@ -35,4 +36,175 @@
   to {
     transform: rotate(360deg);
   }
+}
+
+*{
+  font-family: "Open Sans", sans-serif;
+}
+
+h1{
+  font-family: Bitter, serif;
+}
+
+h1, h2, h3{
+  text-align: center;
+}
+
+h2, h3{
+  font-weight: normal
+}
+
+button, select, input, .input-label{
+  font-family: Bitter, serif;
+  font-size: 15pt;
+  height: auto;
+  width: auto;
+  margin-right: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+}
+
+a{
+  color: #757575;
+  font-size: 10;
+}
+
+.links-and-sep{
+  left: 0px;
+  margin-left: 0px
+}
+
+#icon-attribution{
+  color: #757575;
+  font-size: 10;
+  display: inline;
+  position:absolute;
+  bottom:5px;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+}
+
+.user-input{
+  width: 30%
+}
+
+/* #room-selector, #bookshelf-selector{
+  /* text-align: justify
+}*/
+
+.fullycentered{
+  margin: 0;
+  position: absolute;
+  top: 25%;
+  left: 50%;
+  -ms-transform: translate(-50%, -50%);
+  transform: translate(-50%, -50%);
+  }
+
+/*CSS for all blocks in the library*/
+.list-block {
+  /* border-style: groove;
+  border-color: #282c34;
+  /* font-family: 'Droid Sans';
+  color: #282c34; */
+  display: flex;
+  width: 90%;
+  height: auto;
+}
+
+
+/*sets the height, width, margin of the cover img*/
+#cover-block{
+  width: auto;
+  height: 150px;
+  margin: 10px;
+}
+
+/*CSS for the metadata display in each block in library*/
+#metadata-block{
+  display: grid;
+  margin: 10px;
+  width: 100%
+}
+
+/* #homepage-buttons
+{
+  margin-left: auto;
+  margin-bottom: auto;
+  display: block;
+  float: right;
+} */
+
+/* .metadata-item{
+  font-size: 18px;
+} */
+
+/*CSS for various 'submit' buttons*/
+/* .homepage-button{
+  /* background-color: transparent;
+  font-family: 'Droid Sans';
+  border-color: black;
+  margin-right: 5px;
+  margin-top: 5px;
+  font-size: 12pt;
+  height: auto;
+  width: auto;
+  float: right;
+} */
+
+.edit-button{
+  /* background-color: transparent; */
+  margin-right: 5px;
+  margin-top: 5px;
+  font-size: 12pt;
+  height: auto;
+  width: 50px;
+}
+
+/*CSS for search page*/
+/* .search{
+  display: flex;
+  flex-wrap: wrap;
+  flex-direction: column;
+} */
+
+/*CSS for all btns on the profile page */
+/* .profiles-button{
+  /* border-color: black; */
+  /* border-radius: 10px;
+  margin-right: 10px;
+  margin-top: 5px;
+  margin-bottom: 5px;
+} */
+
+#guestProfileButton, #newProfileButton
+{
+  float:right;
+}
+
+/*CSS for container for all profile buttons*/
+#profileButtons{
+  margin-top: 10%;
+  margin-left: 5%;
+  margin-right: 5%;
+  text-decoration: none;
+  justify-content: space-between;
+  flex-direction: row;
+}
+
+
+/*Centers various elements on variosu pages*/
+.centered{
+  text-align: center;
+}
+
+
+.loc-map-room, #loc-map-header{
+  font-weight: bold;
+  font-family: Bitter, serif;
+}
+
+.loc-map-room, .loc-map-bookshelf{
+  font-size: 15pt;
 }

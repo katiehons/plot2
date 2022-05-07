@@ -1,5 +1,4 @@
 import {React, useState} from 'react';
-import { Link } from 'react-router-dom'
 import { RoomSelector, BookshelfSelector } from "../library_components";
 import library_db from "../db_connect/sequelize_index";
 
@@ -11,35 +10,22 @@ function EditLocation() {
   const[rooms, setRooms] = useState([]);
   const[selectedRoom, setSelectedRoom] = useState( null );
   const[bookshelves, setBookshelves] = useState([]);
-  const[selectedBookshelf, setSelectedBookshelf] = useState( null );
 
   function fetchBookshelves( room_id )
   {
-    console.log("Fetching bookshelves..." + room_id )
     Bookshelf.findAll({
       where: {
       room_id: room_id
       },
       raw: true}).then((bookshelves_result) => {
-        console.log("bookshelves: " + bookshelves_result)
         setBookshelves( bookshelves_result );
-        if( bookshelves_result.length > 0 )
-        {
-          setSelectedBookshelf( bookshelves_result.[0].bookshelf_id );
-        }
-        else
-        {
-          setSelectedBookshelf(null);
-        }
     });
   }
 
   if( firstLoad )
   {
-    console.log("Working on first load…")
     setFirstLoad( false )
     Room.findAll({raw: true}).then((rooms) => {
-      console.log("number of rooms: " + rooms.length)
           setRooms(rooms);
           if( rooms.length > 0 )
           {
@@ -50,21 +36,10 @@ function EditLocation() {
           {
             setSelectedRoom(null)
             setBookshelves([])
-            setSelectedBookshelf(null)
           }
         });
   }
 
-
-/// from add book pg, needs rework!!! todotodotodo vvvvvvvvvvvvv
-  // const [state, setState] = useState({ author: "", book: "", isbn: "" });
-  const handleSubmit = e => {
-  //   e.preventDefault();
-  //   //display success or failure message
-  //   console.log(state);
-  };
-
-///^^^^^^^^^^^^^^^^^^
   function deleteBookshelf( bookshelf_id, from_room_delete=false )
   {
     Bookshelf.destroy({
@@ -73,7 +48,6 @@ function EditLocation() {
       }
     }).then( () => {
       Bookshelf.sync()
-      console.log( "Current room: " + selectedRoom );
       if( !from_room_delete )
       {
         fetchBookshelves( selectedRoom );
@@ -88,7 +62,6 @@ function EditLocation() {
 
     if( window.confirm( "Are you sure you want to delete bookshelf \"" + bookshelf_name + "\"?\nThis will unset location for all books on this shelf."))
     {
-      console.log("deleting bookshelf: " + bookshelf_name + " id: " + bookshelf_id )
       deleteBookshelf( bookshelf_id );
     }
   }
@@ -102,13 +75,12 @@ function EditLocation() {
     {
       // this takes care of deleting bookshelfs and room-bookshelf associations
       for (var i = 0; i < bookshelves.length; i++) {
-          // console.log("From room delete, deleting bookshelf: " + bookshelves[i].bookshelf_name);
           deleteBookshelf( bookshelves[i].bookshelf_id, true );
       }
 
     Room.destroy({
       where: {
-        room_name: room_name
+        room_id: room_id
       }
     }).then( () => {
       Room.sync()
@@ -123,23 +95,16 @@ function EditLocation() {
   };
 
   const handleBookshelfChange = e =>{
-    setSelectedBookshelf( e.target.value);
+    //todo, now that we're not using selectedbookshelf, is there something we should do in this function?
   };
 
   return (
     <div className="centered">
-      <h1>Update or Delete Location</h1>
-      <form onSubmit={handleSubmit}>
+      <h1>Delete a Location</h1>
       <RoomSelector rooms={rooms} roomChange={handleRoomChange}/>
+      <button id="delete-room-btn" onClick={handleDeleteRoom}>Delete this room</button><br/>
       <BookshelfSelector bookshelves={bookshelves} bookshelfChange={handleBookshelfChange}/>
-      <input className="edit-button" id="submit-btn" type="submit" value="Make these changes" />
-      </form>
-      <button id="delete-bookshelf-btn" onClick={handleDeleteBookshelf}>Delete this bookshelf</button>
-      <button id="delete-room-btn" onClick={handleDeleteRoom}>Delete this room</button>
-
-      <Link to={'/LocationMgr'}>
-                  <button className="edit-button" id="locationabortButton">Back to all locations</button>
-                  </Link>
+      <button id="delete-bookshelf-btn" onClick={handleDeleteBookshelf}>Delete this bookshelf</button><br/>
     </div>
   );
 }

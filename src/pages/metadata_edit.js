@@ -1,13 +1,11 @@
-import React, { location, useState, useReducer } from 'react';
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+import React, { useState, useReducer } from 'react';
+import { useNavigate, useLocation } from 'react-router-dom';
 import { RoomSelector, BookshelfSelector } from "../library_components";
 import library_db from "../db_connect/sequelize_index"
 
 const Book = library_db.book;
 const Bookshelf = library_db.bookshelf;
 const Room = library_db.room;
-
-const queryString = require('query-string');
 
 function MetadataEdit(props) {
   const bookInitialState = { isbn: "", title: "", author: "", bookshelf_id: "" }
@@ -19,9 +17,9 @@ function MetadataEdit(props) {
     bookInitialState);
 
   const [firstLoad, setFirstLoad] = useState( true );
-  const [selectedRoom, setSelectedRoom] = useState( null );
   const [rooms, setRooms] = useState([]);
   const [bookshelves, setBookshelves] = useState([]);
+
   let history = useNavigate();
   const useQuery = () => new URLSearchParams(useLocation().search);
   let query = useQuery();
@@ -31,7 +29,6 @@ function MetadataEdit(props) {
   if( firstLoad ){
     setFirstLoad(false)
     Room.findAll({raw: true}).then((rooms) => {
-      console.log("number of rooms: " + rooms.length)
           setRooms(rooms);
         });
     Book.findAll({
@@ -46,14 +43,12 @@ function MetadataEdit(props) {
           attributes: ["room_name"]
         }}}).then((bookList) => {
       let foundBook = bookList[0]
-      console.log( book[0] )
       updateBook( {isbn: foundBook.isbn, title: foundBook.title, author: foundBook.author, bookshelf_id: foundBook.bookshelf_id })
 
       let book_room_opt = document.getElementById("room-sel-"+foundBook["bookshelf.room.room_id"]);
       if( book_room_opt )
       {
         book_room_opt.selected = true;
-        setSelectedRoom( book_room_opt.value );
         fetchBookshelves( book_room_opt.value, false ).then( () => {
           let book_shelf_opt = document.getElementById("bookshelf-sel-"+foundBook.bookshelf_id);
           if( book_shelf_opt )
@@ -75,7 +70,6 @@ function MetadataEdit(props) {
 
   async function fetchBookshelves( room_id, shouldSetBooksBookshelf=true )
   {
-    console.log("Fetching bookshelves..." + room_id )
     return Bookshelf.findAll({
       where: {
       room_id: room_id
@@ -112,9 +106,6 @@ function MetadataEdit(props) {
             }
         }).then( Book.sync() );
   }
-    else {
-      console.log("cancelled book update");
-    }
   };
 
   const deleteBook = function( delete_isbn ) {
@@ -130,7 +121,6 @@ function MetadataEdit(props) {
   };
 
   const handleRoomChange = e => {
-    setSelectedRoom( e.target.value );
     fetchBookshelves( e.target.value )
   };
 
@@ -141,7 +131,6 @@ function MetadataEdit(props) {
   const handleDeleteBook = e =>{
     if( window.confirm( "Do you want to delete this book?\nThis action cannot be undone."))
     {
-      console.log("deleting book: " + book.isbn )
       deleteBook( book.isbn );
     }
   }
@@ -154,33 +143,21 @@ function MetadataEdit(props) {
     <div className='centered'>
     <h1>Input edits and "Save"</h1>
     <form onSubmit={( event ) => saveEdits(event, original_isbn)}>
-    <label className="metadata-edit-label">
-      Title: &emsp;
-      <input className="userInput" name="title" id="smaller-input" type="text"
-           value={book.title} onChange={handleChange}/>
-    </label>
-    <br/>
-    <label className="metadata-edit-label">
-      ISBN: &emsp;
-      <input className="userInput" name="isbn" id="smaller-input" type="ISBN"
-          value={book.isbn} onChange={handleChange}/>
-    </label>
-    <br/>
-    <label className="metadata-edit-label">
-      Author: &emsp;
-      <input className="userInput" name="author" id="smaller-input" type="text"
-          value={book.author} onChange={handleChange}/>
-    </label>
-    <RoomSelector id="room-sel" rooms={rooms} roomChange={handleRoomChange}/>
-    <BookshelfSelector bookshelves={bookshelves} bookshelfChange={handleBookshelfChange}/>
-    <br/>
-      <button className="edit-button" id="submit-btn" type="submit">Save</button>
+    <label className="input-label" >Title:</label>
+    <input className="userInput" name="title" type="text" value={book.title}
+           onChange={handleChange}/><br/>
+    <label className="input-label">ISBN:</label>
+    <input className="userInput" name="isbn" type="ISBN"
+          value={book.isbn} onChange={handleChange}/><br/>
+    <label className="input-label">Author:</label>
+    <input className="userInput" name="author" type="text"
+          value={book.author} onChange={handleChange}/><br/>
+    <RoomSelector id="room-sel" rooms={rooms} roomChange={handleRoomChange}/><br/>
+    <BookshelfSelector bookshelves={bookshelves} bookshelfChange={handleBookshelfChange}/><br/>
+    <button id="back-btn" onClick={handleGoBack}>Go Back</button>
+    <button id="delete-btn" onClick={handleDeleteBook}>Delete this book</button>
+    <button id="submit-btn" type="submit">Save</button>
     </form>
-    <button className="edit-button" id="delete-btn" onClick={handleDeleteBook}>Delete this book</button>
-    <button className="edit-button" id="back-btn" onClick={handleGoBack}>Go Back</button>
-    <Link to={'/Home'} id='return-to-home'>
-        <button className="edit-button" >Home</button>
-    </Link>
     </div>
   )
 }

@@ -21,7 +21,7 @@ function AddProfile() {
       });
     }
     else {
-      console.log("empty username string");
+      console.log("Error: empty username string");
       window.alert("Username \"" + newUsername + "\" is invalid. Please try again.")
     }
   };
@@ -34,12 +34,12 @@ function AddProfile() {
             <form onSubmit={handleSubmit}>
               <input className="userInput" id="text-input" name="newUsername" type="text"
                     placeholder="New Username" onChange={handleChange}/>
-              <button id="submit-btn" className="edit-button"
+              <button id="submit-btn"
                     type="submit">Save and return to profiles page</button>
             </form>
 
             <Link to={'/Login'} >
-                <button id="abortButton" className="edit-button">Return without saving</button>
+                <button id="abortButton">Return without saving</button>
             </Link>
         </div>
     )

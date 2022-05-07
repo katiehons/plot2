@@ -1,4 +1,76 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { useState } from 'react';
+import { useNavigate } from 'react-router-dom';
+import imageNotFound from './images/book_blank_cover.png';
+import library_db from "./db_connect/sequelize_index"
+
+function RoomMap(room){
+  let bookshelves_div = <></>
+  if( room.bookshelves )
+  {
+    bookshelves_div = room["bookshelves"].map( (bookshelf) =>  <div key={bookshelf.bookshelf_name} id="loc-map-bookshelf">{bookshelf.bookshelf_name}</div> )
+  }
+
+  return(
+    <>
+      <div className="loc-map-room" key={room.room_name} >{room.room_name}</div>
+      {bookshelves_div} <br/>
+    </>
+  )
+}
+
+function LocationMap(){
+  const [firstLoad, setFirstLoad] = useState(true);
+  const [rooms, setRooms] = useState([]);
+
+  const Room = library_db.room;
+  const Bookshelf = library_db.bookshelf;
+
+  if( firstLoad )
+  {
+    setFirstLoad(false);
+    Room.findAll({raw: true}).then((rooms_returned) => {
+      for( let i = 0; i < rooms_returned.length; i++ )
+      {
+        Bookshelf.findAll({
+            where: { room_id: rooms_returned[i].room_id },
+                     raw: true}).then((bookshelves_result) => {
+              rooms_returned[i].bookshelves = bookshelves_result;
+              if (i === ( rooms_returned.length - 1 ) )
+              {
+                setRooms(rooms_returned);
+              }
+            });
+      }
+    });
+  }
+
+  return (
+    <>
+      <h2 id="loc-map-header">All Locations:</h2>
+      <span id='locations-map'>{rooms.map((room) => RoomMap(room))}</span>
+    </>
+  )
+}
+
+function LibraryHeader({ name }) {
+  return (
+    <h1 id='library_name'>The {name} Library</h1>
+  )
+}
+
+// username button
+function makeProfileButton(user, onProfileClick) {
+  return (
+    <button className="profiles-button" key={user.username} onClick={() => onProfileClick(user.username)}>{user.username}</button>
+  )
+}
+
+// all username buttons
+function ProfileButtons({ profiles, onProfileClick }) {
+  return (
+    <span id='generated-profilesButtons'>{profiles.map((user) => makeProfileButton(user, onProfileClick))}</span>
+  )
+}
 
 function BookshelfSelector( {bookshelves, bookshelfChange} )
 {
@@ -6,12 +78,13 @@ function BookshelfSelector( {bookshelves, bookshelfChange} )
     return (<option key={i} value={item.bookshelf_id} id={"bookshelf-sel-"+item.bookshelf_id}>{item.bookshelf_name}</option>)
     }, this);
   return(
-    <div id="bookshelf-selector">
-      <label for="bookshelfsel">Which bookshelf? </label>
+    <>
+      <label className="input-label">Bookshelf: </label>
       <select id="bookshelfsel" onChange={bookshelfChange}>{bookshelvesList}</select>
-    </div>
+    </>
   )
 }
+
 function RoomSelector({rooms, roomChange})
 {
   let roomList = rooms.length > 0 && rooms.map((item, i) => {
@@ -19,10 +92,10 @@ function RoomSelector({rooms, roomChange})
     }, this);
 
   return(
-    <div id="room-selector">
-      <label for="roomsel">Which room? </label>
+    <>
+      <label className="input-label">Room: </label>
       <select id="roomsel" onChange={roomChange}> {roomList} </select>
-    </div>
+    </>
   )
 }
 
@@ -34,14 +107,10 @@ function CurrentUser({ user }) {
 
 // generate the book list
 function EditBookButton({isbn}) {
-  console.log("making button for: ")
-  console.log( isbn )
   let history = useNavigate();
 
   return(
     <button type="button" className="edit-button" onClick={() => {
-      console.log("EditBookButton sending you to MetadataEdit page with ISBN ")
-      console.log(isbn)
       history("/MetadataEdit?isbn=" + isbn)}}>
       Edit
     </button>
@@ -50,15 +119,13 @@ function EditBookButton({isbn}) {
 
 function makeBook(book)
 {
-  console.log("lookin at book:")
-  console.log( book)
   //get the image for each cover and set custom image if none found
-  // var cover;
-  // if(book.cover != null){
-  //   cover = book.cover;
-  // }else{
-  //   cover = imageNotFound;
-  // }
+  var cover;
+  if(book.cover != null){
+    cover = book.cover;
+  }else{
+    cover = imageNotFound;
+  }
 
   var title = book.title;
   var isbn = book.isbn;
@@ -66,34 +133,35 @@ function makeBook(book)
   var bookshelf = book["bookshelf.bookshelf_name"];
   var room = book["bookshelf.room.room_name"];
 
+  var img_alt_text = title + " cover image"
+
   return(
-    <p class="list-block">
+    <div key={isbn} className="list-block">
+      <img id="cover-block" src={cover} alt={img_alt_text}/>
       <div id="metadata-block">
-          <div class="metadata-item" id="title">
+          <div className="metadata-item" id="title">
           Title: {title}
           </div>
-          <div class="metadata-item" id="isbn">
+          <div className="metadata-item" id="isbn">
           ISBN: {isbn}
           </div>
-          <div class="metadata-item" id="author">
+          <div className="metadata-item" id="author">
           Author: {author}
           </div>
-          <div class="metadata-item" id="author">
+          <div className="metadata-item" id="author">
           Location: {room}, {bookshelf}
           </div>
+          <EditBookButton isbn={isbn}/>
       </div>
-      <EditBookButton isbn={isbn}/>
-    </p>
+    </div>
   )
 }
 
 function BookList({ books }) {
-  let history = useNavigate();
-
-  console.log("displaying books" + books);
   return (
     <div id='book-list'>{books.map((book) => makeBook(book))}</div>
   )
 }
 
-export { BookList, CurrentUser, RoomSelector, BookshelfSelector }
+//todo, sort this list and the file in a sensible manner
+export { BookList, CurrentUser, RoomSelector, BookshelfSelector, LibraryHeader, ProfileButtons, LocationMap }

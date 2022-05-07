@@ -1,18 +1,27 @@
 {
-  "name": "plot2",
-  "version": "0.1.0",
+  "name": "Plot",
+  "version": "1.0.0",
+  "homepage": "./",
   "private": true,
+  "author": "Katie Honsinger",
+  "email": "katiebug@spu.edu",
+  "description": "Personal Library Organization and Tracking",
   "dependencies": {
     "@testing-library/jest-dom": "^5.11.4",
     "@testing-library/react": "^11.1.0",
     "@testing-library/user-event": "^12.1.10",
-    "electron-builder": "^23.0.3",
+    "cross-env": "^7.0.3",
+    "electron-builder-squirrel-windows": "^23.0.8",
+    "electron-is-dev": "^2.0.0",
+    "electron-store": "^8.0.1",
     "node": "16.9.1",
     "pg-hstore": "^2.3.4",
+    "process": "^0.11.10",
     "react": "^17.0.2",
     "react-app-rewired": "^2.2.1",
     "react-dom": "^17.0.2",
     "react-icons": "^4.3.1",
+    "react-router-dom": "^6.0.2",
     "react-scripts": "4.0.3",
     "sequelize": "^6.18.0",
     "sqlite3": "^5.0.0",
@@ -24,8 +33,46 @@
     "build": "react-app-rewired build",
     "test": "react-app-rewired test",
     "eject": "react-app-rewired eject",
-    "dev": "concurrently \"BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\"",
+    "electron-pack": "electron-builder --dir",
+    "electron-dist": "electron-builder -mwl",
+    "preelectron-pack": "yarn build",
+    "dev": "concurrently \"cross-env BROWSER=none yarn start\" \"wait-on http://localhost:3000 && electron .\"",
     "postinstall": "electron-builder install-app-deps"
+  },
+  "build": {
+    "appId": "plot.app",
+    "dmg": {
+      "contents": [
+        {
+          "x": 110,
+          "y": 150
+        },
+        {
+          "x": 240,
+          "y": 150,
+          "type": "link",
+          "path": "/Applications"
+        }
+      ]
+    },
+    "linux": {
+      "target": "AppImage",
+      "category": "Application",
+      "icon": "icon.png"
+    },
+    "win": {
+      "target": "nsis"
+    },
+    "asarUnpack": [
+      "src/*"
+    ],
+    "files": [
+      "src/**/*",
+      "node_modules/**/*"
+    ],
+    "directories": {
+      "buildResources": "src/images"
+    }
   },
   "eslintConfig": {
     "extends": [
@@ -48,9 +95,7 @@
   "devDependencies": {
     "concurrently": "^6.4.0",
     "electron": "^16.0.4",
-    "electron-is-dev": "^2.0.0",
-    "electron-store": "^8.0.1",
-    "react-router-dom": "^6.0.2",
+    "electron-builder": "^23.0.3",
     "wait-on": "^6.0.0"
   }
 }
