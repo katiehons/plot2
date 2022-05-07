@@ -6,27 +6,14 @@ This project is inspired by my family's gloriously unmanageable book collection.
 ##### Some technical details
 PLOT is built on the [Electron](https://www.electronjs.org/) Framework. It also uses [React](https://reactjs.org/) for UI rendering and management. The [SQLite](https://www.sqlite.org/index.html) database is created and modified using [Sequelize](https://sequelize.org/). The [Google Books API](https://developers.google.com/books) provides book details from a given ISBN.
 
-## Next features
-##### Reading History and TBR
-As you may notice, the ability to view books as a particular user goes completely unused at this point. The vision for this feature is to implement a reading history and to be read list. A user will be able to add books from the library to their own list.
-
-##### Select and Move Multiple Books
-I would like to add the ability to move multiple books at once from one location to another. With the current feature set, if you move several books from one shelf to another you would need to change their location in PLOT one at a time, which could be heinously tedious depending on how many books you move at once.
-
-##### User-defined Tags
-Users would be able to define their own categories and assign books to them.
-
-##### What would you like to see?
-I welcome feature suggestions and other input. If you have an idea for refinement of an existing feature or if there is a feature you would love to see, create an issue in this repo to let me know! This is also the best way to report bugs.
-
 ## Acknowledgements
 Many thanks to the student developer team who started this project with me: Max Briggs, Nathan Lee, Kevin Mach, and Jordan Mielbrecht. Thank you, Dr. Arias, for always encouraging me and for mentoring my Honors Project; and my family, for fostering my love of books, technology, and creativity. Finally, I am so grateful to my father and first software mentor, Bradey Honsinger, for advising me through every step of creating PLOT.  
 
 App icons created by [Daniel Ceha](https://www.flaticon.com/free-icons/bookshelf) and [bqlqn](https://www.flaticon.com/free-icons/book)
 
-
 ---
 ## FIXME Installation Guide
+todo: link to releases page
 App images for MacOS (`.dmg`) and Linux (`.AppImage`) are available in the [`dist`](dist) directory. Windows OS is coming soon. To install, simply download and open the appropriate file.  
 ##### Some MacOS-specific notes
 On MacOS, since I didn't buy an app certificate from Apple, you will probably get a security warning when you go to open the app. If it won't open with a simple click, you should be able to open it if you right-click on the app and choose "open".
@@ -34,6 +21,7 @@ On MacOS, since I didn't buy an app certificate from Apple, you will probably ge
 
 ## User Guide
 ### Library setup
+![library setup](../plot_screencaps/library_setup.png)
 The first time you open PLOT, you will see a screen like the one above. Give your library a name! It will be displayed later as "The _Yourname_ Library". If you input "The Yourname Library" into the text box, it will turn into "The The Yourname Library Library". Then you can sign in as guest right away, or add a user first. Either way, you should add a location before you add a book because of [this existing issue](https://github.com/katiehons/plot2/issues/5). After clicking the Menu button (☰) go to Manage Locations > Add a location. You'll need to add a room first and then a bookshelf. Then you can start adding books under Menu > Add Book! See the below section for more information.
 
 ### Profiles
@@ -65,4 +53,17 @@ The pages in the library, a brief description of their purpose, and how to navig
 **Manage Locations**: Navigate to add or delete locations page. View all locations that exist in the library. Menu > Manage Locations  
 **Add New Location** Add a room or bookshelf. Manage Locations > "Add Location" button  
 **Delete a Location** Remove a room or bookshelf from your library. Manage Locations > "Delete Location" button  
-**Setup** Set your library name. Visible only the first time you open the app; no way to navigate back to it after setup is complete.
+**Setup** Set your library name. Visible only the first time you open the app; no way to navigate back to it after setup is complete.  
+
+## Planned features
+##### Reading History and TBR
+As you may notice, the ability to view books as a particular user goes completely unused at this point. The vision for this feature is to implement a reading history and to be read list. A user will be able to add books from the library to their own list.
+
+##### Select and Move Multiple Books
+I would like to add the ability to move multiple books at once from one location to another. With the current feature set, if you move several books from one shelf to another you would need to change their location in PLOT one at a time, which could be heinously tedious depending on how many books you move at once.
+
+##### User-defined Tags
+Users would be able to define their own categories and assign books to them.
+
+##### What would you like to see?
+I welcome feature suggestions and other input. If you have an idea for refinement of an existing feature or if there is a feature you would love to see, create an issue in this repo to let me know! This is also the best way to report bugs.
